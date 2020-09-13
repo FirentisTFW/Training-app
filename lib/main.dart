@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:training_app/screens/add_client_screen.dart';
 
 import './providers/clients.dart';
-import './screens/statistics_screen.dart';
+import './screens/add_client_screen.dart';
+import './screens/client_profile_screen.dart';
 import './screens/clients_screen.dart';
+import './screens/statistics_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
           '/': (ctx) => ClientsScreen(),
           StatisticsScreen.routeName: (ctx) => StatisticsScreen(),
           AddClientScreen.routeName: (ctx) => AddClientScreen(),
+          ClientProfileScreen.routeName: (ctx) => ClientProfileScreen(),
         },
       ),
     );

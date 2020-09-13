@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/client_profile_screen.dart';
 
 class ClientItem extends StatelessWidget {
   final String firstName;
@@ -12,7 +13,9 @@ class ClientItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(ClientProfileScreen.routeName);
+      },
       child: Container(
         height: 90,
         child: Card(
@@ -21,6 +24,7 @@ class ClientItem extends StatelessWidget {
           ),
           margin: const EdgeInsets.all(8),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 20),
@@ -30,7 +34,8 @@ class ClientItem extends StatelessWidget {
                 ),
               ),
               Container(
-                width: 300,
+                width: 290,
+                padding: EdgeInsets.only(right: 20),
                 child: Text(
                   '$firstName $lastName',
                   textAlign: TextAlign.center,
