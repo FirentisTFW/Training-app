@@ -33,14 +33,14 @@ class ClientItem extends StatelessWidget {
                   size: 30,
                 ),
               ),
-              Container(
-                width: 290,
-                padding: EdgeInsets.only(right: 20),
-                child: Text(
-                  '$firstName $lastName',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
+              Expanded(
+                child: Center(
+                  child: Text(
+                    '$firstName $lastName',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ),

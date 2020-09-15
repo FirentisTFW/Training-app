@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:training_app/screens/workout_programs_screen.dart';
 
 import '../widgets/client_profile_list_item.dart';
 
@@ -89,7 +90,9 @@ class ClientProfileScreen extends StatelessWidget {
             Divider(),
             ClientProfileListItem('Completed Workouts', Icons.done, () {}),
             Divider(),
-            ClientProfileListItem('Workout Programs', Icons.event_note, () {}),
+            ClientProfileListItem('Workout Programs', Icons.event_note, () {
+              Navigator.of(context).pushNamed(WorkoutProgramsScreen.routeName);
+            }),
             Divider(),
             ClientProfileListItem('Progress', Icons.show_chart, () {}),
             Divider(),

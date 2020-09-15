@@ -13,17 +13,22 @@ class ClientProfileListItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(width: 10),
             Icon(
               icon,
               size: 30,
             ),
-            SizedBox(width: 20),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 22,
+            SizedBox(width: 30),
+            Expanded(
+              child: Center(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
+                ),
               ),
             ),
           ],
