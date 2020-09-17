@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/workout_programs.dart';
+import '../widgets/exercise_item.dart';
 
 class ProgramExercisesScreen extends StatelessWidget {
   static const routeName = '/program-exercises';
@@ -23,8 +24,11 @@ class ProgramExercisesScreen extends StatelessWidget {
       body: ListView.builder(
         itemCount: exercises.length,
         itemBuilder: (ctx, index) {
-          return Container(
-            child: Text("lalala"),
+          return ExerciseItem(
+            name: exercises[index].name,
+            sets: exercises[index].sets,
+            repsMin: exercises[index].repsMin,
+            repsMax: exercises[index].repsMax,
           );
         },
       ),
