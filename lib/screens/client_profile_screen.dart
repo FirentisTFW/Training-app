@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:training_app/screens/done_workouts_screen.dart';
 import 'package:training_app/screens/workout_programs_screen.dart';
+import 'package:training_app/widgets/workout_program_chooser.dart';
 
 import '../widgets/client_profile_list_item.dart';
 
@@ -86,8 +87,17 @@ class ClientProfileScreen extends StatelessWidget {
               ),
               onPressed: () {},
             ),
-            ClientProfileListItem(
-                'New Workout', Icons.accessibility_new, () {}),
+            ClientProfileListItem('New Workout', Icons.accessibility_new, () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (_) {
+                    return GestureDetector(
+                      onTap: () {},
+                      behavior: HitTestBehavior.opaque,
+                      child: WorkoutProgramChooser(),
+                    );
+                  });
+            }),
             Divider(),
             ClientProfileListItem('Completed Workouts', Icons.done, () {
               Navigator.of(context).pushNamed(DoneWorkoutScreen.routeName);

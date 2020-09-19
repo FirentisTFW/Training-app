@@ -12,13 +12,22 @@ class DoneWorkoutScreen extends StatelessWidget {
     final workoutsData = Provider.of<Workouts>(context);
     final workouts = workoutsData.findByClientId('0');
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: Theme.of(context).accentColor,
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: ListView.builder(
         itemCount: workouts.length,
         itemBuilder: (ctx, index) {
           return WorkoutItem(
-            workouts[index].programName,
-            workouts[index].date,
+            workouts[index],
           );
         },
       ),

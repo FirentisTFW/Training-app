@@ -21,10 +21,10 @@ class Workouts with ChangeNotifier {
               reps: 4,
               weight: 0,
             ),
-            Set(
-              reps: 4,
-              weight: 0,
-            ),
+            // Set(
+            //   reps: 4,
+            //   weight: 0,
+            // ),
           ],
         ),
         WorkoutExercise(
@@ -34,14 +34,14 @@ class Workouts with ChangeNotifier {
               reps: 12,
               weight: 0,
             ),
-            Set(
-              reps: 10,
-              weight: 0,
-            ),
-            Set(
-              reps: 9,
-              weight: 0,
-            ),
+            // Set(
+            //   reps: 10,
+            //   weight: 0,
+            // ),
+            // Set(
+            //   reps: 9,
+            //   weight: 0,
+            // ),
           ],
         ),
         WorkoutExercise(
