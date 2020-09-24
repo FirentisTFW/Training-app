@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/workout_programs.dart';
+import '../screens/new_workout_screen.dart';
 
 class WorkoutProgramChooser extends StatelessWidget {
-  Widget _buildProgramTile(String programName) {
-    return Card(
-      child: Container(
-        height: 80,
-        child: Align(
-          alignment: Alignment.center,
-          child: Text(
-            programName,
-            style: TextStyle(
-              fontSize: 26,
+  Widget _buildProgramTile(String programName, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushReplacementNamed(NewWorkoutScreen.routeName);
+      },
+      child: Card(
+        child: Container(
+          height: 80,
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              programName,
+              style: TextStyle(
+                fontSize: 26,
+              ),
             ),
           ),
         ),
@@ -44,10 +50,11 @@ class WorkoutProgramChooser extends StatelessWidget {
             ),
             Divider(),
             Container(
-              height: 300,
+              height: 250,
               child: ListView(
                   children: workoutPrograms
-                      .map((program) => _buildProgramTile(program.name))
+                      .map(
+                          (program) => _buildProgramTile(program.name, context))
                       .toList()),
             ),
           ],
