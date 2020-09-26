@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:training_app/screens/add_client_screen.dart';
 
-import '../database/database_provider.dart';
 import '../providers/clients.dart';
 import '../widgets/main_drawer.dart';
 import '../widgets/client_item.dart';
@@ -13,25 +12,29 @@ class ClientsScreen extends StatefulWidget {
 }
 
 class _ClientsScreenState extends State<ClientsScreen> {
-  var isLoading = true;
+  var _isLoading = true;
 
   @override
   void didChangeDependencies() {
-    Provider.of<Clients>(context).fetchClients().then((_) {
-      setState(() {
-        isLoading = false;
+    if (_isLoading) {
+      Provider.of<Clients>(context).fetchClients().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
       });
-    });
+    }
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    // TODO: try to use Consumer instead of Provider
     final clientsData = Provider.of<Clients>(context);
     final clients = clientsData.clients;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clients'),
+        title: const Text('Clients'),
         actions: [
           IconButton(
             icon: Icon(
@@ -48,11 +51,11 @@ class _ClientsScreenState extends State<ClientsScreen> {
             icon: Icon(Icons.more_vert),
             itemBuilder: (_) => [
               PopupMenuItem(
-                child: Text('Show Only Men'),
+                child: const Text('Show Only Men'),
                 value: 'aa',
               ),
               PopupMenuItem(
-                child: Text('Show Only Women'),
+                child: const Text('Show Only Women'),
                 value: 'aa',
               ),
             ],
@@ -60,8 +63,8 @@ class _ClientsScreenState extends State<ClientsScreen> {
         ],
       ),
       drawer: MainDrawer(),
-      body: isLoading
-          ? CircularProgressIndicator()
+      body: _isLoading
+          ? Container(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: clients.length,
               itemBuilder: (ctx, index) {

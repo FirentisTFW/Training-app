@@ -1,10 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'client.g.dart';
 
 enum Gender {
   Man,
   Woman,
 }
 
+@JsonSerializable()
 class Client {
   final String id;
   final String firstName;
@@ -22,6 +26,10 @@ class Client {
     @required this.height,
     this.bodyweight,
   });
+
+  factory Client.fromJson(Map<String, dynamic> json) => _$ClientFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ClientToJson(this);
 
   Map<String, dynamic> toMap() {
     return {

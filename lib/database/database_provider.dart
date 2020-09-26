@@ -55,4 +55,9 @@ class DatabaseProvider {
     final db = await database;
     await db.execute("DELETE FROM " + tableName);
   }
+
+  Future<void> deleteTable(String tableName) async {
+    final db = await database;
+    await db.execute("DROP TABLE " + tableName);
+  }
 }

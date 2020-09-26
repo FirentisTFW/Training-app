@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-import '../database/database_provider.dart';
 import '../models/client.dart';
+import '../providers/clients.dart';
 
 class AddClientScreen extends StatefulWidget {
   static const routeName = '/add-client';
@@ -53,7 +54,9 @@ class _AddClientScreenState extends State<AddClientScreen> {
       return;
     }
     _addClientForm.currentState.save();
-    await DatabaseProvider.db.insertIntoDatabase(_client, 'clients');
+    final clientsProvider = Provider.of<Clients>(context, listen: false);
+    clientsProvider.addNewClient(_client);
+    await clientsProvider.writeToFile();
     Navigator.of(context).pop();
   }
 
