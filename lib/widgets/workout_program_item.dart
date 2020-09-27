@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:training_app/screens/program_exercises_screen.dart';
 
 class WorkoutProgramItem extends StatelessWidget {
+  final String clientId;
   final String name;
   final int exercisesNumber;
   final int setsNumber;
 
   WorkoutProgramItem({
+    this.clientId,
     this.name,
     this.exercisesNumber,
     this.setsNumber,
@@ -16,7 +18,11 @@ class WorkoutProgramItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(ProgramExercisesScreen.routeName);
+        Navigator.of(context)
+            .pushNamed(ProgramExercisesScreen.routeName, arguments: {
+          'name': name,
+          'clientId': clientId,
+        });
       },
       child: Container(
         height: 100,

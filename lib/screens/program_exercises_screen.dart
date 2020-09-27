@@ -9,8 +9,13 @@ class ProgramExercisesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final programData =
+        ModalRoute.of(context).settings.arguments as Map<String, String>;
     final workoutProgramsData = Provider.of<WorkoutPrograms>(context);
-    final workoutProgram = workoutProgramsData.findByProgramName('PULL');
+    final workoutProgram = workoutProgramsData.findByProgramNameAndClientId(
+      programData['name'],
+      programData['clientId'],
+    );
     final exercises = workoutProgram.exercises;
     return Scaffold(
       appBar: AppBar(

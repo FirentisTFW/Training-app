@@ -47,7 +47,7 @@ class DatabaseProvider {
     final List<Map<String, dynamic>> clientMaps = await db.query('clients');
 
     return List.generate(clientMaps.length, (i) {
-      return Client.createFromMap(clientMaps[i]);
+      // return Client.createFromMap(clientMaps[i]);
     });
   }
 

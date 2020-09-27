@@ -1,10 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'exercise.g.dart';
 
 enum ExerciseType {
   ForRepetitions,
   ForTime,
 }
 
+@JsonSerializable(explicitToJson: true)
 class Exercise {
   final String id;
   final String name;
@@ -21,4 +25,9 @@ class Exercise {
     @required this.repsMin,
     @required this.repsMax,
   });
+
+  factory Exercise.fromJson(Map<String, dynamic> json) =>
+      _$ExerciseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ExerciseToJson(this);
 }

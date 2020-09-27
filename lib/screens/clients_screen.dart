@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:training_app/screens/add_client_screen.dart';
@@ -69,6 +72,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
               itemCount: clients.length,
               itemBuilder: (ctx, index) {
                 return ClientItem(
+                  clients[index].id,
                   clients[index].firstName,
                   clients[index].lastName,
                 );

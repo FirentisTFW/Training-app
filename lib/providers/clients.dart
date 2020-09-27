@@ -30,21 +30,27 @@ class Clients with ChangeNotifier {
     return [..._clients];
   }
 
-  Future<void> fetchClients() async {
-    final fileData = await readDataFromFile();
-    final clientMap = jsonDecode(fileData) as List;
-    _clients = clientMap.map((client) => Client.fromJson(client)).toList();
+  void addNewClient(Client newClient) {
+    _clients.add(newClient);
 
     notifyListeners();
   }
+
+  Client getClientById(String id) {
+    return _clients.firstWhere((client) => client.id == id);
+  }
+
+  // STORAGE MANAGEMENT
 
   Future<File> get localFile async {
     final path = await StorageProvider.localPath;
     return File('$path/clients.json');
   }
 
-  void addNewClient(Client newClient) {
-    _clients.add(newClient);
+  Future<void> fetchClients() async {
+    final fileData = await readDataFromFile();
+    final clientMap = jsonDecode(fileData) as List;
+    _clients = clientMap.map((client) => Client.fromJson(client)).toList();
 
     notifyListeners();
   }

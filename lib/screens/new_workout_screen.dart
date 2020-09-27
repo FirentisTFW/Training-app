@@ -48,7 +48,8 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
   @override
   Widget build(BuildContext context) {
     final workoutProgramsData = Provider.of<WorkoutPrograms>(context);
-    final program = workoutProgramsData.findByProgramName('PULL');
+    final program =
+        workoutProgramsData.findByProgramNameAndClientId('PULL', '0');
     return Scaffold(
       appBar: AppBar(
         actions: [

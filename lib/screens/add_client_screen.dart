@@ -17,6 +17,7 @@ class _AddClientScreenState extends State<AddClientScreen> {
   final _lastNameFocusNode = FocusNode();
   final _genderFocusNode = FocusNode();
   final _heightFocusNode = FocusNode();
+  final _bodyweightFocusNode = FocusNode();
   final _addClientForm = GlobalKey<FormState>();
   DateTime _birthDate;
   var _client = Client(
@@ -24,6 +25,7 @@ class _AddClientScreenState extends State<AddClientScreen> {
     firstName: '',
     lastName: '',
     gender: '',
+    birthDate: null,
     height: 0,
     bodyweight: 0,
   );
@@ -33,24 +35,49 @@ class _AddClientScreenState extends State<AddClientScreen> {
     _lastNameFocusNode.dispose();
     _genderFocusNode.dispose();
     _heightFocusNode.dispose();
+    _bodyweightFocusNode.dispose();
     super.dispose();
   }
 
   // TODO: improve this - move to client class
-  void _updateClient(String field, String value) {
+  void _updateClient(String field, dynamic value) {
     _client = Client(
       id: _client.id,
       firstName: (field == 'firstName') ? value : _client.firstName,
       lastName: (field == 'lastName') ? value : _client.lastName,
       gender: (field == 'gender') ? value : _client.gender,
+      birthDate: (field == 'birthDate') ? value : _client.birthDate,
       height: (field == 'height') ? int.parse(value) : _client.height,
-      bodyweight: _client.bodyweight,
+      bodyweight:
+          (field == 'bodyweight') ? int.parse(value) : _client.bodyweight,
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('An Error Occured'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
     );
   }
 
   Future<void> _saveForm() async {
     final isFormValid = _addClientForm.currentState.validate();
     if (!isFormValid) {
+      return;
+    }
+    if (_birthDate == null) {
+      _showErrorDialog("Please provide birth date.");
       return;
     }
     _addClientForm.currentState.save();
@@ -79,6 +106,13 @@ class _AddClientScreenState extends State<AddClientScreen> {
     return null;
   }
 
+  String _validateBodyweight(String value) {
+    var bodyweight = int.parse(value);
+    if (bodyweight < 30 || bodyweight > 300) {
+      return "Please provide valid bodyweight in kilograms.";
+    }
+  }
+
   void _pickDate() {
     showDatePicker(
       context: context,
@@ -91,6 +125,7 @@ class _AddClientScreenState extends State<AddClientScreen> {
       }
       setState(() {
         _birthDate = pickedDate;
+        _updateClient('birthDate', _birthDate);
       });
     });
   }
@@ -111,7 +146,7 @@ class _AddClientScreenState extends State<AddClientScreen> {
                 decoration: InputDecoration(labelText: 'First Name'),
                 textInputAction: TextInputAction.next,
                 validator: (value) => _validateForEmptyString(value),
-                onFieldSubmitted: (value) =>
+                onFieldSubmitted: (_) =>
                     FocusScope.of(context).requestFocus(_lastNameFocusNode),
                 onSaved: (value) => _updateClient('firstName', value),
               ),
@@ -120,7 +155,7 @@ class _AddClientScreenState extends State<AddClientScreen> {
                 validator: (value) => _validateForEmptyString(value),
                 textInputAction: TextInputAction.next,
                 focusNode: _lastNameFocusNode,
-                onFieldSubmitted: (value) =>
+                onFieldSubmitted: (_) =>
                     FocusScope.of(context).requestFocus(_genderFocusNode),
                 onSaved: (value) => _updateClient('lastName', value),
               ),
@@ -178,7 +213,17 @@ class _AddClientScreenState extends State<AddClientScreen> {
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
                 focusNode: _heightFocusNode,
-                onSaved: (value) => _updateClient('height', value.toString()),
+                onFieldSubmitted: (_) =>
+                    FocusScope.of(context).requestFocus(_bodyweightFocusNode),
+                onSaved: (value) => _updateClient('height', value),
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Bodyweight (optional)'),
+                validator: (value) => _validateBodyweight(value),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+                focusNode: _bodyweightFocusNode,
+                onSaved: (value) => _updateClient('bodyweight', value),
               ),
               SizedBox(height: 50),
               FlatButton(

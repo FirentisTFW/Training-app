@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import '../screens/client_profile_screen.dart';
 
 class ClientItem extends StatelessWidget {
+  final String id;
   final String firstName;
   final String lastName;
 
   ClientItem(
+    this.id,
     this.firstName,
     this.lastName,
   );
@@ -14,7 +16,10 @@ class ClientItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(ClientProfileScreen.routeName);
+        Navigator.of(context).pushNamed(
+          ClientProfileScreen.routeName,
+          arguments: id,
+        );
       },
       child: Container(
         height: 90,

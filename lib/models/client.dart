@@ -14,6 +14,7 @@ class Client {
   final String firstName;
   final String lastName;
   final String gender;
+  final DateTime birthDate;
   final int height;
   int bodyweight;
   // Measurements measurements;
@@ -23,6 +24,7 @@ class Client {
     @required this.firstName,
     @required this.lastName,
     @required this.gender,
+    @required this.birthDate,
     @required this.height,
     this.bodyweight,
   });
@@ -31,25 +33,36 @@ class Client {
 
   Map<String, dynamic> toJson() => _$ClientToJson(this);
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'firstName': firstName,
-      'lastName': lastName,
-      'gender': gender,
-      'height': height,
-      'bodyweight': bodyweight,
-    };
+  int calculateAge() {
+    final currentDate = DateTime.now();
+    if (birthDate.month < currentDate.month) {
+      return currentDate.year - birthDate.year;
+    } else if (birthDate.month == currentDate.month &&
+        birthDate.day <= currentDate.day) {
+      return currentDate.year - birthDate.year;
+    }
+    return currentDate.year - birthDate.year - 1;
   }
 
-  static Client createFromMap(Map<String, dynamic> map) {
-    return Client(
-      id: map['id'],
-      firstName: map['firstName'],
-      lastName: map['lastName'],
-      gender: map['gender'],
-      height: map['height'],
-      bodyweight: map['bodyweight'],
-    );
-  }
+  // Map<String, dynamic> toMap() {
+  //   return {
+  //     'id': id,
+  //     'firstName': firstName,
+  //     'lastName': lastName,
+  //     'gender': gender,
+  //     'height': height,
+  //     'bodyweight': bodyweight,
+  //   };
+  // }
+
+  // static Client createFromMap(Map<String, dynamic> map) {
+  //   return Client(
+  //     id: map['id'],
+  //     firstName: map['firstName'],
+  //     lastName: map['lastName'],
+  //     gender: map['gender'],
+  //     height: map['height'],
+  //     bodyweight: map['bodyweight'],
+  //   );
+  // }
 }

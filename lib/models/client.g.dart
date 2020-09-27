@@ -12,6 +12,9 @@ Client _$ClientFromJson(Map<String, dynamic> json) {
     firstName: json['firstName'] as String,
     lastName: json['lastName'] as String,
     gender: json['gender'] as String,
+    birthDate: json['birthDate'] == null
+        ? null
+        : DateTime.parse(json['birthDate'] as String),
     height: json['height'] as int,
     bodyweight: json['bodyweight'] as int,
   );
@@ -22,6 +25,7 @@ Map<String, dynamic> _$ClientToJson(Client instance) => <String, dynamic>{
       'firstName': instance.firstName,
       'lastName': instance.lastName,
       'gender': instance.gender,
+      'birthDate': instance.birthDate?.toIso8601String(),
       'height': instance.height,
       'bodyweight': instance.bodyweight,
     };
