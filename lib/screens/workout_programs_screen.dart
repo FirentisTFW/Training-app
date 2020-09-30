@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:training_app/screens/new_workout_program_screen.dart';
 
 import '../models/workout_program.dart';
 import '../providers/workout_programs.dart';
+import '../screens/new_workout_screen.dart';
 import '../widgets/workout_program_item.dart';
 
 class WorkoutProgramsScreen extends StatefulWidget {
@@ -43,7 +45,10 @@ class _WorkoutProgramsScreenState extends State<WorkoutProgramsScreen> {
               Icons.add,
               size: 30,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamed(NewWorkoutProgramScreen.routeName);
+            },
           )
         ],
       ),
