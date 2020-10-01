@@ -228,7 +228,7 @@ class _AddClientScreenState extends State<AddClientScreen> {
               SizedBox(height: 50),
               FlatButton(
                 color: Theme.of(context).primaryColor,
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   'Add',
                   style: TextStyle(color: Theme.of(context).accentColor),

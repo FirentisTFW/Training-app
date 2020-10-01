@@ -8,13 +8,40 @@ class ProgramExercisesList extends StatefulWidget {
 }
 
 class _ProgramExercisesListState extends State<ProgramExercisesList> {
+  int numberOfExercises = 1;
+
   @override
   Widget build(BuildContext context) {
+    print("program-exercises-list");
+
     return Container(
-      child: ListView(
+      child: Column(
         children: [
-          ProgramExerciseItem(),
-          ProgramExerciseItem(),
+          Expanded(
+            child: ListView.builder(
+              itemCount: numberOfExercises,
+              itemBuilder: (context, index) => ProgramExerciseItem(),
+            ),
+          ),
+          Container(
+            color: Theme.of(context).primaryColor,
+            width: double.infinity,
+            child: FlatButton(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'Add Another Exercise',
+                style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+              color: Theme.of(context).primaryColor,
+              onPressed: () {
+                setState(() {
+                  numberOfExercises++;
+                });
+              },
+            ),
+          ),
         ],
       ),
     );

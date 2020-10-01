@@ -8,6 +8,7 @@ class ProgramExerciseItem extends StatefulWidget {
 class _ProgramExerciseItemState extends State<ProgramExerciseItem> {
   @override
   Widget build(BuildContext context) {
+    print("program-exercise-item-state");
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -18,26 +19,28 @@ class _ProgramExerciseItemState extends State<ProgramExerciseItem> {
               child: Column(
                 children: [
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Exercise Name'),
+                    decoration:
+                        const InputDecoration(labelText: 'Exercise Name'),
                   ),
                   DropdownButtonFormField(
-                    decoration: InputDecoration(labelText: 'Exercise Type'),
+                    decoration:
+                        const InputDecoration(labelText: 'Exercise Type'),
                     value: 'ForRepetitions',
                     items: [
                       // TODO: put these options in builder function
                       DropdownMenuItem(
                         value: 'ForRepetitions',
-                        child: Text('For Repetitions'),
+                        child: const Text('For Repetitions'),
                       ),
                       DropdownMenuItem(
                         value: 'ForTime',
-                        child: Text('For Time'),
+                        child: const Text('For Time'),
                       ),
                     ],
                     onChanged: (value) {},
                   ),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Sets'),
+                    decoration: const InputDecoration(labelText: 'Sets'),
                   ),
                   TextFormField(
                     decoration: InputDecoration(labelText: 'Reps Min'),

@@ -7,9 +7,10 @@ class NewWorkoutProgramScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("new-workout-program-screen");
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Workout Program'),
+        title: const Text('New Workout Program'),
       ),
       body: ProgramExercisesList(),
     );
