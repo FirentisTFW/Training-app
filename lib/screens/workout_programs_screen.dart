@@ -35,9 +35,6 @@ class _WorkoutProgramsScreenState extends State<WorkoutProgramsScreen> {
     final clientId = ModalRoute.of(context).settings.arguments;
     final workoutProgramsData = Provider.of<WorkoutPrograms>(context);
     final workoutPrograms = workoutProgramsData.findByClientId(clientId);
-    // final workoutPrograms = workoutProgramsData.workoutPrograms;
-
-    print(jsonEncode(workoutPrograms));
 
     return Scaffold(
       appBar: AppBar(

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -104,7 +102,8 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                     textInputAction: TextInputAction.next,
                     focusNode: _setsFocusNode,
                     keyboardType: TextInputType.number,
-                    validator: (value) => Validator.validateForNumber(value),
+                    validator: (value) =>
+                        Validator.validateForEmptyAndNumber(value),
                     onFieldSubmitted: (_) =>
                         FocusScope.of(context).requestFocus(_repsMinFocusNode),
                     onSaved: (value) =>
@@ -118,7 +117,8 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                     textInputAction: TextInputAction.next,
                     focusNode: _repsMinFocusNode,
                     keyboardType: TextInputType.number,
-                    validator: (value) => Validator.validateForNumber(value),
+                    validator: (value) =>
+                        Validator.validateForEmptyAndNumber(value),
                     onFieldSubmitted: (_) =>
                         FocusScope.of(context).requestFocus(_repsMaxFocusNode),
                     onSaved: (value) => _exercise =
@@ -132,7 +132,8 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                     textInputAction: TextInputAction.next,
                     focusNode: _repsMaxFocusNode,
                     keyboardType: TextInputType.number,
-                    validator: (value) => Validator.validateForNumber(value),
+                    validator: (value) =>
+                        Validator.validateForEmptyAndNumber(value),
                     onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
                     onSaved: (value) => _exercise =
                         _exercise.copyWith(repsMax: int.parse(value)),

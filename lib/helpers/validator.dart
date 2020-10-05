@@ -6,9 +6,19 @@ class Validator {
     return null;
   }
 
-  static validateForNumber(String value) {
+  static String validateForEmptyAndNumber(String value) {
     if (validateForEmptyString(value) != null) {
       return 'This field cannnot be empty.';
+    }
+    if (int.tryParse(value) == null) {
+      return 'Please enter a number.';
+    }
+    return null;
+  }
+
+  static String validateForNumber(String value) {
+    if (value.isEmpty) {
+      return null;
     }
     if (int.tryParse(value) == null) {
       return 'Please enter a number.';
@@ -41,5 +51,6 @@ class Validator {
     if (bodyweight < 30 || bodyweight > 300) {
       return 'Please provide valid bodyweight in kilograms.';
     }
+    return null;
   }
 }

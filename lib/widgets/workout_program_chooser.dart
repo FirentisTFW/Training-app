@@ -5,10 +5,20 @@ import '../providers/workout_programs.dart';
 import '../screens/new_workout_screen.dart';
 
 class WorkoutProgramChooser extends StatelessWidget {
+  final String clientId;
+
+  WorkoutProgramChooser(this.clientId);
+
   Widget _buildProgramTile(String programName, BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushReplacementNamed(NewWorkoutScreen.routeName);
+        Navigator.of(context).pushReplacementNamed(
+          NewWorkoutScreen.routeName,
+          arguments: {
+            'programName': programName,
+            'clientId': clientId,
+          },
+        );
       },
       child: Card(
         child: Container(
@@ -30,7 +40,7 @@ class WorkoutProgramChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final workoutProgramsData = Provider.of<WorkoutPrograms>(context);
-    final workoutPrograms = workoutProgramsData.findByClientId('0');
+    final workoutPrograms = workoutProgramsData.findByClientId(clientId);
     return Card(
       color: Colors.grey[200],
       elevation: 8.0,

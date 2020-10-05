@@ -2,54 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/workout_programs.dart';
+import '../widgets/exercise_and_sets.dart';
 
-class NewWorkoutScreen extends StatefulWidget {
+class NewWorkoutScreen extends StatelessWidget {
   static const routeName = '/new-workout';
 
   @override
-  _NewWorkoutScreenState createState() => _NewWorkoutScreenState();
-}
-
-class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
-  Widget _buildInputField(int number) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text(
-          number.toString() + '. set',
-          style: TextStyle(fontSize: 20),
-        ),
-        Container(
-          width: 80,
-          child: TextFormField(
-            style: TextStyle(fontSize: 20),
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: 'reps',
-              contentPadding: EdgeInsets.all(10),
-            ),
-          ),
-        ),
-        Container(
-          width: 80,
-          child: TextFormField(
-            style: TextStyle(fontSize: 20),
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: 'weight',
-              contentPadding: EdgeInsets.all(10),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final workoutProgramsData = Provider.of<WorkoutPrograms>(context);
-    final program =
-        workoutProgramsData.findByProgramNameAndClientId('PULL', '0');
+    final programData =
+        ModalRoute.of(context).settings.arguments as Map<String, String>;
+    final workoutProgramsProvider = Provider.of<WorkoutPrograms>(context);
+    final program = workoutProgramsProvider.findByProgramNameAndClientId(
+      programData['programName'],
+      programData['clientId'],
+    );
+    List<GlobalKey<ExerciseAndSetsState>> _exercisesKeys = [];
+    for (int i = 0; i < program.exercises.length; i++) {
+      _exercisesKeys.add(GlobalKey());
+    }
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -68,36 +38,10 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
                 child: ListView.builder(
                   itemCount: program.exercises.length,
                   itemBuilder: (ctx, index) {
-                    return Card(
-                      elevation: 8,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              program.exercises[index].name,
-                              style: TextStyle(
-                                fontSize: 24,
-                              ),
-                            ),
-                          ),
-                          for (int i = 1;
-                              i <= program.exercises[index].sets;
-                              i++) ...{
-                            _buildInputField(i),
-                          },
-                          SizedBox(height: 20),
-                          FlatButton(
-                            child: Text(
-                              'Add Another Set',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            onPressed: () {},
-                          ),
-                        ],
-                      ),
+                    return ExerciseAndSets(
+                      formKey: _exercisesKeys[index],
+                      exerciseName: program.exercises[index].name,
+                      initialSets: program.exercises[index].sets,
                     );
                   },
                 ),
@@ -111,7 +55,6 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
                   vertical: 8,
                   horizontal: 40,
                 ),
-                onPressed: () {},
                 child: Text(
                   'Save',
                   style: TextStyle(
@@ -120,6 +63,7 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
                   ),
                 ),
                 color: Theme.of(context).primaryColor,
+                onPressed: () {},
               ),
             ],
           ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:training_app/screens/done_workouts_screen.dart';
 import 'package:training_app/screens/workout_programs_screen.dart';
 import 'package:training_app/widgets/workout_program_chooser.dart';
@@ -98,7 +97,7 @@ class ClientProfileScreen extends StatelessWidget {
                     return GestureDetector(
                       onTap: () {},
                       behavior: HitTestBehavior.opaque,
-                      child: WorkoutProgramChooser(),
+                      child: WorkoutProgramChooser(clientId),
                     );
                   });
             }),

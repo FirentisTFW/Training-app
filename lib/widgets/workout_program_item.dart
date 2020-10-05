@@ -18,11 +18,13 @@ class WorkoutProgramItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context)
-            .pushNamed(ProgramExercisesScreen.routeName, arguments: {
-          'name': name,
-          'clientId': clientId,
-        });
+        Navigator.of(context).pushNamed(
+          ProgramExercisesScreen.routeName,
+          arguments: {
+            'name': name,
+            'clientId': clientId,
+          },
+        );
       },
       child: Container(
         height: 100,
