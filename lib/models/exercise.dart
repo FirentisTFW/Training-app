@@ -30,4 +30,22 @@ class Exercise {
       _$ExerciseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ExerciseToJson(this);
+
+  Exercise copyWith({
+    String id,
+    String name,
+    ExerciseType exerciseType,
+    int sets,
+    int repsMin,
+    int repsMax,
+  }) {
+    return Exercise(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      exerciseType: exerciseType ?? this.exerciseType,
+      sets: sets ?? this.sets,
+      repsMin: repsMin ?? this.repsMin,
+      repsMax: repsMax ?? this.repsMax,
+    );
+  }
 }

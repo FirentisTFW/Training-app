@@ -22,6 +22,18 @@ class WorkoutProgram {
 
   Map<String, dynamic> toJson() => _$WorkoutProgramToJson(this);
 
+  WorkoutProgram copyWith({
+    String clientId,
+    String name,
+    List<Exercise> exercises,
+  }) {
+    return WorkoutProgram(
+      clientId: clientId ?? this.clientId,
+      name: name ?? this.name,
+      exercises: exercises ?? this.exercises,
+    );
+  }
+
   int calculateTotalNumberOfSets() {
     int total = 0;
     exercises.forEach((exercise) => total += exercise.sets);

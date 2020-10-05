@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:training_app/screens/new_workout_program_screen.dart';
 
-import '../models/workout_program.dart';
 import '../providers/workout_programs.dart';
-import '../screens/new_workout_screen.dart';
+import '../screens/new_workout_program_screen.dart';
+import '../widgets/no_items_added_yet_informator.dart';
 import '../widgets/workout_program_item.dart';
 
 class WorkoutProgramsScreen extends StatefulWidget {
@@ -36,6 +35,9 @@ class _WorkoutProgramsScreenState extends State<WorkoutProgramsScreen> {
     final clientId = ModalRoute.of(context).settings.arguments;
     final workoutProgramsData = Provider.of<WorkoutPrograms>(context);
     final workoutPrograms = workoutProgramsData.findByClientId(clientId);
+    // final workoutPrograms = workoutProgramsData.workoutPrograms;
+
+    print(jsonEncode(workoutPrograms));
 
     return Scaffold(
       appBar: AppBar(
@@ -46,8 +48,10 @@ class _WorkoutProgramsScreenState extends State<WorkoutProgramsScreen> {
               size: 30,
             ),
             onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(NewWorkoutProgramScreen.routeName);
+              Navigator.of(context).pushNamed(
+                NewWorkoutProgramScreen.routeName,
+                arguments: clientId,
+              );
             },
           )
         ],
@@ -58,18 +62,20 @@ class _WorkoutProgramsScreenState extends State<WorkoutProgramsScreen> {
                 backgroundColor: Colors.black,
               ),
             )
-          : ListView.builder(
-              itemCount: workoutPrograms.length,
-              itemBuilder: (ctx, index) {
-                return WorkoutProgramItem(
-                  clientId: clientId,
-                  name: workoutPrograms[index].name,
-                  exercisesNumber: workoutPrograms[index].exercises.length,
-                  setsNumber:
-                      workoutPrograms[index].calculateTotalNumberOfSets(),
-                );
-              },
-            ),
+          : workoutPrograms.length <= 0
+              ? const NoItemsAddedYetInformator('No programs added yet.')
+              : ListView.builder(
+                  itemCount: workoutPrograms.length,
+                  itemBuilder: (ctx, index) {
+                    return WorkoutProgramItem(
+                      clientId: clientId,
+                      name: workoutPrograms[index].name,
+                      exercisesNumber: workoutPrograms[index].exercises.length,
+                      setsNumber:
+                          workoutPrograms[index].calculateTotalNumberOfSets(),
+                    );
+                  },
+                ),
     );
   }
 }

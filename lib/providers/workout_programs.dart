@@ -70,6 +70,16 @@ class WorkoutPrograms with ChangeNotifier {
     //   ],
     // ),
   ];
+  WorkoutProgram _programCurrentlyBeingCreated = WorkoutProgram(
+    clientId: null,
+    name: null,
+    exercises: null,
+  );
+  List<Exercise> _exercisesCurrentlyBeingCreated = [];
+
+  List<WorkoutProgram> get workoutPrograms {
+    return _workoutPrograms;
+  }
 
   List<WorkoutProgram> findByClientId(String clientId) {
     return _workoutPrograms
@@ -83,6 +93,37 @@ class WorkoutPrograms with ChangeNotifier {
         program.name == programName && program.clientId == clientId);
   }
 
+  void nameNewProgram({
+    String clientId,
+    String name,
+  }) {
+    _programCurrentlyBeingCreated = _programCurrentlyBeingCreated.copyWith(
+      name: name,
+      clientId: clientId,
+    );
+  }
+
+  void addExerciseToNewProgram(Exercise newExercise) {
+    _exercisesCurrentlyBeingCreated.add(newExercise);
+  }
+
+  void saveNewProgram() {
+    _programCurrentlyBeingCreated = _programCurrentlyBeingCreated.copyWith(
+      exercises: _exercisesCurrentlyBeingCreated,
+    );
+    _workoutPrograms.add(_programCurrentlyBeingCreated);
+    _resetNewProgram();
+  }
+
+  void _resetNewProgram() {
+    _programCurrentlyBeingCreated = WorkoutProgram(
+      clientId: null,
+      name: null,
+      exercises: null,
+    );
+    _exercisesCurrentlyBeingCreated = [];
+  }
+
 // STORAGE MANAGEMENT
 
   Future<File> get localFile async {
@@ -91,12 +132,15 @@ class WorkoutPrograms with ChangeNotifier {
   }
 
   Future<void> fetchWorkoutPrograms() async {
-    final fileData = await readDataFromFile();
-    final programsMap = jsonDecode(fileData) as List;
-    _workoutPrograms =
-        programsMap.map((program) => WorkoutProgram.fromJson(program)).toList();
+    try {
+      final fileData = await readDataFromFile();
+      final programsMap = jsonDecode(fileData) as List;
+      _workoutPrograms = programsMap
+          .map((program) => WorkoutProgram.fromJson(program))
+          .toList();
 
-    notifyListeners();
+      notifyListeners();
+    } catch (error) {}
   }
 
   Future<File> writeToFile() async {
