@@ -55,10 +55,11 @@ class Clients with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<File> writeToFile() async {
+  Future<void> writeToFile() async {
     final file = await localFile;
     final clientsInJson = jsonEncode(clients);
-    return file.writeAsString(clientsInJson.toString());
+    await file.writeAsString(clientsInJson.toString());
+    notifyListeners();
   }
 
   Future<String> readDataFromFile() async {

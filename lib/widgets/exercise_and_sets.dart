@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:training_app/models/workout.dart';
 
 import '../helpers/validator.dart';
+import '../providers/workouts.dart';
 
 class ExerciseAndSets extends StatefulWidget {
-  final formKey;
+  final key;
   final String exerciseName;
   final int initialSets;
 
   ExerciseAndSets({
-    this.formKey,
+    this.key,
     this.exerciseName,
     this.initialSets,
   });
@@ -22,14 +27,19 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
   List<FocusNode> _numberOfSetsFocusNodes = [];
   List<FocusNode> _weightFocusNodes = [];
   var _exerciseFormKey = GlobalKey<FormState>();
+  WorkoutExercise _exercise;
+  List<Set> _sets = [];
 
   @override
   void initState() {
     _numberOfSets = widget.initialSets;
     for (int i = 0; i < _numberOfSets; i++) {
-      _numberOfSetsFocusNodes.add(FocusNode());
-      _weightFocusNodes.add(FocusNode());
+      _addSet();
     }
+    _exercise = WorkoutExercise(
+      name: widget.exerciseName,
+      sets: null,
+    );
     super.initState();
   }
 
@@ -82,32 +92,43 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
         Container(
           width: 80,
           child: TextFormField(
-            decoration: InputDecoration(
-              hintText: 'reps',
-              contentPadding: EdgeInsets.all(10),
-            ),
-            style: TextStyle(fontSize: 20),
-            focusNode: _numberOfSetsFocusNodes[number - 1],
-            keyboardType: TextInputType.number,
-            validator: (value) => Validator.validateForNumber(value),
-            onFieldSubmitted: (value) => FocusScope.of(context)
-                .requestFocus(_weightFocusNodes[number - 1]),
-          ),
+              decoration: InputDecoration(
+                hintText: 'reps',
+                contentPadding: EdgeInsets.all(10),
+              ),
+              style: TextStyle(fontSize: 20),
+              focusNode: _numberOfSetsFocusNodes[number - 1],
+              keyboardType: TextInputType.number,
+              validator: (value) => Validator.validateForNumber(value),
+              onFieldSubmitted: (value) => FocusScope.of(context)
+                  .requestFocus(_weightFocusNodes[number - 1]),
+              onSaved: (value) {
+                var x = value;
+                if (x.isNotEmpty) {
+                  _sets[number - 1] =
+                      _sets[number - 1].copyWith(reps: int.parse(value));
+                }
+              }),
         ),
         Container(
           width: 80,
           child: TextFormField(
-            decoration: InputDecoration(
-              hintText: 'weight',
-              contentPadding: EdgeInsets.all(10),
-            ),
-            style: TextStyle(fontSize: 20),
-            focusNode: _weightFocusNodes[number - 1],
-            keyboardType: TextInputType.number,
-            validator: (value) => Validator.validateForNumber(value),
-            onFieldSubmitted: (value) => FocusScope.of(context)
-                .requestFocus(_numberOfSetsFocusNodes[number]),
-          ),
+              decoration: InputDecoration(
+                hintText: 'weight',
+                contentPadding: EdgeInsets.all(10),
+              ),
+              style: TextStyle(fontSize: 20),
+              focusNode: _weightFocusNodes[number - 1],
+              keyboardType: TextInputType.number,
+              validator: (value) => Validator.validateForNumber(value),
+              onFieldSubmitted: (value) => FocusScope.of(context)
+                  .requestFocus(_numberOfSetsFocusNodes[number]),
+              onSaved: (value) {
+                if (value.isNotEmpty) {
+                  _sets[number - 1] =
+                      _sets[number - 1].copyWith(weight: int.parse(value));
+                }
+              }),
         ),
       ],
     );
@@ -127,16 +148,33 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
   void _addAnotherSet() {
     setState(() {
       _numberOfSets++;
-      _numberOfSetsFocusNodes.add(FocusNode());
-      _weightFocusNodes.add(FocusNode());
+      _addSet();
     });
   }
 
-  void _saveForm() {
+  void _addSet() {
+    _numberOfSetsFocusNodes.add(FocusNode());
+    _weightFocusNodes.add(FocusNode());
+    _sets.add(
+      Set(
+        reps: 0,
+        weight: 0,
+      ),
+    );
+  }
+
+  void saveForm() {
     final isValid = _exerciseFormKey.currentState.validate();
     if (!isValid) {
       return;
     }
     _exerciseFormKey.currentState.save();
+    _addSetsToExercise();
+    final workoutsProvider = Provider.of<Workouts>(context, listen: false);
+    workoutsProvider.addExerciseToNewWorkoutIfNotEmpty(_exercise);
+  }
+
+  void _addSetsToExercise() {
+    _exercise = _exercise.copyWith(sets: [..._sets]);
   }
 }

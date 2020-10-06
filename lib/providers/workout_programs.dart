@@ -8,68 +8,7 @@ import '../models/exercise.dart';
 import '../database/storage_provider.dart';
 
 class WorkoutPrograms with ChangeNotifier {
-  List<WorkoutProgram> _workoutPrograms = [
-    // WorkoutProgram(
-    //   clientId: '2020-09-27 10:54:08.975614',
-    //   name: 'PULL',
-    //   exercises: [
-    //     Exercise(
-    //       id: '1',
-    //       name: 'Muscle ups',
-    //       exerciseType: ExerciseType.ForRepetitions,
-    //       sets: 3,
-    //       repsMin: 4,
-    //       repsMax: 7,
-    //     ),
-    //     Exercise(
-    //       id: '2',
-    //       name: 'Pull ups',
-    //       exerciseType: ExerciseType.ForRepetitions,
-    //       sets: 4,
-    //       repsMin: 8,
-    //       repsMax: 12,
-    //     ),
-    //     Exercise(
-    //       id: '3',
-    //       name: 'Australian Pull Ups',
-    //       exerciseType: ExerciseType.ForRepetitions,
-    //       sets: 3,
-    //       repsMin: 12,
-    //       repsMax: 15,
-    //     ),
-    //     Exercise(
-    //       id: '5',
-    //       name: 'Bicep Curls',
-    //       exerciseType: ExerciseType.ForRepetitions,
-    //       sets: 3,
-    //       repsMin: 8,
-    //       repsMax: 12,
-    //     ),
-    //     Exercise(
-    //       id: '4',
-    //       name: 'Trap Raises',
-    //       exerciseType: ExerciseType.ForRepetitions,
-    //       sets: 2,
-    //       repsMin: 10,
-    //       repsMax: 15,
-    //     ),
-    //   ],
-    // ),
-    // WorkoutProgram(
-    //   clientId: '2020-09-27 10:54:08.975614',
-    //   name: 'PUSH',
-    //   exercises: [
-    //     Exercise(
-    //       id: '2',
-    //       name: 'Muscle ups',
-    //       exerciseType: ExerciseType.ForRepetitions,
-    //       sets: 4,
-    //       repsMin: 4,
-    //       repsMax: 7,
-    //     ),
-    //   ],
-    // ),
-  ];
+  List<WorkoutProgram> _workoutPrograms = [];
   WorkoutProgram _programCurrentlyBeingCreated = WorkoutProgram(
     clientId: null,
     name: null,
@@ -143,10 +82,11 @@ class WorkoutPrograms with ChangeNotifier {
     } catch (error) {}
   }
 
-  Future<File> writeToFile() async {
+  Future<void> writeToFile() async {
     final file = await localFile;
     final programsInJson = jsonEncode(_workoutPrograms);
-    return file.writeAsString(programsInJson.toString());
+    await file.writeAsString(programsInJson.toString());
+    notifyListeners();
   }
 
   Future<String> readDataFromFile() async {

@@ -103,13 +103,16 @@ class ClientProfileScreen extends StatelessWidget {
             }),
             Divider(),
             ClientProfileListItem('Completed Workouts', Icons.done, () {
-              Navigator.of(context).pushNamed(DoneWorkoutScreen.routeName);
+              Navigator.of(context).pushNamed(
+                DoneWorkoutScreen.routeName,
+                arguments: clientId,
+              );
             }),
             Divider(),
             ClientProfileListItem('Workout Programs', Icons.event_note, () {
               Navigator.of(context).pushNamed(
                 WorkoutProgramsScreen.routeName,
-                arguments: client.id,
+                arguments: clientId,
               );
             }),
             Divider(),
