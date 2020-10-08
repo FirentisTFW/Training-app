@@ -37,15 +37,19 @@ class NewWorkoutScreen extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: program.exercises.length,
-                  itemBuilder: (ctx, index) {
-                    return ExerciseAndSets(
-                      key: _exercisesKeys[index],
-                      exerciseName: program.exercises[index].name,
-                      initialSets: program.exercises[index].sets,
-                    );
-                  },
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < program.exercises.length; i++)
+                        ...{
+                          ExerciseAndSets(
+                            key: _exercisesKeys[i],
+                            exerciseName: program.exercises[i].name,
+                            initialSets: program.exercises[i].sets,
+                          )
+                        }.toList(),
+                    ],
+                  ),
                 ),
               ),
               Divider(
@@ -75,7 +79,9 @@ class NewWorkoutScreen extends StatelessWidget {
   }
 
   Future<void> saveWorkout(BuildContext context, var programData) async {
-    saveExercises();
+    if (!tryToSaveExercises()) {
+      return;
+    }
     final workoutsProvider = Provider.of<Workouts>(context, listen: false);
     workoutsProvider.initializeNewWorkout(
       programName: programData['programName'],
@@ -87,9 +93,13 @@ class NewWorkoutScreen extends StatelessWidget {
     Navigator.of(context).pop();
   }
 
-  void saveExercises() {
+  bool tryToSaveExercises() {
+    var _areFormsValid = true;
     _exercisesKeys.forEach((element) {
-      element.currentState.saveForm();
+      if (!element.currentState.saveForm()) {
+        _areFormsValid = false;
+      }
     });
+    return _areFormsValid;
   }
 }

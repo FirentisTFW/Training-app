@@ -16,7 +16,6 @@ class ProgramExercisesList extends StatefulWidget {
 }
 
 class ProgramExercisesListState extends State<ProgramExercisesList> {
-  int _numberOfExercises = 1;
   List<GlobalKey<ProgramExerciseItemState>> _exercisesKeys = [
     GlobalKey(),
   ];
@@ -63,7 +62,6 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
 
   void addAnotherExercise() {
     setState(() {
-      _numberOfExercises++;
       _exercisesKeys.add(GlobalKey());
     });
   }

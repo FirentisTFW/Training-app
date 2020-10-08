@@ -163,15 +163,16 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
     );
   }
 
-  void saveForm() {
+  bool saveForm() {
     final isValid = _exerciseFormKey.currentState.validate();
     if (!isValid) {
-      return;
+      return false;
     }
     _exerciseFormKey.currentState.save();
     _addSetsToExercise();
     final workoutsProvider = Provider.of<Workouts>(context, listen: false);
     workoutsProvider.addExerciseToNewWorkoutIfNotEmpty(_exercise);
+    return true;
   }
 
   void _addSetsToExercise() {

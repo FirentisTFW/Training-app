@@ -21,7 +21,7 @@ class Validator {
       return null;
     }
     if (int.tryParse(value) == null) {
-      return 'Please enter a number.';
+      return 'Enter a number.';
     }
     return null;
   }
