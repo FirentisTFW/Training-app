@@ -28,10 +28,15 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
       child: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: _numberOfExercises,
-              itemBuilder: (context, index) => ProgramExerciseItem(
-                key: _exercisesKeys[index],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ..._exercisesKeys
+                      .map((singleKey) => ProgramExerciseItem(
+                            key: singleKey,
+                          ))
+                      .toList()
+                ],
               ),
             ),
           ),

@@ -48,11 +48,13 @@ class Clients with ChangeNotifier {
   }
 
   Future<void> fetchClients() async {
-    final fileData = await readDataFromFile();
-    final clientMap = jsonDecode(fileData) as List;
-    _clients = clientMap.map((client) => Client.fromJson(client)).toList();
+    try {
+      final fileData = await readDataFromFile();
+      final clientMap = jsonDecode(fileData) as List;
+      _clients = clientMap.map((client) => Client.fromJson(client)).toList();
 
-    notifyListeners();
+      notifyListeners();
+    } catch (error) {}
   }
 
   Future<void> writeToFile() async {

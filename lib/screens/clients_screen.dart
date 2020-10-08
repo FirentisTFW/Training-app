@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:training_app/screens/add_client_screen.dart';
+import 'package:training_app/widgets/no_items_added_yet_informator.dart';
 
 import '../providers/clients.dart';
 import '../widgets/main_drawer.dart';
@@ -68,16 +69,18 @@ class _ClientsScreenState extends State<ClientsScreen> {
       drawer: MainDrawer(),
       body: _isLoading
           ? Container(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: clients.length,
-              itemBuilder: (ctx, index) {
-                return ClientItem(
-                  clients[index].id,
-                  clients[index].firstName,
-                  clients[index].lastName,
-                );
-              },
-            ),
+          : clients.length == 0
+              ? NoItemsAddedYetInformator('No clients added yet.')
+              : ListView.builder(
+                  itemCount: clients.length,
+                  itemBuilder: (ctx, index) {
+                    return ClientItem(
+                      clients[index].id,
+                      clients[index].firstName,
+                      clients[index].lastName,
+                    );
+                  },
+                ),
     );
   }
 }

@@ -42,14 +42,14 @@ class DatabaseProvider {
     );
   }
 
-  Future<List<Client>> getClients() async {
-    final db = await database;
-    final List<Map<String, dynamic>> clientMaps = await db.query('clients');
+  // Future<List<Client>> getClients() async {
+  //   final db = await database;
+  //   final List<Map<String, dynamic>> clientMaps = await db.query('clients');
 
-    return List.generate(clientMaps.length, (i) {
-      // return Client.createFromMap(clientMaps[i]);
-    });
-  }
+  //   return List.generate(clientMaps.length, (i) {
+  //     // return Client.createFromMap(clientMaps[i]);
+  //   });
+  // }
 
   Future<void> deleteDataInTable(String tableName) async {
     final db = await database;
