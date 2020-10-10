@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,12 +20,22 @@ class _WorkoutProgramsScreenState extends State<WorkoutProgramsScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isLoading) {
-      Provider.of<WorkoutPrograms>(context).fetchWorkoutPrograms().then((_) {
-        setState(() {
-          _isLoading = false;
+      final workoutProgramsData =
+          Provider.of<WorkoutPrograms>(context, listen: false);
+      if (workoutProgramsData.workoutPrograms.isEmpty) {
+        workoutProgramsData.fetchWorkoutPrograms().then((_) {
+          _switchOffLoading();
         });
-      });
+      } else {
+        _switchOffLoading();
+      }
     }
+  }
+
+  void _switchOffLoading() {
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override

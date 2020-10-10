@@ -67,13 +67,23 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
   }
 
   Future<void> _saveProgram() async {
-    _exercisesKeys.forEach((element) {
-      element.currentState.saveForm();
-    });
+    if (!_tryToSaveExercises()) {
+      return;
+    }
     final workoutProgramsProvider =
         Provider.of<WorkoutPrograms>(context, listen: false);
     workoutProgramsProvider.saveNewProgram();
     await workoutProgramsProvider.writeToFile();
     Navigator.of(context).pop();
+  }
+
+  bool _tryToSaveExercises() {
+    var _areFormsValid = true;
+    _exercisesKeys.forEach((element) {
+      if (!element.currentState.saveForm()) {
+        _areFormsValid = false;
+      }
+    });
+    return _areFormsValid;
   }
 }

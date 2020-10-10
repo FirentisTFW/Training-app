@@ -147,14 +147,15 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
     );
   }
 
-  void saveForm() {
+  bool saveForm() {
     final isValid = _newProgramForm.currentState.validate();
     if (!isValid) {
-      return;
+      return false;
     }
     _newProgramForm.currentState.save();
     final workoutProgramsProvider =
         Provider.of<WorkoutPrograms>(context, listen: false);
     workoutProgramsProvider.addExerciseToNewProgram(_exercise);
+    return true;
   }
 }

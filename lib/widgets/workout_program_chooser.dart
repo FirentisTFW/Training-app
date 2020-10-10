@@ -4,10 +4,39 @@ import 'package:provider/provider.dart';
 import '../providers/workout_programs.dart';
 import '../screens/new_workout_screen.dart';
 
-class WorkoutProgramChooser extends StatelessWidget {
+class WorkoutProgramChooser extends StatefulWidget {
   final String clientId;
 
   WorkoutProgramChooser(this.clientId);
+
+  @override
+  _WorkoutProgramChooserState createState() => _WorkoutProgramChooserState();
+}
+
+class _WorkoutProgramChooserState extends State<WorkoutProgramChooser> {
+  var _isLoading = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isLoading) {
+      final workoutProgramsData =
+          Provider.of<WorkoutPrograms>(context, listen: false);
+      if (workoutProgramsData.workoutPrograms.isEmpty) {
+        workoutProgramsData.fetchWorkoutPrograms().then((_) {
+          _switchOffLoading();
+        });
+      } else {
+        _switchOffLoading();
+      }
+    }
+  }
+
+  void _switchOffLoading() {
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   Widget _buildProgramTile(String programName, BuildContext context) {
     return InkWell(
@@ -16,7 +45,7 @@ class WorkoutProgramChooser extends StatelessWidget {
           NewWorkoutScreen.routeName,
           arguments: {
             'programName': programName,
-            'clientId': clientId,
+            'clientId': widget.clientId,
           },
         );
       },
@@ -40,7 +69,7 @@ class WorkoutProgramChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final workoutProgramsData = Provider.of<WorkoutPrograms>(context);
-    final workoutPrograms = workoutProgramsData.findByClientId(clientId);
+    final workoutPrograms = workoutProgramsData.findByClientId(widget.clientId);
     return Card(
       color: Colors.grey[200],
       elevation: 8.0,
@@ -59,14 +88,20 @@ class WorkoutProgramChooser extends StatelessWidget {
               ),
             ),
             Divider(),
-            Container(
-              height: 250,
-              child: ListView(
-                  children: workoutPrograms
-                      .map(
-                          (program) => _buildProgramTile(program.name, context))
-                      .toList()),
-            ),
+            _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.black,
+                    ),
+                  )
+                : Container(
+                    height: 250,
+                    child: ListView(
+                        children: workoutPrograms
+                            .map((program) =>
+                                _buildProgramTile(program.name, context))
+                            .toList()),
+                  ),
           ],
         ),
       ),

@@ -31,19 +31,9 @@ class _DoneWorkoutScreenState extends State<DoneWorkoutScreen> {
   Widget build(BuildContext context) {
     final clientId = ModalRoute.of(context).settings.arguments;
     final workoutsData = Provider.of<Workouts>(context);
-    final workouts = workoutsData.findByClientId(clientId);
+    final workouts = workoutsData.findByClientId(clientId).reversed.toList();
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.edit,
-              color: Theme.of(context).accentColor,
-            ),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: AppBar(),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(

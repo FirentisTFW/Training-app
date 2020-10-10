@@ -27,7 +27,7 @@ class NewWorkoutScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () {},
+            onPressed: () => saveWorkout(context, programData),
           )
         ],
       ),
