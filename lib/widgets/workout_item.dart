@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:training_app/screens/workout_details_screen.dart';
+import 'package:training_app/widgets/pop_up_menu.dart';
 
 import '../models/workout.dart';
+import '../providers/workouts.dart';
 
 class WorkoutItem extends StatefulWidget {
   final Workout workout;
@@ -22,36 +25,35 @@ class _WorkoutItemState extends State<WorkoutItem> {
     _tapPosition = details.globalPosition;
   }
 
-  void _showPopUpMenu() async {
-    print(await showMenu(
-      context: context,
-      position: RelativeRect.fromLTRB(
-        _tapPosition.dx,
-        _tapPosition.dy,
-        _tapPosition.dx + 1,
-        _tapPosition.dy + 1,
+  void _showPopUpMenuAndChooseOption() async {
+    final chosenOption = await PopUpMenu.createPopUpMenuAndChooseOption(
+      context,
+      _tapPosition,
+    );
+    if (chosenOption == 'delete') {
+      await _deleteWorkout();
+    } else if (chosenOption == 'edit') {
+      // TODO: edit workout
+    }
+  }
+
+  Future<void> _deleteWorkout() async {
+    final workoutsProvider = Provider.of<Workouts>(context, listen: false);
+    workoutsProvider.deleteWorkout(widget.workout.id);
+    await workoutsProvider.writeToFile();
+    _displayMessage('Workout deleted.');
+  }
+
+  void _displayMessage(String message) {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 2),
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
       ),
-      items: <PopupMenuEntry>[
-        PopupMenuItem(
-          value: 'delete',
-          child: Row(
-            children: <Widget>[
-              Icon(Icons.delete),
-              Text("Delete"),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'edit',
-          child: Row(
-            children: <Widget>[
-              Icon(Icons.delete),
-              Text("Edit"),
-            ],
-          ),
-        ),
-      ],
-    ));
+    );
   }
 
   @override
@@ -64,7 +66,7 @@ class _WorkoutItemState extends State<WorkoutItem> {
         );
       },
       onTapDown: _storePosition,
-      onLongPress: _showPopUpMenu,
+      onLongPress: _showPopUpMenuAndChooseOption,
       child: Container(
         height: 100,
         child: Card(

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:training_app/models/exercise.dart';
 
 import '../database/storage_provider.dart';
 import '../models/workout.dart';
@@ -110,6 +109,10 @@ class Workouts with ChangeNotifier {
   void _resetNewWorkout() {
     _workoutCurrentlyBeingCreated = null;
     _exercisesCurrentlyBeingCreated = [];
+  }
+
+  void deleteWorkout(String workoutId) {
+    _workouts.removeWhere((workout) => workout.id == workoutId);
   }
 
   // STORAGE MANAGEMENT

@@ -63,6 +63,15 @@ class WorkoutPrograms with ChangeNotifier {
     _exercisesCurrentlyBeingCreated = [];
   }
 
+  void deleteProgram({
+    String clientId,
+    String programName,
+  }) {
+    _workoutPrograms.removeWhere(
+      (program) => program.clientId == clientId && program.name == programName,
+    );
+  }
+
 // STORAGE MANAGEMENT
 
   Future<File> get localFile async {
