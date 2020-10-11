@@ -111,6 +111,14 @@ class Workouts with ChangeNotifier {
     _exercisesCurrentlyBeingCreated = [];
   }
 
+  void updateExercisesInWorkout(String workoutId) {
+    final workoutIndex =
+        _workouts.indexWhere((workout) => workout.id == workoutId);
+    _workouts[workoutIndex] = _workouts[workoutIndex]
+        .copyWith(exercises: _exercisesCurrentlyBeingCreated);
+    _resetNewWorkout();
+  }
+
   void deleteWorkout(String workoutId) {
     _workouts.removeWhere((workout) => workout.id == workoutId);
   }

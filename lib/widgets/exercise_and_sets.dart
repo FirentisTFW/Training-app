@@ -8,11 +8,13 @@ import '../providers/workouts.dart';
 class ExerciseAndSets extends StatefulWidget {
   final key;
   final String exerciseName;
-  final int initialSets;
+  final int initialNumberOfSets;
+  final List<Set> initialSets;
 
   ExerciseAndSets({
-    this.key,
-    this.exerciseName,
+    @required this.key,
+    @required this.exerciseName,
+    @required this.initialNumberOfSets,
     this.initialSets,
   });
 
@@ -30,7 +32,7 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
 
   @override
   void initState() {
-    _numberOfSets = widget.initialSets;
+    _numberOfSets = widget.initialNumberOfSets;
     for (int i = 0; i < _numberOfSets; i++) {
       _addSet();
     }
@@ -59,7 +61,13 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
               ),
             ),
             for (int i = 0; i < _numberOfSets; i++) ...{
-              _buildInputField(i + 1),
+              _buildInputField(
+                  i + 1,
+                  widget.initialSets != null
+                      ? i <= widget.initialSets.length
+                          ? widget.initialSets[i]
+                          : null
+                      : null),
             },
             SizedBox(height: 20),
             FlatButton(
@@ -79,7 +87,7 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
     );
   }
 
-  Widget _buildInputField(int number) {
+  Widget _buildInputField(int number, [Set initialValues]) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -94,6 +102,8 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
                 hintText: 'reps',
                 contentPadding: EdgeInsets.all(10),
               ),
+              initialValue:
+                  initialValues != null ? initialValues.reps.toString() : null,
               style: TextStyle(fontSize: 20),
               focusNode: _numberOfSetsFocusNodes[number - 1],
               keyboardType: TextInputType.number,
@@ -115,6 +125,9 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
                 hintText: 'weight',
                 contentPadding: EdgeInsets.all(10),
               ),
+              initialValue: initialValues != null
+                  ? initialValues.weight.toString()
+                  : null,
               style: TextStyle(fontSize: 20),
               focusNode: _weightFocusNodes[number - 1],
               keyboardType: TextInputType.number,

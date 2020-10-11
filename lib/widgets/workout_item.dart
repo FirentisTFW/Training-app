@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:training_app/screens/edit_workout_screen.dart';
 import 'package:training_app/screens/workout_details_screen.dart';
 import 'package:training_app/widgets/pop_up_menu.dart';
 
@@ -34,6 +37,7 @@ class _WorkoutItemState extends State<WorkoutItem> {
       await _deleteWorkout();
     } else if (chosenOption == 'edit') {
       // TODO: edit workout
+      _editWorkout();
     }
   }
 
@@ -42,6 +46,13 @@ class _WorkoutItemState extends State<WorkoutItem> {
     workoutsProvider.deleteWorkout(widget.workout.id);
     await workoutsProvider.writeToFile();
     _displayMessage('Workout deleted.');
+  }
+
+  void _editWorkout() {
+    Navigator.of(context).pushNamed(
+      EditWorkoutScreen.routeName,
+      arguments: widget.workout,
+    );
   }
 
   void _displayMessage(String message) {

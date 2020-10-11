@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/workout.dart';
 import '../providers/workouts.dart';
 import '../providers/workout_programs.dart';
 import '../widgets/exercise_and_sets.dart';
 
-class NewWorkoutScreen extends StatelessWidget {
-  static const routeName = '/new-workout';
+class EditWorkoutScreen extends StatelessWidget {
+  static const routeName = '/edit-workout';
   List<GlobalKey<ExerciseAndSetsState>> _exercisesKeys = [];
 
   @override
   Widget build(BuildContext context) {
-    final programData =
-        ModalRoute.of(context).settings.arguments as Map<String, String>;
-    final workoutProgramsProvider = Provider.of<WorkoutPrograms>(context);
-    final program = workoutProgramsProvider.findByProgramNameAndClientId(
-      programData['programName'],
-      programData['clientId'],
-    );
+    final workout = ModalRoute.of(context).settings.arguments as Workout;
 
-    for (int i = 0; i < program.exercises.length; i++) {
+    for (int i = 0; i < workout.exercises.length; i++) {
       _exercisesKeys.add(GlobalKey());
     }
     return Scaffold(
@@ -27,7 +22,7 @@ class NewWorkoutScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () => saveWorkout(context, programData),
+            onPressed: () => saveWorkout(context, workout.id),
           )
         ],
       ),
@@ -40,12 +35,14 @@ class NewWorkoutScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      for (int i = 0; i < program.exercises.length; i++)
+                      for (int i = 0; i < workout.exercises.length; i++)
                         ...{
                           ExerciseAndSets(
                             key: _exercisesKeys[i],
-                            exerciseName: program.exercises[i].name,
-                            initialNumberOfSets: program.exercises[i].sets,
+                            exerciseName: workout.exercises[i].name,
+                            initialNumberOfSets:
+                                workout.exercises[i].sets.length,
+                            initialSets: workout.exercises[i].sets,
                           )
                         }.toList(),
                     ],
@@ -69,7 +66,7 @@ class NewWorkoutScreen extends StatelessWidget {
                   ),
                 ),
                 color: Theme.of(context).primaryColor,
-                onPressed: () => saveWorkout(context, programData),
+                onPressed: () => saveWorkout(context, workout.id),
               ),
             ],
           ),
@@ -78,17 +75,15 @@ class NewWorkoutScreen extends StatelessWidget {
     );
   }
 
-  Future<void> saveWorkout(BuildContext context, var programData) async {
+  Future<void> saveWorkout(
+    BuildContext context,
+    String workoutId,
+  ) async {
     if (!tryToSaveExercises()) {
       return;
     }
     final workoutsProvider = Provider.of<Workouts>(context, listen: false);
-    workoutsProvider.initializeNewWorkout(
-      programName: programData['programName'],
-      clientId: programData['clientId'],
-      date: DateTime.now(),
-    );
-    workoutsProvider.saveNewWorkout();
+    workoutsProvider.updateExercisesInWorkout(workoutId);
     await workoutsProvider.writeToFile();
     Navigator.of(context).pop();
   }
