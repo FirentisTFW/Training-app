@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -57,10 +59,14 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
                         ...{
                           _wasThisExerciseAlreadyDone(
                                   workoutProgram.exercises[i].name,
-                                  workout.exercises[_doneExercisesCurrentIndex]
+                                  workout
+                                      .exercises[_doneExercisesCurrentIndex <=
+                                              _maximalDoneExercisesIndex
+                                          ? _doneExercisesCurrentIndex
+                                          : _maximalDoneExercisesIndex]
                                       .name)
-                              ? ExerciseAndSets(
-                                  key: _exercisesKeys[i],
+                              ? _buildFieldsWithInitialValues(
+                                  keyIndex: i,
                                   exerciseName:
                                       workoutProgram.exercises[i].name,
                                   initialNumberOfSets: workout
@@ -71,13 +77,12 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
                                       .exercises[_doneExercisesCurrentIndex - 1]
                                       .sets,
                                 )
-                              : ExerciseAndSets(
-                                  key: _exercisesKeys[i],
+                              : _buildEmptyFields(
+                                  keyIndex: i,
                                   exerciseName:
                                       workoutProgram.exercises[i].name,
                                   initialNumberOfSets:
                                       workoutProgram.exercises[i].sets,
-                                  initialSets: null,
                                 )
                         }.toList(),
                     ],
@@ -110,6 +115,33 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
     );
   }
 
+  Widget _buildEmptyFields({
+    int keyIndex,
+    String exerciseName,
+    int initialNumberOfSets,
+  }) {
+    return ExerciseAndSets(
+      key: _exercisesKeys[keyIndex],
+      exerciseName: exerciseName,
+      initialNumberOfSets: initialNumberOfSets,
+      initialSets: null,
+    );
+  }
+
+  Widget _buildFieldsWithInitialValues({
+    int keyIndex,
+    String exerciseName,
+    int initialNumberOfSets,
+    List<Set> initialSets,
+  }) {
+    return ExerciseAndSets(
+      key: _exercisesKeys[keyIndex],
+      exerciseName: exerciseName,
+      initialNumberOfSets: initialNumberOfSets,
+      initialSets: initialSets,
+    );
+  }
+
   void _setMaximalDoneExercisesIndex(int maximalIndex) {
     setState(() {
       _maximalDoneExercisesIndex = maximalIndex;
@@ -128,11 +160,11 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
   }
 
   void _updateDoneExerciseIndex() {
-    setState(() {
-      if (_doneExercisesCurrentIndex < _maximalDoneExercisesIndex)
+    if (_doneExercisesCurrentIndex <= _maximalDoneExercisesIndex) {
+      setState(() {
         _doneExercisesCurrentIndex++;
-      // _shouldIndexBeUpdated = false;
-    });
+      });
+    }
   }
 
   Future<void> _saveWorkout(
