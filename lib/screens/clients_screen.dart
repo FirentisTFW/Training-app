@@ -6,6 +6,7 @@ import 'package:training_app/screens/add_client_screen.dart';
 import 'package:training_app/widgets/no_items_added_yet_informator.dart';
 
 import '../providers/clients.dart';
+import '../providers/workout_programs.dart';
 import '../widgets/main_drawer.dart';
 import '../widgets/client_item.dart';
 
@@ -21,8 +22,12 @@ class _ClientsScreenState extends State<ClientsScreen> {
   void didChangeDependencies() {
     if (_isLoading) {
       Provider.of<Clients>(context).fetchClients().then((_) {
-        setState(() {
-          _isLoading = false;
+        Provider.of<WorkoutPrograms>(context, listen: false)
+            .fetchWorkoutPrograms()
+            .then((_) {
+          setState(() {
+            _isLoading = false;
+          });
         });
       });
     }

@@ -6,23 +6,41 @@ import '../providers/workouts.dart';
 import '../providers/workout_programs.dart';
 import '../widgets/exercise_and_sets.dart';
 
-class EditWorkoutScreen extends StatelessWidget {
+class EditWorkoutScreen extends StatefulWidget {
   static const routeName = '/edit-workout';
+
+  @override
+  _EditWorkoutScreenState createState() => _EditWorkoutScreenState();
+}
+
+class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
   List<GlobalKey<ExerciseAndSetsState>> _exercisesKeys = [];
+  var _doneExercisesCurrentIndex = 0;
+  var _maximalDoneExercisesIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final workout = ModalRoute.of(context).settings.arguments as Workout;
+    final workoutProgramsProvider =
+        Provider.of<WorkoutPrograms>(context, listen: false);
+    final workoutProgram = workoutProgramsProvider.findByProgramNameAndClientId(
+      workout.programName,
+      workout.clientId,
+    );
 
-    for (int i = 0; i < workout.exercises.length; i++) {
-      _exercisesKeys.add(GlobalKey());
+    _setMaximalDoneExercisesIndex(workout.exercises.length - 1);
+
+    for (int i = 0; i < workoutProgram.exercises.length; i++) {
+      setState(() {
+        _exercisesKeys.add(GlobalKey());
+      });
     }
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () => saveWorkout(context, workout.id),
+            onPressed: () => _saveWorkout(context, workout.id),
           )
         ],
       ),
@@ -35,15 +53,32 @@ class EditWorkoutScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      for (int i = 0; i < workout.exercises.length; i++)
+                      for (int i = 0; i < workoutProgram.exercises.length; i++)
                         ...{
-                          ExerciseAndSets(
-                            key: _exercisesKeys[i],
-                            exerciseName: workout.exercises[i].name,
-                            initialNumberOfSets:
-                                workout.exercises[i].sets.length,
-                            initialSets: workout.exercises[i].sets,
-                          )
+                          _wasThisExerciseAlreadyDone(
+                                  workoutProgram.exercises[i].name,
+                                  workout.exercises[_doneExercisesCurrentIndex]
+                                      .name)
+                              ? ExerciseAndSets(
+                                  key: _exercisesKeys[i],
+                                  exerciseName:
+                                      workoutProgram.exercises[i].name,
+                                  initialNumberOfSets: workout
+                                      .exercises[_doneExercisesCurrentIndex - 1]
+                                      .sets
+                                      .length,
+                                  initialSets: workout
+                                      .exercises[_doneExercisesCurrentIndex - 1]
+                                      .sets,
+                                )
+                              : ExerciseAndSets(
+                                  key: _exercisesKeys[i],
+                                  exerciseName:
+                                      workoutProgram.exercises[i].name,
+                                  initialNumberOfSets:
+                                      workoutProgram.exercises[i].sets,
+                                  initialSets: null,
+                                )
                         }.toList(),
                     ],
                   ),
@@ -66,7 +101,7 @@ class EditWorkoutScreen extends StatelessWidget {
                   ),
                 ),
                 color: Theme.of(context).primaryColor,
-                onPressed: () => saveWorkout(context, workout.id),
+                onPressed: () => _saveWorkout(context, workout.id),
               ),
             ],
           ),
@@ -75,11 +110,36 @@ class EditWorkoutScreen extends StatelessWidget {
     );
   }
 
-  Future<void> saveWorkout(
+  void _setMaximalDoneExercisesIndex(int maximalIndex) {
+    setState(() {
+      _maximalDoneExercisesIndex = maximalIndex;
+    });
+  }
+
+  bool _wasThisExerciseAlreadyDone(
+    String exerciseName,
+    String firstUnmatchedDoneExerciseName,
+  ) {
+    if (exerciseName == firstUnmatchedDoneExerciseName) {
+      _updateDoneExerciseIndex();
+      return true;
+    }
+    return false;
+  }
+
+  void _updateDoneExerciseIndex() {
+    setState(() {
+      if (_doneExercisesCurrentIndex < _maximalDoneExercisesIndex)
+        _doneExercisesCurrentIndex++;
+      // _shouldIndexBeUpdated = false;
+    });
+  }
+
+  Future<void> _saveWorkout(
     BuildContext context,
     String workoutId,
   ) async {
-    if (!tryToSaveExercises()) {
+    if (!_tryToSaveExercises()) {
       return;
     }
     final workoutsProvider = Provider.of<Workouts>(context, listen: false);
@@ -88,7 +148,7 @@ class EditWorkoutScreen extends StatelessWidget {
     Navigator.of(context).pop();
   }
 
-  bool tryToSaveExercises() {
+  bool _tryToSaveExercises() {
     var _areFormsValid = true;
     _exercisesKeys.forEach((element) {
       if (!element.currentState.saveForm()) {

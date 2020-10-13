@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -23,49 +21,6 @@ class WorkoutItem extends StatefulWidget {
 
 class _WorkoutItemState extends State<WorkoutItem> {
   Offset _tapPosition;
-
-  void _storePosition(TapDownDetails details) {
-    _tapPosition = details.globalPosition;
-  }
-
-  void _showPopUpMenuAndChooseOption() async {
-    final chosenOption = await PopUpMenu.createPopUpMenuAndChooseOption(
-      context,
-      _tapPosition,
-    );
-    if (chosenOption == 'delete') {
-      await _deleteWorkout();
-    } else if (chosenOption == 'edit') {
-      // TODO: edit workout
-      _editWorkout();
-    }
-  }
-
-  Future<void> _deleteWorkout() async {
-    final workoutsProvider = Provider.of<Workouts>(context, listen: false);
-    workoutsProvider.deleteWorkout(widget.workout.id);
-    await workoutsProvider.writeToFile();
-    _displayMessage('Workout deleted.');
-  }
-
-  void _editWorkout() {
-    Navigator.of(context).pushNamed(
-      EditWorkoutScreen.routeName,
-      arguments: widget.workout,
-    );
-  }
-
-  void _displayMessage(String message) {
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 2),
-        content: Text(
-          message,
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +65,48 @@ class _WorkoutItemState extends State<WorkoutItem> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _storePosition(TapDownDetails details) {
+    _tapPosition = details.globalPosition;
+  }
+
+  void _showPopUpMenuAndChooseOption() async {
+    final chosenOption = await PopUpMenu.createPopUpMenuAndChooseOption(
+      context,
+      _tapPosition,
+    );
+    if (chosenOption == 'delete') {
+      await _deleteWorkout();
+    } else if (chosenOption == 'edit') {
+      _editWorkout();
+    }
+  }
+
+  Future<void> _deleteWorkout() async {
+    final workoutsProvider = Provider.of<Workouts>(context, listen: false);
+    workoutsProvider.deleteWorkout(widget.workout.id);
+    await workoutsProvider.writeToFile();
+    _displayMessage('Workout deleted.');
+  }
+
+  void _editWorkout() {
+    Navigator.of(context).pushNamed(
+      EditWorkoutScreen.routeName,
+      arguments: widget.workout,
+    );
+  }
+
+  void _displayMessage(String message) {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 2),
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
         ),
       ),
     );

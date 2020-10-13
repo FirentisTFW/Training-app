@@ -67,11 +67,12 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
   }
 
   Future<void> _saveProgram() async {
-    if (!_tryToSaveExercises()) {
-      return;
-    }
     final workoutProgramsProvider =
         Provider.of<WorkoutPrograms>(context, listen: false);
+    if (!_tryToSaveExercises()) {
+      workoutProgramsProvider.resetNewExercises();
+      return;
+    }
     workoutProgramsProvider.saveNewProgram();
     await workoutProgramsProvider.writeToFile();
     Navigator.of(context).pop();

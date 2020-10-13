@@ -2,8 +2,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
 
-import '../models/client.dart';
-
 class DatabaseProvider {
   DatabaseProvider._();
   static final DatabaseProvider db = DatabaseProvider._();

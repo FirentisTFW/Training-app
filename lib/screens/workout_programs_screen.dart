@@ -6,37 +6,8 @@ import '../screens/new_workout_program_screen.dart';
 import '../widgets/no_items_added_yet_informator.dart';
 import '../widgets/workout_program_item.dart';
 
-class WorkoutProgramsScreen extends StatefulWidget {
+class WorkoutProgramsScreen extends StatelessWidget {
   static const routeName = '/workout-programs';
-
-  @override
-  _WorkoutProgramsScreenState createState() => _WorkoutProgramsScreenState();
-}
-
-class _WorkoutProgramsScreenState extends State<WorkoutProgramsScreen> {
-  var _isLoading = true;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_isLoading) {
-      final workoutProgramsData =
-          Provider.of<WorkoutPrograms>(context, listen: false);
-      if (workoutProgramsData.workoutPrograms.isEmpty) {
-        workoutProgramsData.fetchWorkoutPrograms().then((_) {
-          _switchOffLoading();
-        });
-      } else {
-        _switchOffLoading();
-      }
-    }
-  }
-
-  void _switchOffLoading() {
-    setState(() {
-      _isLoading = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,26 +32,20 @@ class _WorkoutProgramsScreenState extends State<WorkoutProgramsScreen> {
           )
         ],
       ),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.black,
-              ),
-            )
-          : workoutPrograms.length <= 0
-              ? const NoItemsAddedYetInformator('No programs added yet.')
-              : ListView.builder(
-                  itemCount: workoutPrograms.length,
-                  itemBuilder: (ctx, index) {
-                    return WorkoutProgramItem(
-                      clientId: clientId,
-                      name: workoutPrograms[index].name,
-                      exercisesNumber: workoutPrograms[index].exercises.length,
-                      setsNumber:
-                          workoutPrograms[index].calculateTotalNumberOfSets(),
-                    );
-                  },
-                ),
+      body: workoutPrograms.length <= 0
+          ? const NoItemsAddedYetInformator('No programs added yet.')
+          : ListView.builder(
+              itemCount: workoutPrograms.length,
+              itemBuilder: (ctx, index) {
+                return WorkoutProgramItem(
+                  clientId: clientId,
+                  name: workoutPrograms[index].name,
+                  exercisesNumber: workoutPrograms[index].exercises.length,
+                  setsNumber:
+                      workoutPrograms[index].calculateTotalNumberOfSets(),
+                );
+              },
+            ),
     );
   }
 }

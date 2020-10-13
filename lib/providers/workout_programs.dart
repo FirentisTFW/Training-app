@@ -52,6 +52,7 @@ class WorkoutPrograms with ChangeNotifier {
     );
     _workoutPrograms.add(_programCurrentlyBeingCreated);
     _resetNewProgram();
+    resetNewExercises();
   }
 
   void _resetNewProgram() {
@@ -60,6 +61,9 @@ class WorkoutPrograms with ChangeNotifier {
       name: null,
       exercises: null,
     );
+  }
+
+  void resetNewExercises() {
     _exercisesCurrentlyBeingCreated = [];
   }
 
