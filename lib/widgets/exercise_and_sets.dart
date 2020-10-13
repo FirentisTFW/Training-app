@@ -64,7 +64,7 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
               _buildInputField(
                   i + 1,
                   widget.initialSets != null
-                      ? i <= widget.initialSets.length
+                      ? i < widget.initialSets.length
                           ? widget.initialSets[i]
                           : null
                       : null),
@@ -86,6 +86,8 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
       ),
     );
   }
+
+  bool _wasThisSetAlreadyDone() {}
 
   Widget _buildInputField(int number, [Set initialValues]) {
     return Row(
