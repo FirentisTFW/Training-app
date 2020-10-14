@@ -33,6 +33,7 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
                   ..._exercisesKeys
                       .map((singleKey) => ProgramExerciseItem(
                             key: singleKey,
+                            removeExercise: removeExercise,
                           ))
                       .toList()
                 ],
@@ -58,6 +59,12 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
         ],
       ),
     );
+  }
+
+  void removeExercise(Key exerciseKey) {
+    setState(() {
+      _exercisesKeys.removeWhere((singleKey) => singleKey == exerciseKey);
+    });
   }
 
   void addAnotherExercise() {

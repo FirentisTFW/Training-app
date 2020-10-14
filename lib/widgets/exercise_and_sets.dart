@@ -87,8 +87,6 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
     );
   }
 
-  bool _wasThisSetAlreadyDone() {}
-
   Widget _buildInputField(int number, [Set initialValues]) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -6,10 +6,12 @@ import '../models/exercise.dart';
 import '../providers/workout_programs.dart';
 
 class ProgramExerciseItem extends StatefulWidget {
-  final key;
+  final Key key;
+  final Function removeExercise;
 
   ProgramExerciseItem({
     @required this.key,
+    @required this.removeExercise,
   });
 
   @override
@@ -56,18 +58,35 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
               key: _newProgramForm,
               child: Column(
                 children: [
-                  TextFormField(
-                    decoration:
-                        const InputDecoration(labelText: 'Exercise Name'),
-                    textInputAction: TextInputAction.next,
-                    focusNode: _nameFocusNode,
-                    keyboardType: TextInputType.name,
-                    validator: (value) =>
-                        Validator.validateForEmptyString(value),
-                    onFieldSubmitted: (_) =>
-                        FocusScope.of(context).requestFocus(_typeFocusNode),
-                    onSaved: (value) =>
-                        _exercise = _exercise.copyWith(name: value),
+                  Row(
+                    children: [
+                      Container(
+                        width: 300,
+                        child: TextFormField(
+                          decoration:
+                              const InputDecoration(labelText: 'Exercise Name'),
+                          textInputAction: TextInputAction.next,
+                          focusNode: _nameFocusNode,
+                          keyboardType: TextInputType.name,
+                          validator: (value) =>
+                              Validator.validateForEmptyString(value),
+                          onFieldSubmitted: (_) => FocusScope.of(context)
+                              .requestFocus(_typeFocusNode),
+                          onSaved: (value) =>
+                              _exercise = _exercise.copyWith(name: value),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 14),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            size: 26,
+                          ),
+                          onPressed: () => _confirmRemovingExercise(context),
+                        ),
+                      )
+                    ],
                   ),
                   DropdownButtonFormField(
                     decoration:
@@ -144,6 +163,31 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _confirmRemovingExercise(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm"),
+          content: const Text("Are you sure you want to delete this item?"),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text("DELETE"),
+              onPressed: () {
+                widget.removeExercise(widget.key);
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: const Text("CANCEL"),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
     );
   }
 

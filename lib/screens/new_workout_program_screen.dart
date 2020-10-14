@@ -12,9 +12,8 @@ class NewWorkoutProgramScreen extends StatefulWidget {
 }
 
 class _NewWorkoutProgramScreenState extends State<NewWorkoutProgramScreen> {
-  var wasNameGiven = false;
-
   final GlobalKey<ProgramExercisesListState> _exercisesListKey = GlobalKey();
+  var wasNameGiven = false;
 
   @override
   Widget build(BuildContext context) {
