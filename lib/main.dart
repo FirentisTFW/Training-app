@@ -15,6 +15,7 @@ import './screens/program_exercises_screen.dart';
 import './screens/workout_details_screen.dart';
 import './screens/new_workout_program_screen.dart';
 import './screens/edit_workout_screen.dart';
+import './screens/edit_workout_program_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -57,6 +58,8 @@ class MyApp extends StatelessWidget {
           NewWorkoutScreen.routeName: (ctx) => NewWorkoutScreen(),
           NewWorkoutProgramScreen.routeName: (ctx) => NewWorkoutProgramScreen(),
           EditWorkoutScreen.routeName: (ctx) => EditWorkoutScreen(),
+          EditWorkoutProgramScreen.routeName: (ctx) =>
+              EditWorkoutProgramScreen(),
         },
       ),
     );

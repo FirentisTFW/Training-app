@@ -38,11 +38,7 @@ class WorkoutProgramsScreen extends StatelessWidget {
               itemCount: workoutPrograms.length,
               itemBuilder: (ctx, index) {
                 return WorkoutProgramItem(
-                  clientId: clientId,
-                  name: workoutPrograms[index].name,
-                  exercisesNumber: workoutPrograms[index].exercises.length,
-                  setsNumber:
-                      workoutPrograms[index].calculateTotalNumberOfSets(),
+                  workoutProgram: workoutPrograms[index],
                 );
               },
             ),

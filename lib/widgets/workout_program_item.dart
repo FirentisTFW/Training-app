@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/workout_program.dart';
 import 'package:training_app/screens/program_exercises_screen.dart';
+import 'package:training_app/screens/edit_workout_program_screen.dart';
 import 'package:training_app/widgets/pop_up_menu.dart';
 
 import '../providers/workout_programs.dart';
 
 class WorkoutProgramItem extends StatefulWidget {
-  final String clientId;
-  final String name;
-  final int exercisesNumber;
-  final int setsNumber;
+  final WorkoutProgram workoutProgram;
 
   WorkoutProgramItem({
-    this.clientId,
-    this.name,
-    this.exercisesNumber,
-    this.setsNumber,
+    @required this.workoutProgram,
   });
 
   @override
@@ -36,7 +32,7 @@ class _WorkoutProgramItemState extends State<WorkoutProgramItem> {
     if (chosenOption == 'delete') {
       await _deleteWorkoutProgram();
     } else if (chosenOption == 'edit') {
-      // edit
+      _editProgram();
     }
   }
 
@@ -44,9 +40,17 @@ class _WorkoutProgramItemState extends State<WorkoutProgramItem> {
     final workoutProgramsProvider =
         Provider.of<WorkoutPrograms>(context, listen: false);
     workoutProgramsProvider.deleteProgram(
-        clientId: widget.clientId, programName: widget.name);
+        clientId: widget.workoutProgram.clientId,
+        programName: widget.workoutProgram.name);
     await workoutProgramsProvider.writeToFile();
     _displayMessage('Program deleted.');
+  }
+
+  void _editProgram() {
+    Navigator.of(context).pushNamed(
+      EditWorkoutProgramScreen.routeName,
+      arguments: widget.workoutProgram,
+    );
   }
 
   void _displayMessage(String message) {
@@ -68,8 +72,8 @@ class _WorkoutProgramItemState extends State<WorkoutProgramItem> {
         Navigator.of(context).pushNamed(
           ProgramExercisesScreen.routeName,
           arguments: {
-            'name': widget.name,
-            'clientId': widget.clientId,
+            'name': widget.workoutProgram.name,
+            'clientId': widget.workoutProgram.clientId,
           },
         );
       },
@@ -84,7 +88,7 @@ class _WorkoutProgramItemState extends State<WorkoutProgramItem> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    widget.name,
+                    widget.workoutProgram.name,
                     style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
@@ -98,11 +102,11 @@ class _WorkoutProgramItemState extends State<WorkoutProgramItem> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      'Exercises: ${widget.exercisesNumber.toString()}',
+                      'Exercises: ${widget.workoutProgram.exercises.length.toString()}',
                       style: TextStyle(fontSize: 18),
                     ),
                     Text(
-                      'Sets: ${widget.setsNumber.toString()}',
+                      'Sets: ${widget.workoutProgram.calculateTotalNumberOfSets().toString()}',
                       style: TextStyle(fontSize: 18),
                     )
                   ],

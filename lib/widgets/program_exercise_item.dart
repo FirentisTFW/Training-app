@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,10 +10,12 @@ import '../providers/workout_programs.dart';
 class ProgramExerciseItem extends StatefulWidget {
   final Key key;
   final Function removeExercise;
+  final Exercise initialValues;
 
   ProgramExerciseItem({
     @required this.key,
     @required this.removeExercise,
+    this.initialValues,
   });
 
   @override
@@ -65,6 +69,9 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                         child: TextFormField(
                           decoration:
                               const InputDecoration(labelText: 'Exercise Name'),
+                          initialValue: widget.initialValues != null
+                              ? widget.initialValues.name
+                              : null,
                           textInputAction: TextInputAction.next,
                           focusNode: _nameFocusNode,
                           keyboardType: TextInputType.name,
@@ -92,7 +99,9 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                     decoration:
                         const InputDecoration(labelText: 'Exercise Type'),
                     focusNode: _typeFocusNode,
-                    value: ExerciseType.ForRepetitions,
+                    value: widget.initialValues != null
+                        ? widget.initialValues.exerciseType
+                        : ExerciseType.ForRepetitions,
                     items: [
                       DropdownMenuItem(
                         value: ExerciseType.ForRepetitions,
@@ -118,6 +127,9 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Sets'),
+                    initialValue: widget.initialValues != null
+                        ? widget.initialValues.sets.toString()
+                        : null,
                     textInputAction: TextInputAction.next,
                     focusNode: _setsFocusNode,
                     keyboardType: TextInputType.number,
@@ -133,6 +145,9 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                       labelText:
                           _isExerciseForReps ? 'Reps Min' : 'Seconds Min',
                     ),
+                    initialValue: widget.initialValues != null
+                        ? widget.initialValues.repsMin.toString()
+                        : null,
                     textInputAction: TextInputAction.next,
                     focusNode: _repsMinFocusNode,
                     keyboardType: TextInputType.number,
@@ -148,6 +163,9 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                       labelText:
                           _isExerciseForReps ? 'Reps Max' : 'Seconds Max',
                     ),
+                    initialValue: widget.initialValues != null
+                        ? widget.initialValues.repsMin.toString()
+                        : null,
                     textInputAction: TextInputAction.next,
                     focusNode: _repsMaxFocusNode,
                     keyboardType: TextInputType.number,

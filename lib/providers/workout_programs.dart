@@ -67,6 +67,17 @@ class WorkoutPrograms with ChangeNotifier {
     _exercisesCurrentlyBeingCreated = [];
   }
 
+  void updateProgram({
+    String clientId,
+    String name,
+  }) {
+    final programIndex = _workoutPrograms.indexWhere(
+        (program) => program.clientId == clientId && program.name == name);
+    _workoutPrograms[programIndex] = _workoutPrograms[programIndex].copyWith(
+      exercises: _exercisesCurrentlyBeingCreated,
+    );
+  }
+
   void deleteProgram({
     String clientId,
     String programName,
