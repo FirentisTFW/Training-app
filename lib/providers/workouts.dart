@@ -7,67 +7,9 @@ import '../database/storage_provider.dart';
 import '../models/workout.dart';
 
 class Workouts with ChangeNotifier {
-  List<Workout> _workouts = [
-    // Workout(
-    //   id: DateTime.now().toString(),
-    //   clientId: '0',
-    //   date: DateTime.now(),
-    //   programName: 'PULL',
-    //   exercises: [
-    //     WorkoutExercise(
-    //       'Muscle Ups',
-    //       [
-    //         Set(
-    //           reps: 5,
-    //           weight: 0,
-    //         ),
-    //         Set(
-    //           reps: 4,
-    //           weight: 0,
-    //         ),
-    //         // Set(
-    //         //   reps: 4,
-    //         //   weight: 0,
-    //         // ),
-    //       ],
-    //     ),
-    //     WorkoutExercise(
-    //       'Pull Ups',
-    //       [
-    //         Set(
-    //           reps: 12,
-    //           weight: 0,
-    //         ),
-    //         // Set(
-    //         //   reps: 10,
-    //         //   weight: 0,
-    //         // ),
-    //         // Set(
-    //         //   reps: 9,
-    //         //   weight: 0,
-    //         // ),
-    //       ],
-    //     ),
-    //     WorkoutExercise(
-    //       'Australian Pull Ups',
-    //       [
-    //         Set(
-    //           reps: 15,
-    //           weight: 0,
-    //         ),
-    //         Set(
-    //           reps: 13,
-    //           weight: 0,
-    //         ),
-    //         Set(
-    //           reps: 13,
-    //           weight: 0,
-    //         ),
-    //       ],
-    //     ),
-    //   ],
-    // ),
-  ];
+  final String _storageFileName = '/workouts.json';
+
+  List<Workout> _workouts = [];
   Workout _workoutCurrentlyBeingCreated;
   List<WorkoutExercise> _exercisesCurrentlyBeingCreated = [];
 
@@ -127,7 +69,7 @@ class Workouts with ChangeNotifier {
 
   Future<File> get localFile async {
     final path = await StorageProvider.localPath;
-    return File('$path/workouts.json');
+    return File('$path/$_storageFileName');
   }
 
   Future<void> fetchWorkouts() async {

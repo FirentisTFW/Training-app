@@ -7,24 +7,8 @@ import '../models/client.dart';
 import '../database/storage_provider.dart';
 
 class Clients with ChangeNotifier {
-  List<Client> _clients = [
-    // Client(
-    //   id: "aasdasd23123",
-    //   firstName: 'Jan',
-    //   lastName: 'Kowalski',
-    //   gender: "Man",
-    //   height: 178,
-    //   bodyweight: 78,
-    // ),
-    // Client(
-    //   id: "aasdasd231adsadasd23",
-    //   firstName: 'KAsia',
-    //   lastName: 'Kowalska',
-    //   gender: "Man",
-    //   height: 178,
-    //   bodyweight: 78,
-    // ),
-  ];
+  final String _storageFileName = '/clients.json';
+  List<Client> _clients = [];
 
   List<Client> get clients {
     return [..._clients];
@@ -44,7 +28,7 @@ class Clients with ChangeNotifier {
 
   Future<File> get localFile async {
     final path = await StorageProvider.localPath;
-    return File('$path/clients.json');
+    return File('$path/$_storageFileName');
   }
 
   Future<void> fetchClients() async {

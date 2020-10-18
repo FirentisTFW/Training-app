@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../helpers/confirmation.dart';
 import '../models/workout_program.dart';
 import 'package:training_app/screens/program_exercises_screen.dart';
 import 'package:training_app/screens/edit_workout_program_screen.dart';
@@ -37,31 +38,28 @@ class _WorkoutProgramItemState extends State<WorkoutProgramItem> {
   }
 
   Future<void> _deleteWorkoutProgram() async {
+    if (!await _confirmDeletion()) {
+      return;
+    }
+
     final workoutProgramsProvider =
         Provider.of<WorkoutPrograms>(context, listen: false);
     workoutProgramsProvider.deleteProgram(
         clientId: widget.workoutProgram.clientId,
         programName: widget.workoutProgram.name);
     await workoutProgramsProvider.writeToFile();
-    _displayMessage('Program deleted.');
+    Confirmation.displayMessage('Program deleted.', context);
+  }
+
+  Future<bool> _confirmDeletion() async {
+    final isConfirmed = await Confirmation.confirmationDialog(context);
+    return isConfirmed;
   }
 
   void _editProgram() {
     Navigator.of(context).pushNamed(
       EditWorkoutProgramScreen.routeName,
       arguments: widget.workoutProgram,
-    );
-  }
-
-  void _displayMessage(String message) {
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 2),
-        content: Text(
-          message,
-          textAlign: TextAlign.center,
-        ),
-      ),
     );
   }
 
@@ -103,11 +101,11 @@ class _WorkoutProgramItemState extends State<WorkoutProgramItem> {
                   children: [
                     Text(
                       'Exercises: ${widget.workoutProgram.exercises.length.toString()}',
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                     Text(
                       'Sets: ${widget.workoutProgram.calculateTotalNumberOfSets().toString()}',
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     )
                   ],
                 ),

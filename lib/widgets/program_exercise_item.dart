@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:training_app/helpers/confirmation.dart';
 
 import '../helpers/validator.dart';
 import '../models/exercise.dart';
@@ -185,28 +184,11 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
   }
 
   Future<void> _confirmRemovingExercise(BuildContext context) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Confirm"),
-          content: const Text("Are you sure you want to delete this item?"),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text("DELETE"),
-              onPressed: () {
-                widget.removeExercise(widget.key);
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: const Text("CANCEL"),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        );
-      },
-    );
+    final isConfirmed = await Confirmation.confirmationDialog(context);
+
+    if (isConfirmed) {
+      widget.removeExercise(widget.key);
+    }
   }
 
   bool saveForm() {

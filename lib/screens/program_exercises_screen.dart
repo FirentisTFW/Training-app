@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/workout_programs.dart';
+import '../screens/edit_workout_program_screen.dart';
 import '../widgets/exercise_item.dart';
 
 class ProgramExercisesScreen extends StatelessWidget {
@@ -22,7 +23,12 @@ class ProgramExercisesScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                EditWorkoutProgramScreen.routeName,
+                arguments: workoutProgram,
+              );
+            },
           ),
         ],
       ),

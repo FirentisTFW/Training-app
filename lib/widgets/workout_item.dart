@@ -5,6 +5,7 @@ import 'package:training_app/screens/edit_workout_screen.dart';
 import 'package:training_app/screens/workout_details_screen.dart';
 import 'package:training_app/widgets/pop_up_menu.dart';
 
+import '../helpers/confirmation.dart';
 import '../models/workout.dart';
 import '../providers/workouts.dart';
 
@@ -87,28 +88,25 @@ class _WorkoutItemState extends State<WorkoutItem> {
   }
 
   Future<void> _deleteWorkout() async {
+    if (!await _confirmDeletion()) {
+      return;
+    }
+
     final workoutsProvider = Provider.of<Workouts>(context, listen: false);
     workoutsProvider.deleteWorkout(widget.workout.id);
     await workoutsProvider.writeToFile();
-    _displayMessage('Workout deleted.');
+    Confirmation.displayMessage('Workout deleted.', context);
+  }
+
+  Future<bool> _confirmDeletion() async {
+    final isConfirmed = await Confirmation.confirmationDialog(context);
+    return isConfirmed;
   }
 
   void _editWorkout() {
     Navigator.of(context).pushNamed(
       EditWorkoutScreen.routeName,
       arguments: widget.workout,
-    );
-  }
-
-  void _displayMessage(String message) {
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 2),
-        content: Text(
-          message,
-          textAlign: TextAlign.center,
-        ),
-      ),
     );
   }
 }

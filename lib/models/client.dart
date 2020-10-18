@@ -17,7 +17,6 @@ class Client {
   final DateTime birthDate;
   final int height;
   int bodyweight;
-  // Measurements measurements;
 
   Client({
     @required this.id,
@@ -43,26 +42,4 @@ class Client {
     }
     return currentDate.year - birthDate.year - 1;
   }
-
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'id': id,
-  //     'firstName': firstName,
-  //     'lastName': lastName,
-  //     'gender': gender,
-  //     'height': height,
-  //     'bodyweight': bodyweight,
-  //   };
-  // }
-
-  // static Client createFromMap(Map<String, dynamic> map) {
-  //   return Client(
-  //     id: map['id'],
-  //     firstName: map['firstName'],
-  //     lastName: map['lastName'],
-  //     gender: map['gender'],
-  //     height: map['height'],
-  //     bodyweight: map['bodyweight'],
-  //   );
-  // }
 }

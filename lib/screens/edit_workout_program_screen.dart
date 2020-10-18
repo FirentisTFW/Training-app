@@ -18,7 +18,6 @@ class _EditWorkoutProgramScreenState extends State<EditWorkoutProgramScreen> {
   Widget build(BuildContext context) {
     final WorkoutProgram workoutProgram =
         ModalRoute.of(context).settings.arguments;
-    print("edit-workout-program-screen");
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add exercises'),
