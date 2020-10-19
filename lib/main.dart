@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:training_app/screens/measurements_screen.dart';
 import 'package:training_app/screens/new_workout_screen.dart';
 
 import './providers/clients.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
           EditWorkoutScreen.routeName: (ctx) => EditWorkoutScreen(),
           EditWorkoutProgramScreen.routeName: (ctx) =>
               EditWorkoutProgramScreen(),
+          MeasurementsScreen.routeName: (ctx) => MeasurementsScreen(),
         },
       ),
     );

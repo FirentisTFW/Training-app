@@ -13,7 +13,7 @@ enum Bodypart {
   Arm,
   Forearm,
   Chest,
-  Waits,
+  Waist,
   Hips,
   Thigh,
   Calf,

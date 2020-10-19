@@ -43,7 +43,7 @@ class Clients with ChangeNotifier {
 
   Future<void> writeToFile() async {
     final file = await localFile;
-    final clientsInJson = jsonEncode(clients);
+    final clientsInJson = jsonEncode(_clients);
     await file.writeAsString(clientsInJson.toString());
     notifyListeners();
   }

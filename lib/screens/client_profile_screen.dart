@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/clients.dart';
 import '../widgets/client_profile_list_item.dart';
+import './measurements_screen.dart';
 
 class ClientProfileScreen extends StatelessWidget {
   static const routeName = '/client-profile';
@@ -90,7 +91,7 @@ class ClientProfileScreen extends StatelessWidget {
               ),
               onPressed: () {},
             ),
-            ClientProfileListItem('New Workout', Icons.accessibility_new, () {
+            ClientProfileListItem('New Workout', Icons.fitness_center, () {
               showModalBottomSheet(
                   context: context,
                   builder: (_) {
@@ -112,6 +113,13 @@ class ClientProfileScreen extends StatelessWidget {
             ClientProfileListItem('Workout Programs', Icons.event_note, () {
               Navigator.of(context).pushNamed(
                 WorkoutProgramsScreen.routeName,
+                arguments: clientId,
+              );
+            }),
+            Divider(),
+            ClientProfileListItem('Measurements', Icons.subject, () {
+              Navigator.of(context).pushNamed(
+                MeasurementsScreen.routeName,
                 arguments: clientId,
               );
             }),

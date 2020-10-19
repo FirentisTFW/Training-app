@@ -63,7 +63,7 @@ const _$BodypartEnumMap = {
   Bodypart.Arm: 'Arm',
   Bodypart.Forearm: 'Forearm',
   Bodypart.Chest: 'Chest',
-  Bodypart.Waits: 'Waits',
+  Bodypart.Waist: 'Waist',
   Bodypart.Hips: 'Hips',
   Bodypart.Thigh: 'Thigh',
   Bodypart.Calf: 'Calf',
