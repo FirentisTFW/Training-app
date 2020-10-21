@@ -52,7 +52,7 @@ T _$enumDecodeNullable<T>(
 }
 
 const _$MeasurementTypeEnumMap = {
-  MeasurementType.Weight: 'Weight',
+  MeasurementType.Bodyweight: 'Bodyweight',
   MeasurementType.Bodyfat: 'Bodyfat',
   MeasurementType.BodyMeasurement: 'BodyMeasurement',
 };

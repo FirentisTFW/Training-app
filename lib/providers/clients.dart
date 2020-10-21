@@ -53,7 +53,7 @@ class Clients with ChangeNotifier {
       final file = await localFile;
       String content = await file.readAsString();
       return content;
-    } catch (e) {
+    } catch (error) {
       return "An error occured";
     }
   }

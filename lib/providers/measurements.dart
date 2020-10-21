@@ -11,28 +11,58 @@ class Measurements with ChangeNotifier {
   final String _storageFileName = '/measurements.json';
   List<MeasurementSession> _measurements = [
     MeasurementSession(
-        clientId: "2020-09-27 10:54:08.975614",
-        date: DateTime.now(),
-        id: DateTime.now().toString(),
-        measurements: [
-          Measurement(
-            type: MeasurementType.Bodyfat,
-            value: 20.5,
-          ),
-          Measurement(
-            type: MeasurementType.Bodyfat,
-            value: 19.7,
-          ),
-          Measurement(
-            type: MeasurementType.Weight,
-            value: 82,
-          ),
-          BodyMeasurement(
-            type: MeasurementType.Weight,
-            bodypart: Bodypart.Waist,
-            value: 78,
-          ),
-        ])
+      clientId: "2020-09-27 10:54:08.975614",
+      date: DateTime.now(),
+      id: DateTime.now().toString(),
+      measurements: [
+        Measurement(
+          type: MeasurementType.Bodyfat,
+          value: 20.5,
+        ),
+        Measurement(
+          type: MeasurementType.Bodyfat,
+          value: 19.7,
+        ),
+        Measurement(
+          type: MeasurementType.Bodyweight,
+          value: 82,
+        ),
+        BodyMeasurement(
+          type: MeasurementType.BodyMeasurement,
+          bodypart: Bodypart.Waist,
+          value: 78,
+        ),
+      ],
+    ),
+    MeasurementSession(
+      clientId: "2020-09-27 10:54:08.975614",
+      date: DateTime(2020, 10, 14),
+      id: DateTime.now().toString(),
+      measurements: [
+        Measurement(
+          type: MeasurementType.Bodyfat,
+          value: 20.5,
+        ),
+        Measurement(
+          type: MeasurementType.Bodyfat,
+          value: 19.7,
+        ),
+        Measurement(
+          type: MeasurementType.Bodyweight,
+          value: 82,
+        ),
+        BodyMeasurement(
+          type: MeasurementType.BodyMeasurement,
+          bodypart: Bodypart.Waist,
+          value: 78,
+        ),
+        BodyMeasurement(
+          type: MeasurementType.BodyMeasurement,
+          bodypart: Bodypart.Waist,
+          value: 78,
+        ),
+      ],
+    ),
   ];
 
   List<MeasurementSession> get measurements {
@@ -52,10 +82,23 @@ class Measurements with ChangeNotifier {
     return File('$path/$_storageFileName');
   }
 
+  Future<void> fetchMeasurements() async {
+    try {
+      final fileData = await readDataFromFile();
+      final measurementsMap = jsonDecode(fileData) as List;
+      _measurements = measurementsMap
+          .map((measurementSession) =>
+              MeasurementSession.fromJson(measurementSession))
+          .toList();
+
+      notifyListeners();
+    } catch (error) {}
+  }
+
   Future<void> writeToFile() async {
     final file = await localFile;
-    final clientsInJson = jsonEncode(_measurements);
-    await file.writeAsString(clientsInJson.toString());
+    final measurementsInJson = jsonEncode(_measurements);
+    await file.writeAsString(measurementsInJson.toString());
     notifyListeners();
   }
 
@@ -64,7 +107,7 @@ class Measurements with ChangeNotifier {
       final file = await localFile;
       String content = await file.readAsString();
       return content;
-    } catch (e) {
+    } catch (error) {
       return "An error occured";
     }
   }

@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'measurement.g.dart';
 
 enum MeasurementType {
-  Weight,
+  Bodyweight,
   Bodyfat,
   BodyMeasurement,
 }

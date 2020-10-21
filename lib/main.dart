@@ -6,6 +6,7 @@ import 'package:training_app/screens/new_workout_screen.dart';
 import './providers/clients.dart';
 import './providers/workout_programs.dart';
 import './providers/workouts.dart';
+import './providers/measurements.dart';
 import './screens/add_client_screen.dart';
 import './screens/client_profile_screen.dart';
 import './screens/clients_screen.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => Workouts(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Measurements(),
         ),
       ],
       child: MaterialApp(
