@@ -26,6 +26,16 @@ class Validator {
     return null;
   }
 
+  static String validateForDoubleNumberOrEmpty(String value) {
+    if (value.isEmpty) {
+      return null;
+    }
+    if (double.tryParse(value) == null) {
+      return 'Please enter a number or leave field empty';
+    }
+    return null;
+  }
+
   static String validateHeight(String value) {
     if (validateForEmptyString(value) != null) {
       return 'Please provide height.';

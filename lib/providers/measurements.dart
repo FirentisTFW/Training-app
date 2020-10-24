@@ -75,11 +75,36 @@ class Measurements with ChangeNotifier {
         .toList();
   }
 
+  void addMeasurementSession(MeasurementSession newSession) {
+    _measurements.add(newSession);
+
+    notifyListeners();
+  }
+
   // STORAGE MANAGEMENT
 
   Future<File> get localFile async {
     final path = await StorageProvider.localPath;
     return File('$path/$_storageFileName');
+  }
+
+  void _convertMeasurementsFromMap() {
+    for (int i = 0; i < _measurements.length; i++) {
+      var innerMeasurementsMap = _measurements[i].measurements;
+      var test = Measurement.fromJson(innerMeasurementsMap[0]);
+      var innerMeasurements = innerMeasurementsMap.map(
+        (singleMeasurement) {
+          if (singleMeasurement['type'] != 'BodyMeasurement') {
+            return Measurement.fromJson(singleMeasurement);
+          } else {
+            return BodyMeasurement.fromJson(singleMeasurement);
+          }
+        },
+      ).toList();
+      _measurements[i] =
+          _measurements[i].copyWith(measurements: innerMeasurements);
+      print(_measurements[i].measurements);
+    }
   }
 
   Future<void> fetchMeasurements() async {
@@ -90,6 +115,7 @@ class Measurements with ChangeNotifier {
           .map((measurementSession) =>
               MeasurementSession.fromJson(measurementSession))
           .toList();
+      _convertMeasurementsFromMap();
 
       notifyListeners();
     } catch (error) {}

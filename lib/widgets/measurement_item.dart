@@ -21,7 +21,6 @@ class _MeasurementItemState extends State<MeasurementItem> {
     final bodyweight = widget.measurementSession.getBodyweight();
     final bodyfat = widget.measurementSession.getBodyfat();
     final bodyMeasurements = widget.measurementSession.getBodyMeasurements();
-    // final bodyMeasurements = null;
     return Container(
       height: getFinalHeight(
           bodyMeasurements != null ? bodyMeasurements.length : null),

@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:training_app/models/client.dart';
 import 'package:training_app/providers/clients.dart';

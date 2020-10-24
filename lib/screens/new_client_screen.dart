@@ -7,14 +7,14 @@ import '../helpers/validator.dart';
 import '../models/client.dart';
 import '../providers/clients.dart';
 
-class AddClientScreen extends StatefulWidget {
+class NewClientScreen extends StatefulWidget {
   static const routeName = '/add-client';
 
   @override
-  _AddClientScreenState createState() => _AddClientScreenState();
+  _NewClientScreenState createState() => _NewClientScreenState();
 }
 
-class _AddClientScreenState extends State<AddClientScreen> {
+class _NewClientScreenState extends State<NewClientScreen> {
   final _addClientForm = GlobalKey<FormState>();
   final _lastNameFocusNode = FocusNode();
   final _genderFocusNode = FocusNode();

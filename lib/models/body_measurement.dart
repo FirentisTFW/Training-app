@@ -5,6 +5,16 @@ import './measurement.dart';
 
 part 'body_measurement.g.dart';
 
+enum Bodypart {
+  Arm,
+  Forearm,
+  Chest,
+  Waist,
+  Hips,
+  Thigh,
+  Calf,
+}
+
 @JsonSerializable()
 class BodyMeasurement extends Measurement {
   final Bodypart bodypart;

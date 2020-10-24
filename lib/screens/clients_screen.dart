@@ -2,7 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:training_app/screens/add_client_screen.dart';
+import 'package:training_app/screens/new_client_screen.dart';
 import 'package:training_app/widgets/no_items_added_yet_informator.dart';
 
 import '../providers/clients.dart';
@@ -51,7 +51,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
               color: Theme.of(context).accentColor,
             ),
             onPressed: () {
-              Navigator.of(context).pushNamed(AddClientScreen.routeName);
+              Navigator.of(context).pushNamed(NewClientScreen.routeName);
             },
           ),
           PopupMenuButton(

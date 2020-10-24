@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:training_app/screens/new_measurement_screen.dart';
 import 'package:training_app/widgets/measurement_item.dart';
 import 'package:training_app/widgets/no_items_added_yet_informator.dart';
 
@@ -33,7 +36,20 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
     final measurementsProvider = Provider.of<Measurements>(context);
     final measurements = measurementsProvider.findByClientId(clientId);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            iconSize: 30,
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                NewMeasurementScreen.routeName,
+                arguments: clientId,
+              );
+            },
+          )
+        ],
+      ),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(

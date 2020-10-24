@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:training_app/screens/measurements_screen.dart';
+import 'package:training_app/screens/new_measurement_screen.dart';
 import 'package:training_app/screens/new_workout_screen.dart';
 
 import './providers/clients.dart';
 import './providers/workout_programs.dart';
 import './providers/workouts.dart';
 import './providers/measurements.dart';
-import './screens/add_client_screen.dart';
+import 'screens/new_client_screen.dart';
 import './screens/client_profile_screen.dart';
 import './screens/clients_screen.dart';
 import './screens/statistics_screen.dart';
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (ctx) => ClientsScreen(),
           StatisticsScreen.routeName: (ctx) => StatisticsScreen(),
-          AddClientScreen.routeName: (ctx) => AddClientScreen(),
+          NewClientScreen.routeName: (ctx) => NewClientScreen(),
           ClientProfileScreen.routeName: (ctx) => ClientProfileScreen(),
           WorkoutProgramsScreen.routeName: (ctx) => WorkoutProgramsScreen(),
           ProgramExercisesScreen.routeName: (ctx) => ProgramExercisesScreen(),
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
           EditWorkoutProgramScreen.routeName: (ctx) =>
               EditWorkoutProgramScreen(),
           MeasurementsScreen.routeName: (ctx) => MeasurementsScreen(),
+          NewMeasurementScreen.routeName: (ctx) => NewMeasurementScreen(),
         },
       ),
     );

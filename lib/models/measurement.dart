@@ -9,16 +9,6 @@ enum MeasurementType {
   BodyMeasurement,
 }
 
-enum Bodypart {
-  Arm,
-  Forearm,
-  Chest,
-  Waist,
-  Hips,
-  Thigh,
-  Calf,
-}
-
 @JsonSerializable()
 class Measurement {
   final double value;
