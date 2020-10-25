@@ -40,8 +40,8 @@ void main() async {
         'Measurements inside of single measurement session are fetched correctly',
         () {
       final measurements = mockMeasurements.measurements[0].measurements[0];
-      expect(measurements['value'], 20.5);
-      expect(measurements['type'], 'Bodyfat');
+      expect(measurements.value, 20.5);
+      expect(measurements.type, MeasurementType.Bodyfat);
     });
   });
 

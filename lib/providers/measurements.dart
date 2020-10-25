@@ -10,59 +10,59 @@ import 'package:training_app/models/measurement_session.dart';
 class Measurements with ChangeNotifier {
   final String _storageFileName = '/measurements.json';
   List<MeasurementSession> _measurements = [
-    MeasurementSession(
-      clientId: "2020-09-27 10:54:08.975614",
-      date: DateTime.now(),
-      id: DateTime.now().toString(),
-      measurements: [
-        Measurement(
-          type: MeasurementType.Bodyfat,
-          value: 20.5,
-        ),
-        Measurement(
-          type: MeasurementType.Bodyfat,
-          value: 19.7,
-        ),
-        Measurement(
-          type: MeasurementType.Bodyweight,
-          value: 82,
-        ),
-        BodyMeasurement(
-          type: MeasurementType.BodyMeasurement,
-          bodypart: Bodypart.Waist,
-          value: 78,
-        ),
-      ],
-    ),
-    MeasurementSession(
-      clientId: "2020-09-27 10:54:08.975614",
-      date: DateTime(2020, 10, 14),
-      id: DateTime.now().toString(),
-      measurements: [
-        Measurement(
-          type: MeasurementType.Bodyfat,
-          value: 20.5,
-        ),
-        Measurement(
-          type: MeasurementType.Bodyfat,
-          value: 19.7,
-        ),
-        Measurement(
-          type: MeasurementType.Bodyweight,
-          value: 82,
-        ),
-        BodyMeasurement(
-          type: MeasurementType.BodyMeasurement,
-          bodypart: Bodypart.Waist,
-          value: 78,
-        ),
-        BodyMeasurement(
-          type: MeasurementType.BodyMeasurement,
-          bodypart: Bodypart.Waist,
-          value: 78,
-        ),
-      ],
-    ),
+    // MeasurementSession(
+    //   clientId: "2020-09-27 10:54:08.975614",
+    //   date: DateTime.now(),
+    //   id: DateTime.now().toString(),
+    //   measurements: [
+    //     Measurement(
+    //       type: MeasurementType.Bodyfat,
+    //       value: 20.5,
+    //     ),
+    //     Measurement(
+    //       type: MeasurementType.Bodyfat,
+    //       value: 19.7,
+    //     ),
+    //     Measurement(
+    //       type: MeasurementType.Bodyweight,
+    //       value: 82,
+    //     ),
+    //     BodyMeasurement(
+    //       type: MeasurementType.BodyMeasurement,
+    //       bodypart: Bodypart.Waist,
+    //       value: 78,
+    //     ),
+    //   ],
+    // ),
+    // MeasurementSession(
+    //   clientId: "2020-09-27 10:54:08.975614",
+    //   date: DateTime(2020, 10, 14),
+    //   id: DateTime.now().toString(),
+    //   measurements: [
+    //     Measurement(
+    //       type: MeasurementType.Bodyfat,
+    //       value: 20.5,
+    //     ),
+    //     Measurement(
+    //       type: MeasurementType.Bodyfat,
+    //       value: 19.7,
+    //     ),
+    //     Measurement(
+    //       type: MeasurementType.Bodyweight,
+    //       value: 82,
+    //     ),
+    //     BodyMeasurement(
+    //       type: MeasurementType.BodyMeasurement,
+    //       bodypart: Bodypart.Waist,
+    //       value: 78,
+    //     ),
+    //     BodyMeasurement(
+    //       type: MeasurementType.BodyMeasurement,
+    //       bodypart: Bodypart.Waist,
+    //       value: 78,
+    //     ),
+    //   ],
+    // ),
   ];
 
   List<MeasurementSession> get measurements {
@@ -81,6 +81,10 @@ class Measurements with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteMeasurementSession(String sessionId) {
+    _measurements.removeWhere((singleSession) => singleSession.id == sessionId);
+  }
+
   // STORAGE MANAGEMENT
 
   Future<File> get localFile async {
@@ -90,20 +94,11 @@ class Measurements with ChangeNotifier {
 
   void _convertMeasurementsFromMap() {
     for (int i = 0; i < _measurements.length; i++) {
-      var innerMeasurementsMap = _measurements[i].measurements;
-      var test = Measurement.fromJson(innerMeasurementsMap[0]);
-      var innerMeasurements = innerMeasurementsMap.map(
-        (singleMeasurement) {
-          if (singleMeasurement['type'] != 'BodyMeasurement') {
-            return Measurement.fromJson(singleMeasurement);
-          } else {
-            return BodyMeasurement.fromJson(singleMeasurement);
-          }
-        },
-      ).toList();
+      final innerMeasurementsConverted =
+          MeasurementSession.convertBodyMeasurementsFromMap(
+              _measurements[i].measurements);
       _measurements[i] =
-          _measurements[i].copyWith(measurements: innerMeasurements);
-      print(_measurements[i].measurements);
+          _measurements[i].copyWith(measurements: innerMeasurementsConverted);
     }
   }
 

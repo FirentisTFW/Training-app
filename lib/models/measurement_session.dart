@@ -41,17 +41,17 @@ class MeasurementSession {
   Map<String, dynamic> toJson() => _$MeasurementSessionToJson(this);
 
   double getBodyweight() {
-    return measurements
-        .firstWhere(
-            (measurement) => measurement.type == MeasurementType.Bodyweight)
-        .value;
+    final bodyweightMeasurement = measurements.firstWhere(
+        (measurement) => measurement.type == MeasurementType.Bodyweight,
+        orElse: () => null);
+    return bodyweightMeasurement?.value ?? null;
   }
 
   double getBodyfat() {
-    return measurements
-        .firstWhere(
-            (measurement) => measurement.type == MeasurementType.Bodyfat)
-        .value;
+    final bodyfatMeasurement = measurements.firstWhere(
+        (measurement) => measurement.type == MeasurementType.Bodyfat,
+        orElse: () => null);
+    return bodyfatMeasurement?.value ?? null;
   }
 
   List<BodyMeasurement> getBodyMeasurements() {
@@ -65,5 +65,19 @@ class MeasurementSession {
         .map((measurement) => BodyMeasurement.fromJson(measurement))
         .toList();
     return bodyMeasurementsFinal;
+  }
+
+  static List<dynamic> convertBodyMeasurementsFromMap(
+      List<dynamic> measurements) {
+    var bodyMeasurements = measurements.map(
+      (singleMeasurement) {
+        if (singleMeasurement['type'] != 'BodyMeasurement') {
+          return Measurement.fromJson(singleMeasurement);
+        } else {
+          return BodyMeasurement.fromJson(singleMeasurement);
+        }
+      },
+    ).toList();
+    return bodyMeasurements;
   }
 }

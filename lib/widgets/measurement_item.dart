@@ -1,5 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:training_app/helpers/confirmation.dart';
+import 'package:training_app/providers/measurements.dart';
+import 'package:training_app/widgets/pop_up_menu.dart';
 
 import '../models/measurement_session.dart';
 import '../models/body_measurement.dart';
@@ -15,39 +19,74 @@ class MeasurementItem extends StatefulWidget {
 
 class _MeasurementItemState extends State<MeasurementItem> {
   var _isExpanded = false;
+  Offset _tapPosition;
 
   @override
   Widget build(BuildContext context) {
     final bodyweight = widget.measurementSession.getBodyweight();
     final bodyfat = widget.measurementSession.getBodyfat();
     final bodyMeasurements = widget.measurementSession.getBodyMeasurements();
-    return Container(
-      height: getFinalHeight(
-          bodyMeasurements != null ? bodyMeasurements.length : null),
-      child: Card(
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  DateFormat.yMd().format(widget.measurementSession.date),
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+    return InkWell(
+      onTapDown: _storePosition,
+      onLongPress: _showPopUpMenuAndChooseOption,
+      child: Container(
+        height: getFinalHeight(
+            bodyMeasurements != null ? bodyMeasurements.length : null),
+        child: Card(
+          child: Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    DateFormat.yMd().format(widget.measurementSession.date),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
                   ),
                 ),
-              ),
-              if (bodyweight != null) showAttribute('Bodyweight', bodyweight),
-              if (bodyfat != null) showAttribute('Bodyfat', bodyfat),
-              if (bodyMeasurements != null)
-                showMeasurementsList(bodyMeasurements),
-            ],
+                if (bodyweight != null) showAttribute('Bodyweight', bodyweight),
+                if (bodyfat != null) showAttribute('Bodyfat', bodyfat),
+                if (bodyMeasurements != null)
+                  showMeasurementsList(bodyMeasurements),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void _storePosition(TapDownDetails details) {
+    _tapPosition = details.globalPosition;
+  }
+
+  void _showPopUpMenuAndChooseOption() async {
+    final chosenOption = await PopUpMenu.createPopUpMenuAndChooseOption(
+      context,
+      _tapPosition,
+    );
+    if (chosenOption == 'delete') {
+      await _deleteMeasurementSession();
+    }
+  }
+
+  Future<void> _deleteMeasurementSession() async {
+    if (!await _confirmDeletion()) {
+      return;
+    }
+
+    final measurementsProvider =
+        Provider.of<Measurements>(context, listen: false);
+    measurementsProvider.deleteMeasurementSession(widget.measurementSession.id);
+    await measurementsProvider.writeToFile();
+    Confirmation.displayMessage('Measurements session deleted.', context);
+  }
+
+  Future<bool> _confirmDeletion() async {
+    return await Confirmation.confirmationDialog(context);
   }
 
   double getFinalHeight(bodyMeasurementsLength) {
@@ -55,7 +94,7 @@ class _MeasurementItemState extends State<MeasurementItem> {
       return 120.0;
     }
     if (_isExpanded) {
-      return 160.0 + bodyMeasurementsLength * 35.0 + 20;
+      return 190.0 + bodyMeasurementsLength * 30.0;
     }
     return 190.0;
   }
@@ -64,7 +103,10 @@ class _MeasurementItemState extends State<MeasurementItem> {
     return Padding(
       padding: const EdgeInsets.all(4),
       child: Text(
-        attributeName + ':  ' + value.toString() + getTrail(attributeName),
+        attributeName +
+            ':  ' +
+            value.toString() +
+            getTrailForAttribute(attributeName),
         style: const TextStyle(
           fontSize: 18,
         ),
@@ -72,7 +114,7 @@ class _MeasurementItemState extends State<MeasurementItem> {
     );
   }
 
-  String getTrail(String attributeName) {
+  String getTrailForAttribute(String attributeName) {
     if (attributeName == 'Bodyweight') {
       return ' kg';
     }

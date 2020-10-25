@@ -144,7 +144,6 @@ class _NewMeasurementsFormState extends State<NewMeasurementsForm> {
     _newMeasurementsForm.currentState.save();
     _measurementSession =
         _measurementSession.copyWith(measurements: _measurements);
-    print(_measurements);
     final measurementsProvider =
         Provider.of<Measurements>(context, listen: false);
     measurementsProvider.addMeasurementSession(_measurementSession);

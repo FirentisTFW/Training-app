@@ -99,8 +99,7 @@ class _WorkoutItemState extends State<WorkoutItem> {
   }
 
   Future<bool> _confirmDeletion() async {
-    final isConfirmed = await Confirmation.confirmationDialog(context);
-    return isConfirmed;
+    return await Confirmation.confirmationDialog(context);
   }
 
   void _editWorkout() {
