@@ -8,10 +8,10 @@ import './providers/clients.dart';
 import './providers/workout_programs.dart';
 import './providers/workouts.dart';
 import './providers/measurements.dart';
-import 'screens/new_client_screen.dart';
+import './screens/new_client_screen.dart';
 import './screens/client_profile_screen.dart';
 import './screens/clients_screen.dart';
-import './screens/statistics_screen.dart';
+import './screens/client_statistics_screen.dart';
 import './screens/workout_programs_screen.dart';
 import './screens/done_workouts_screen.dart';
 import './screens/program_exercises_screen.dart';
@@ -19,6 +19,7 @@ import './screens/workout_details_screen.dart';
 import './screens/new_workout_program_screen.dart';
 import './screens/edit_workout_screen.dart';
 import './screens/edit_workout_program_screen.dart';
+import './screens/statistics_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -54,8 +55,8 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (ctx) => ClientsScreen(),
-          StatisticsScreen.routeName: (ctx) => StatisticsScreen(),
           NewClientScreen.routeName: (ctx) => NewClientScreen(),
+          StatisticsScreen.routeName: (ctx) => StatisticsScreen(),
           ClientProfileScreen.routeName: (ctx) => ClientProfileScreen(),
           WorkoutProgramsScreen.routeName: (ctx) => WorkoutProgramsScreen(),
           ProgramExercisesScreen.routeName: (ctx) => ProgramExercisesScreen(),
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
               EditWorkoutProgramScreen(),
           MeasurementsScreen.routeName: (ctx) => MeasurementsScreen(),
           NewMeasurementScreen.routeName: (ctx) => NewMeasurementScreen(),
+          ClientStatisticsScreen.routeName: (ctx) => ClientStatisticsScreen(),
         },
       ),
     );

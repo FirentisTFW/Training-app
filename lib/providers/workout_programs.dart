@@ -33,6 +33,10 @@ class WorkoutPrograms with ChangeNotifier {
         program.name == programName && program.clientId == clientId);
   }
 
+  int getTotalNumberOfWorkoutProgramsByClientId(String clientId) {
+    return findByClientId(clientId).length;
+  }
+
   void nameNewProgram({
     String clientId,
     String name,

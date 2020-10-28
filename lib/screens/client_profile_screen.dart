@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:training_app/screens/done_workouts_screen.dart';
+import 'package:training_app/screens/client_statistics_screen.dart';
 import 'package:training_app/screens/workout_programs_screen.dart';
 import 'package:training_app/widgets/workout_program_chooser.dart';
 import 'package:provider/provider.dart';
@@ -126,7 +127,12 @@ class ClientProfileScreen extends StatelessWidget {
             Divider(),
             ClientProfileListItem('Progress', Icons.show_chart, () {}),
             Divider(),
-            ClientProfileListItem('Statistics', Icons.insert_chart, () {}),
+            ClientProfileListItem('Statistics', Icons.insert_chart, () {
+              Navigator.of(context).pushNamed(
+                ClientStatisticsScreen.routeName,
+                arguments: clientId,
+              );
+            }),
             Divider(),
           ],
         ),
