@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:training_app/models/workout.dart';
 
-import '../helpers/validator.dart';
+import '../services/validator.dart';
 import '../providers/workouts.dart';
 
 class ExerciseAndSets extends StatefulWidget {

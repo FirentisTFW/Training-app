@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import '../lib/helpers/validator.dart';
+import 'package:training_app/services/validator.dart';
 
 void main() {
   group('Validator', () {

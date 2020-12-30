@@ -2,10 +2,8 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:training_app/database/storage_provider.dart';
-import 'package:training_app/models/body_measurement.dart';
-import 'package:training_app/models/measurement.dart';
 import 'package:training_app/models/measurement_session.dart';
+import 'package:training_app/services/storage_service.dart';
 
 class Measurements with ChangeNotifier {
   final String _storageFileName = '/measurements.json';
@@ -88,7 +86,7 @@ class Measurements with ChangeNotifier {
   // STORAGE MANAGEMENT
 
   Future<File> get localFile async {
-    final path = await StorageProvider.localPath;
+    final path = await StorageService.localPath;
     return File('$path/$_storageFileName');
   }
 

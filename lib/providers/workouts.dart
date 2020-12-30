@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:training_app/services/storage_service.dart';
 
-import '../database/storage_provider.dart';
 import '../models/workout.dart';
 
 class Workouts with ChangeNotifier {
@@ -95,7 +95,7 @@ class Workouts with ChangeNotifier {
   // STORAGE MANAGEMENT
 
   Future<File> get localFile async {
-    final path = await StorageProvider.localPath;
+    final path = await StorageService.localPath;
     return File('$path/$_storageFileName');
   }
 

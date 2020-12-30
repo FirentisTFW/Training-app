@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../helpers/validator.dart';
+import '../services/validator.dart';
 import '../providers/workout_programs.dart';
 
 class NameProgram extends StatefulWidget {

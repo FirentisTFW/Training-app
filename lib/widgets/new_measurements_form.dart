@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../helpers/validator.dart';
+import '../services/validator.dart';
 import '../models/measurement_session.dart';
 import '../models/measurement.dart';
 import '../models/body_measurement.dart';

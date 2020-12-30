@@ -3,7 +3,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../helpers/validator.dart';
+import '../services/validator.dart';
 import '../models/client.dart';
 import '../providers/clients.dart';
 

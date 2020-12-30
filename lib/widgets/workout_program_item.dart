@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../helpers/confirmation.dart';
+import '../ui/dialogs/confirmation.dart';
 import '../models/workout_program.dart';
 import 'package:training_app/screens/program_exercises_screen.dart';
 import 'package:training_app/screens/edit_workout_program_screen.dart';

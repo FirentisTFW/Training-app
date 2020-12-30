@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:training_app/services/storage_service.dart';
 
 import '../models/client.dart';
-import '../database/storage_provider.dart';
 
 class Clients with ChangeNotifier {
   final String _storageFileName = '/clients.json';
@@ -27,7 +27,7 @@ class Clients with ChangeNotifier {
   // STORAGE MANAGEMENT
 
   Future<File> get localFile async {
-    final path = await StorageProvider.localPath;
+    final path = await StorageService.localPath;
     return File('$path/$_storageFileName');
   }
 
