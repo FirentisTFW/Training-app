@@ -1,6 +1,6 @@
 import 'package:training_app/screens/client_profile_screen.dart';
 import 'package:training_app/screens/client_statistics_screen.dart';
-import 'package:training_app/screens/clients_screen.dart';
+import 'package:training_app/ui/screens/clients_screen/clients_screen.dart';
 import 'package:training_app/screens/done_workouts_screen.dart';
 import 'package:training_app/screens/edit_workout_program_screen.dart';
 import 'package:training_app/screens/edit_workout_screen.dart';

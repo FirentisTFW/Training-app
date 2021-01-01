@@ -34,9 +34,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Client'),
-      ),
+      appBar: AppBar(title: const Text('Add Client')),
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: Form(
