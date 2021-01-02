@@ -22,7 +22,6 @@ void main() async {
       expect(mockClients.clients[0].firstName, 'Jan');
       expect(mockClients.clients[0].lastName, 'Kowalski');
       expect(mockClients.clients[0].height, 175);
-      expect(mockClients.clients[0].bodyweight, 76);
     });
 
     test('getClientById() works properly', () {
@@ -38,9 +37,8 @@ void main() async {
       birthDate: DateTime(1980, 10, 20),
       firstName: 'Maciej',
       lastName: 'Mankiewicz',
-      gender: 'Man',
+      gender: Gender.Man,
       height: 172,
-      bodyweight: 82,
     );
 
     test('Adding new client increases _clients length', () {
@@ -55,7 +53,6 @@ void main() async {
       expect(mockClients.clients[2].lastName, 'Mankiewicz');
       expect(mockClients.clients[2].gender, 'Man');
       expect(mockClients.clients[2].height, 172);
-      expect(mockClients.clients[2].bodyweight, 82);
     });
   });
 }

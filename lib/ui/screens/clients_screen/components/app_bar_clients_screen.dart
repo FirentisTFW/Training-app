@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:training_app/screens/new_client_screen.dart';
+import 'package:training_app/ui/screens/new_client_screen/new_client_screen.dart';
 
 class AppBarClientsScreen extends StatelessWidget
     implements PreferredSizeWidget {
