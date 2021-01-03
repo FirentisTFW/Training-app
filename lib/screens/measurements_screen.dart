@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:training_app/screens/new_measurement_screen.dart';
 import 'package:training_app/widgets/measurement_item.dart';
-import 'package:training_app/widgets/no_items_added_yet_informator.dart';
+import 'package:training_app/ui/universal_components/no_items_added_yet_informator.dart';
 
 import '../providers/measurements.dart';
 

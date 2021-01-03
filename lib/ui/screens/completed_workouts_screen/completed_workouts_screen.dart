@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:training_app/ui/universal_components/loading_spinner.dart';
 
-import '../providers/workouts.dart';
-import '../widgets/workout_item.dart';
-import '../widgets/no_items_added_yet_informator.dart';
+import '../../../providers/workouts.dart';
+import 'components/workout_item.dart';
+import '../../universal_components/no_items_added_yet_informator.dart';
 
-class DoneWorkoutScreen extends StatefulWidget {
+class CompletedWorkoutScreen extends StatefulWidget {
   static const routeName = '/done-workouts';
 
   @override
-  _DoneWorkoutScreenState createState() => _DoneWorkoutScreenState();
+  _CompletedWorkoutScreenState createState() => _CompletedWorkoutScreenState();
 }
 
-class _DoneWorkoutScreenState extends State<DoneWorkoutScreen> {
+class _CompletedWorkoutScreenState extends State<CompletedWorkoutScreen> {
   var _isLoading = true;
 
   @override
-  void didChangeDependencies() {
-    if (_isLoading) {
-      Provider.of<Workouts>(context).fetchWorkouts().then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-      });
-    }
+  void didChangeDependencies() async {
     super.didChangeDependencies();
+    if (_isLoading) {
+      await Provider.of<Workouts>(context).fetchWorkouts();
+
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -32,14 +31,11 @@ class _DoneWorkoutScreenState extends State<DoneWorkoutScreen> {
     final clientId = ModalRoute.of(context).settings.arguments;
     final workoutsData = Provider.of<Workouts>(context);
     final workouts = workoutsData.findByClientId(clientId).reversed.toList();
+
     return Scaffold(
       appBar: AppBar(),
       body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.black,
-              ),
-            )
+          ? LoadingSpinner()
           : workouts.length == 0
               ? NoItemsAddedYetInformator('No workouts completed yet.')
               : ListView.builder(

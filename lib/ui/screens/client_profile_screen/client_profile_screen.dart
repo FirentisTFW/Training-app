@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:training_app/providers/workouts.dart';
-import 'package:training_app/screens/done_workouts_screen.dart';
+import 'package:training_app/ui/screens/completed_workouts_screen/completed_workouts_screen.dart';
 import 'package:training_app/screens/client_statistics_screen.dart';
 import 'package:training_app/screens/workout_programs_screen.dart';
 import 'package:training_app/ui/universal_components/loading_spinner.dart';
@@ -135,7 +135,7 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
 
   Future goToDoneWorkoutScreen(BuildContext context, String clientId) =>
       Navigator.of(context).pushNamed(
-        DoneWorkoutScreen.routeName,
+        CompletedWorkoutScreen.routeName,
         arguments: clientId,
       );
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:training_app/ui/dialogs/confirmation.dart';
 import 'package:training_app/providers/measurements.dart';
-import 'package:training_app/widgets/pop_up_menu.dart';
+import 'package:training_app/ui/universal_components/pop_up_menu.dart';
 
 import '../models/measurement_session.dart';
 import '../models/body_measurement.dart';

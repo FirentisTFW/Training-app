@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/workout_programs.dart';
 import '../screens/new_workout_program_screen.dart';
-import '../widgets/no_items_added_yet_informator.dart';
+import '../ui/universal_components/no_items_added_yet_informator.dart';
 import '../widgets/workout_program_item.dart';
 
 class WorkoutProgramsScreen extends StatelessWidget {

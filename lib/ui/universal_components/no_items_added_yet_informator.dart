@@ -10,7 +10,10 @@ class NoItemsAddedYetInformator extends StatelessWidget {
     return Center(
       child: Text(
         text,
-        style: TextStyle(color: Colors.black, fontSize: 24),
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+        ),
       ),
     );
   }

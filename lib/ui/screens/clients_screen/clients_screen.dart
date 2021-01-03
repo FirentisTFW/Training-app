@@ -3,7 +3,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:training_app/ui/universal_components/loading_spinner.dart';
-import 'package:training_app/widgets/no_items_added_yet_informator.dart';
+import 'package:training_app/ui/universal_components/no_items_added_yet_informator.dart';
 
 import '../../../providers/clients.dart';
 import '../../../providers/workout_programs.dart';

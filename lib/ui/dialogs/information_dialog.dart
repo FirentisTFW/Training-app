@@ -17,4 +17,16 @@ class InformationDialogs {
       ),
     );
   }
+
+  static void showSnackbar(String message, BuildContext context) {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 2),
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
 }
