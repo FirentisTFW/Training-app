@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../screens/client_profile_screen.dart';
+import '../../client_profile_screen/client_profile_screen.dart';
 
 class ClientItem extends StatelessWidget {
   final String id;

@@ -27,9 +27,8 @@ class _ClientsScreenState extends State<ClientsScreen> {
       await Provider.of<Clients>(context, listen: false).fetchClients();
       await Provider.of<WorkoutPrograms>(context, listen: false)
           .fetchWorkoutPrograms();
-      setState(() {
-        _isLoading = false;
-      });
+
+      setState(() => _isLoading = false);
     }
   }
 
