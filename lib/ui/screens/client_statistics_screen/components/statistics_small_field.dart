@@ -26,9 +26,9 @@ class StatisticsSmallField extends StatelessWidget {
           ),
           Text(
             date,
-            style: date != "No workouts completed yet"
-                ? TextStyle(fontSize: 20)
-                : TextStyle(fontSize: 14),
+            style: date == "No workouts completed yet"
+                ? TextStyle(fontSize: 14)
+                : TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
         ],

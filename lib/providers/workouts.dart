@@ -23,10 +23,10 @@ class Workouts with ChangeNotifier {
 
   double getNumberOfWorkoutsPerWeekByClientId(String clientId) {
     DateTime firstWorkoutDate = getFirstWorkoutDateByClientId(clientId);
-    DateTime lastWorkoutDate = getLastWorkoutDateByClientId(clientId);
+    DateTime currentDate = DateTime.now();
     double dateDifferenceInWeeks =
-        firstWorkoutDate?.difference(lastWorkoutDate)?.inDays?.toDouble() ??
-            0.0 / 7;
+        firstWorkoutDate?.difference(currentDate)?.inDays?.toDouble()?.abs() ??
+            0.0;
     if (dateDifferenceInWeeks == 0.0) {
       // there's only one workout or all of the workouts were done the same day
       dateDifferenceInWeeks = 1;
@@ -36,12 +36,12 @@ class Workouts with ChangeNotifier {
 
   DateTime getFirstWorkoutDateByClientId(String clientId) {
     final clientWorkouts = findByClientId(clientId);
-    return clientWorkouts.isNotEmpty ? clientWorkouts.last.date : null;
+    return clientWorkouts.isNotEmpty ? clientWorkouts.first.date : null;
   }
 
   DateTime getLastWorkoutDateByClientId(String clientId) {
     final clientWorkouts = findByClientId(clientId);
-    return clientWorkouts.isNotEmpty ? clientWorkouts.first.date : null;
+    return clientWorkouts.isNotEmpty ? clientWorkouts.last.date : null;
   }
 
   void initializeNewWorkout({
