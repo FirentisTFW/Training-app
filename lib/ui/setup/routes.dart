@@ -4,7 +4,7 @@ import 'package:training_app/ui/screens/clients_screen/clients_screen.dart';
 import 'package:training_app/ui/screens/completed_workouts_screen/completed_workouts_screen.dart';
 import 'package:training_app/screens/edit_workout_program_screen.dart';
 import 'package:training_app/screens/edit_workout_screen.dart';
-import 'package:training_app/screens/measurements_screen.dart';
+import 'package:training_app/ui/screens/measurements_screen/measurements_screen.dart';
 import 'package:training_app/ui/screens/new_client_screen/new_client_screen.dart';
 import 'package:training_app/screens/new_measurement_screen.dart';
 import 'package:training_app/screens/new_workout_program_screen.dart';

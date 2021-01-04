@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/clients.dart';
 import 'components/client_profile_list_item.dart';
-import '../../../screens/measurements_screen.dart';
+import '../measurements_screen/measurements_screen.dart';
 
 class ClientProfileScreen extends StatefulWidget {
   static const routeName = '/client-profile';

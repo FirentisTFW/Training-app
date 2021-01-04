@@ -129,8 +129,8 @@ class _NewClientScreenState extends State<NewClientScreen> {
       await clientsProvider.writeToFile();
       Navigator.of(context).pop();
     } catch (err) {
-      // TODO: error handling
-      print(err.toString());
+      InformationDialogs.showInformationDialog(context,
+          title: 'Try again', message: 'Couldn\'t add client. Try again.');
     }
   }
 }
