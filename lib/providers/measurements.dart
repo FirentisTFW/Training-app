@@ -15,7 +15,9 @@ class Measurements with ChangeNotifier {
       .toList();
 
   void addMeasurementSession(MeasurementSession newSession) {
-    _measurements.add(newSession);
+    if (!_measurements.any((element) => element.id == newSession.id)) {
+      _measurements.add(newSession);
+    }
 
     notifyListeners();
   }
@@ -39,19 +41,13 @@ class Measurements with ChangeNotifier {
             MeasurementSession.fromJson(measurementSession))
         .toList();
 
-    _convertMeasurementsFromMap();
-
     notifyListeners();
   }
 
-  void _convertMeasurementsFromMap() {
-    for (int i = 0; i < _measurements.length; i++) {
-      final innerMeasurementsConverted =
-          MeasurementSession.convertBodyMeasurementsFromMap(
-              _measurements[i].measurements);
-      _measurements[i] =
-          _measurements[i].copyWith(measurements: innerMeasurementsConverted);
-    }
+  Future<String> readDataFromFile() async {
+    final file = await localFile;
+    String content = await file.readAsString();
+    return content;
   }
 
   Future<void> writeToFile() async {
@@ -60,11 +56,5 @@ class Measurements with ChangeNotifier {
     await file.writeAsString(measurementsInJson.toString());
 
     notifyListeners();
-  }
-
-  Future<String> readDataFromFile() async {
-    final file = await localFile;
-    String content = await file.readAsString();
-    return content;
   }
 }

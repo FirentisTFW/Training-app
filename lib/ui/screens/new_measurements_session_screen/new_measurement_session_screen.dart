@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/new_measurements_form.dart';
+import 'components/new_measurements_form.dart';
 
-class NewMeasurementScreen extends StatelessWidget {
+class NewMeasurementSessionScreen extends StatelessWidget {
   static const routeName = '/new-measurement';
 
   @override

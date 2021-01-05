@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:training_app/screens/new_measurement_screen.dart';
+import 'package:training_app/ui/screens/new_measurements_session_screen/new_measurement_session_screen.dart';
 import 'package:training_app/ui/screens/measurements_screen/components/measurement_item.dart';
+import 'package:training_app/ui/universal_components/error_informator.dart';
 import 'package:training_app/ui/universal_components/loading_spinner.dart';
 import 'package:training_app/ui/universal_components/no_items_added_yet_informator.dart';
 
@@ -16,12 +17,17 @@ class MeasurementsScreen extends StatefulWidget {
 
 class _MeasurementsScreenState extends State<MeasurementsScreen> {
   var _isLoading = true;
+  var _hasError = false;
 
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
     if (_isLoading) {
-      await Provider.of<Measurements>(context).fetchMeasurements();
+      try {
+        await Provider.of<Measurements>(context).fetchMeasurements();
+      } catch (err) {
+        _hasError = true;
+      }
 
       setState(() => _isLoading = false);
     }
@@ -40,25 +46,27 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
           IconButton(
             icon: Icon(Icons.add),
             iconSize: 30,
-            onPressed: () => goToNewMeasurementScreen(clientId),
+            onPressed: () => goToNewMeasurementSessionScreen(clientId),
           )
         ],
       ),
       body: _isLoading
           ? LoadingSpinner()
-          : measurements.length == 0
-              ? NoItemsAddedYetInformator('No measurements taken yet.')
-              : ListView.builder(
-                  itemCount: measurements.length,
-                  itemBuilder: (ctx, index) =>
-                      MeasurementItem(measurements[index]),
-                ),
+          : _hasError
+              ? ErrorInformator('An error occured. Try again.')
+              : measurements.length == 0
+                  ? NoItemsAddedYetInformator('No measurements taken yet.')
+                  : ListView.builder(
+                      itemCount: measurements.length,
+                      itemBuilder: (ctx, index) =>
+                          MeasurementItem(measurements[index]),
+                    ),
     );
   }
 
-  Future goToNewMeasurementScreen(String clientId) =>
+  Future goToNewMeasurementSessionScreen(String clientId) =>
       Navigator.of(context).pushNamed(
-        NewMeasurementScreen.routeName,
+        NewMeasurementSessionScreen.routeName,
         arguments: clientId,
       );
 }

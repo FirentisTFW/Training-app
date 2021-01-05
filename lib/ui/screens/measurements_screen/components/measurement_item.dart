@@ -54,9 +54,9 @@ class _MeasurementItemState extends State<MeasurementItem> {
                       name: 'Bodyweight', value: bodyweight),
                 if (bodyfat != null)
                   SingleMeasurementAttribute(name: 'Bodyfat', value: bodyfat),
-                if (bodyMeasurements != null)
+                if (bodyMeasurements.isNotEmpty)
                   BodyMeasurementsButton(_isExpanded, _expand),
-                if (bodyMeasurements != null && _isExpanded)
+                if (_isExpanded && bodyMeasurements.isNotEmpty)
                   BodyMeasurementsList(bodyMeasurements),
               ],
             ),

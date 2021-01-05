@@ -11,7 +11,15 @@ MeasurementSession _$MeasurementSessionFromJson(Map<String, dynamic> json) {
     id: json['id'] as String,
     clientId: json['clientId'] as String,
     date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
-    measurements: json['measurements'] as List,
+    measurements: (json['measurements'] as List)
+        ?.map((e) =>
+            e == null ? null : Measurement.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    bodyMeasurements: (json['bodyMeasurements'] as List)
+        ?.map((e) => e == null
+            ? null
+            : BodyMeasurement.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -20,5 +28,7 @@ Map<String, dynamic> _$MeasurementSessionToJson(MeasurementSession instance) =>
       'id': instance.id,
       'clientId': instance.clientId,
       'date': instance.date?.toIso8601String(),
-      'measurements': instance.measurements,
+      'measurements': instance.measurements?.map((e) => e?.toJson())?.toList(),
+      'bodyMeasurements':
+          instance.bodyMeasurements?.map((e) => e?.toJson())?.toList(),
     };
