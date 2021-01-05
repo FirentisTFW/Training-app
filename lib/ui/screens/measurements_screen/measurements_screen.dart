@@ -31,7 +31,8 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
   Widget build(BuildContext context) {
     final clientId = ModalRoute.of(context).settings.arguments;
     final measurementsProvider = Provider.of<Measurements>(context);
-    final measurements = measurementsProvider.findByClientId(clientId);
+    final measurements =
+        _isLoading ? null : measurementsProvider.findByClientId(clientId);
 
     return Scaffold(
       appBar: AppBar(

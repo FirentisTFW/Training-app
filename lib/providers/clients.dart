@@ -7,12 +7,12 @@ import 'package:training_app/services/storage_service.dart';
 import '../models/client.dart';
 
 class Clients with ChangeNotifier {
-  final String _storageFileName = '/clients.json';
   List<Client> _clients = [];
 
-  List<Client> get clients {
-    return [..._clients];
-  }
+  List<Client> get clients => _clients;
+
+  Client getClientById(String id) =>
+      _clients.firstWhere((client) => client.id == id);
 
   void addNewClient(Client newClient) {
     _clients.add(newClient);
@@ -20,41 +20,32 @@ class Clients with ChangeNotifier {
     notifyListeners();
   }
 
-  Client getClientById(String id) {
-    return _clients.firstWhere((client) => client.id == id);
-  }
-
   // STORAGE MANAGEMENT
 
   Future<File> get localFile async {
     final path = await StorageService.localPath;
-    return File('$path/$_storageFileName');
+    return File('$path/${StorageService.clientsFileName}');
   }
 
   Future<void> fetchClients() async {
-    try {
-      final fileData = await readDataFromFile();
-      final clientMap = jsonDecode(fileData) as List;
-      _clients = clientMap.map((client) => Client.fromJson(client)).toList();
+    final fileData = await readDataFromFile();
+    final clientMap = jsonDecode(fileData) as List;
+    _clients = clientMap.map((client) => Client.fromJson(client)).toList();
 
-      notifyListeners();
-    } catch (error) {}
+    notifyListeners();
   }
 
   Future<void> writeToFile() async {
     final file = await localFile;
     final clientsInJson = jsonEncode(_clients);
     await file.writeAsString(clientsInJson.toString());
+
     notifyListeners();
   }
 
   Future<String> readDataFromFile() async {
-    try {
-      final file = await localFile;
-      String content = await file.readAsString();
-      return content;
-    } catch (error) {
-      return "An error occured";
-    }
+    final file = await localFile;
+    String content = await file.readAsString();
+    return content;
   }
 }

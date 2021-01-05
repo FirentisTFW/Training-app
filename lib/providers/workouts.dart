@@ -7,8 +7,6 @@ import 'package:training_app/services/storage_service.dart';
 import '../models/workout.dart';
 
 class Workouts with ChangeNotifier {
-  final String _storageFileName = '/workouts.json';
-
   List<Workout> _workouts = [];
   Workout _workoutCurrentlyBeingCreated;
   List<WorkoutExercise> _exercisesCurrentlyBeingCreated = [];
@@ -96,7 +94,7 @@ class Workouts with ChangeNotifier {
 
   Future<File> get localFile async {
     final path = await StorageService.localPath;
-    return File('$path/$_storageFileName');
+    return File('$path/${StorageService.workoutsFileName}');
   }
 
   Future<void> fetchWorkouts() async {

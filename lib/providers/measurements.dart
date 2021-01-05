@@ -6,72 +6,13 @@ import 'package:training_app/models/measurement_session.dart';
 import 'package:training_app/services/storage_service.dart';
 
 class Measurements with ChangeNotifier {
-  final String _storageFileName = '/measurements.json';
-  List<MeasurementSession> _measurements = [
-    // MeasurementSession(
-    //   clientId: "2020-09-27 10:54:08.975614",
-    //   date: DateTime.now(),
-    //   id: DateTime.now().toString(),
-    //   measurements: [
-    //     Measurement(
-    //       type: MeasurementType.Bodyfat,
-    //       value: 20.5,
-    //     ),
-    //     Measurement(
-    //       type: MeasurementType.Bodyfat,
-    //       value: 19.7,
-    //     ),
-    //     Measurement(
-    //       type: MeasurementType.Bodyweight,
-    //       value: 82,
-    //     ),
-    //     BodyMeasurement(
-    //       type: MeasurementType.BodyMeasurement,
-    //       bodypart: Bodypart.Waist,
-    //       value: 78,
-    //     ),
-    //   ],
-    // ),
-    // MeasurementSession(
-    //   clientId: "2020-09-27 10:54:08.975614",
-    //   date: DateTime(2020, 10, 14),
-    //   id: DateTime.now().toString(),
-    //   measurements: [
-    //     Measurement(
-    //       type: MeasurementType.Bodyfat,
-    //       value: 20.5,
-    //     ),
-    //     Measurement(
-    //       type: MeasurementType.Bodyfat,
-    //       value: 19.7,
-    //     ),
-    //     Measurement(
-    //       type: MeasurementType.Bodyweight,
-    //       value: 82,
-    //     ),
-    //     BodyMeasurement(
-    //       type: MeasurementType.BodyMeasurement,
-    //       bodypart: Bodypart.Waist,
-    //       value: 78,
-    //     ),
-    //     BodyMeasurement(
-    //       type: MeasurementType.BodyMeasurement,
-    //       bodypart: Bodypart.Waist,
-    //       value: 78,
-    //     ),
-    //   ],
-    // ),
-  ];
+  List<MeasurementSession> _measurements;
 
-  List<MeasurementSession> get measurements {
-    return [..._measurements];
-  }
+  List<MeasurementSession> get measurements => _measurements;
 
-  List<MeasurementSession> findByClientId(String clientId) {
-    return _measurements
-        .where((singleSession) => singleSession.clientId == clientId)
-        .toList();
-  }
+  List<MeasurementSession> findByClientId(String clientId) => _measurements
+      .where((singleSession) => singleSession.clientId == clientId)
+      .toList();
 
   void addMeasurementSession(MeasurementSession newSession) {
     _measurements.add(newSession);
@@ -87,7 +28,20 @@ class Measurements with ChangeNotifier {
 
   Future<File> get localFile async {
     final path = await StorageService.localPath;
-    return File('$path/$_storageFileName');
+    return File('$path/${StorageService.measurementsFileName}');
+  }
+
+  Future<void> fetchMeasurements() async {
+    final fileData = await readDataFromFile();
+    final measurementsMap = jsonDecode(fileData) as List;
+    _measurements = measurementsMap
+        .map((measurementSession) =>
+            MeasurementSession.fromJson(measurementSession))
+        .toList();
+
+    _convertMeasurementsFromMap();
+
+    notifyListeners();
   }
 
   void _convertMeasurementsFromMap() {
@@ -100,34 +54,17 @@ class Measurements with ChangeNotifier {
     }
   }
 
-  Future<void> fetchMeasurements() async {
-    try {
-      final fileData = await readDataFromFile();
-      final measurementsMap = jsonDecode(fileData) as List;
-      _measurements = measurementsMap
-          .map((measurementSession) =>
-              MeasurementSession.fromJson(measurementSession))
-          .toList();
-      _convertMeasurementsFromMap();
-
-      notifyListeners();
-    } catch (error) {}
-  }
-
   Future<void> writeToFile() async {
     final file = await localFile;
     final measurementsInJson = jsonEncode(_measurements);
     await file.writeAsString(measurementsInJson.toString());
+
     notifyListeners();
   }
 
   Future<String> readDataFromFile() async {
-    try {
-      final file = await localFile;
-      String content = await file.readAsString();
-      return content;
-    } catch (error) {
-      return "An error occured";
-    }
+    final file = await localFile;
+    String content = await file.readAsString();
+    return content;
   }
 }
