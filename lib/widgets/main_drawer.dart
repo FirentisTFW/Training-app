@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screens/statistics_screen.dart';
+import '../ui/screens/statistics_screen/statistics_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   Widget buildListTile(String title, IconData icon, Function tapHandler) {

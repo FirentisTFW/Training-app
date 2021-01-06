@@ -9,10 +9,10 @@ import 'package:training_app/ui/screens/new_client_screen/new_client_screen.dart
 import 'package:training_app/ui/screens/new_measurements_session_screen/new_measurement_session_screen.dart';
 import 'package:training_app/screens/new_workout_program_screen.dart';
 import 'package:training_app/screens/new_workout_screen.dart';
-import 'package:training_app/screens/program_exercises_screen.dart';
-import 'package:training_app/screens/statistics_screen.dart';
+import 'package:training_app/ui/screens/program_details_screen/program_details_screen.dart';
+import 'package:training_app/ui/screens/statistics_screen/statistics_screen.dart';
 import 'package:training_app/screens/workout_details_screen.dart';
-import 'package:training_app/screens/workout_programs_screen.dart';
+import 'package:training_app/ui/screens/workout_programs_screen/workout_programs_screen.dart';
 
 final routes = {
   '/': (ctx) => ClientsScreen(),
@@ -20,7 +20,7 @@ final routes = {
   StatisticsScreen.routeName: (ctx) => StatisticsScreen(),
   ClientProfileScreen.routeName: (ctx) => ClientProfileScreen(),
   WorkoutProgramsScreen.routeName: (ctx) => WorkoutProgramsScreen(),
-  ProgramExercisesScreen.routeName: (ctx) => ProgramExercisesScreen(),
+  ProgramDetailsScreen.routeName: (ctx) => ProgramDetailsScreen(),
   CompletedWorkoutScreen.routeName: (ctx) => CompletedWorkoutScreen(),
   WorkoutDetailsScreen.routeName: (ctx) => WorkoutDetailsScreen(),
   NewWorkoutScreen.routeName: (ctx) => NewWorkoutScreen(),

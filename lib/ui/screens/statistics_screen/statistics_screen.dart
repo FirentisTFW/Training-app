@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/main_drawer.dart';
+import '../../../widgets/main_drawer.dart';
 
 class StatisticsScreen extends StatelessWidget {
   static const routeName = '/statistics';

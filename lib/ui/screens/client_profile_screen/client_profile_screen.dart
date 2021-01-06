@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:training_app/providers/workouts.dart';
 import 'package:training_app/ui/screens/completed_workouts_screen/completed_workouts_screen.dart';
 import 'package:training_app/ui/screens/client_statistics_screen/client_statistics_screen.dart';
-import 'package:training_app/screens/workout_programs_screen.dart';
+import 'package:training_app/ui/screens/workout_programs_screen/workout_programs_screen.dart';
 import 'package:training_app/ui/universal_components/loading_spinner.dart';
 import 'package:training_app/widgets/workout_program_chooser.dart';
 import 'package:provider/provider.dart';

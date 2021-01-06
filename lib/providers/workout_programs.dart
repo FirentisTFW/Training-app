@@ -36,6 +36,8 @@ class WorkoutPrograms with ChangeNotifier {
     return findByClientId(clientId).length;
   }
 
+  void addProgram(WorkoutProgram program) => _workoutPrograms.add(program);
+
   void nameNewProgram({
     String clientId,
     String name,
