@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:training_app/screens/edit_workout_screen.dart';
 
-import '../models/workout.dart';
-import '../widgets/done_exercise_details.dart';
+import '../../../models/workout.dart';
+import 'components/done_exercise_details.dart';
 
 class WorkoutDetailsScreen extends StatelessWidget {
   static const routeName = '/workout-details';
@@ -16,10 +16,7 @@ class WorkoutDetailsScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: () => Navigator.of(context).pushReplacementNamed(
-              EditWorkoutScreen.routeName,
-              arguments: workout,
-            ),
+            onPressed: () => goToEditWorkoutScreen(context, workout),
           )
         ],
       ),
@@ -30,4 +27,10 @@ class WorkoutDetailsScreen extends StatelessWidget {
       ),
     );
   }
+
+  Future goToEditWorkoutScreen(BuildContext context, Workout workout) =>
+      Navigator.of(context).pushReplacementNamed(
+        EditWorkoutScreen.routeName,
+        arguments: workout,
+      );
 }
