@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:training_app/providers/workout_programs.dart';
 import 'package:training_app/services/program_creator.dart';
-import 'package:training_app/widgets/name_program.dart';
+import 'package:training_app/ui/screens/new_workout_program_screen/components/name_program.dart';
 
 import '../../universal_components/program_exercises_list.dart';
 

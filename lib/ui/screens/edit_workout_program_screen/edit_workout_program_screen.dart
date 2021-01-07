@@ -6,30 +6,20 @@ import 'package:training_app/services/program_creator.dart';
 
 import '../../universal_components/program_exercises_list.dart';
 
-class EditWorkoutProgramScreen extends StatefulWidget {
+// ignore: must_be_immutable
+class EditWorkoutProgramScreen extends StatelessWidget {
   static const routeName = "/edit-workout-program";
 
-  @override
-  _EditWorkoutProgramScreenState createState() =>
-      _EditWorkoutProgramScreenState();
-}
-
-class _EditWorkoutProgramScreenState extends State<EditWorkoutProgramScreen> {
   final GlobalKey<ProgramExercisesListState> _exercisesListKey = GlobalKey();
   ProgramCreator _programCreator;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _programCreator =
-        ProgramCreator(Provider.of<WorkoutPrograms>(context, listen: false));
-  }
 
   @override
   Widget build(BuildContext context) {
     final WorkoutProgram workoutProgram =
         ModalRoute.of(context).settings.arguments;
+    _programCreator =
+        ProgramCreator(Provider.of<WorkoutPrograms>(context, listen: false));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add exercises'),

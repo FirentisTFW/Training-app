@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:training_app/services/program_creator.dart';
 import 'package:training_app/ui/dialogs/information_dialog.dart';
 
 import '../../models/workout_program.dart';
 import 'program_exercise_item.dart';
-import '../../providers/workout_programs.dart';
 
 class ProgramExercisesList extends StatefulWidget {
   final Key key;
@@ -25,13 +23,7 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
   @override
   void initState() {
     super.initState();
-
-    if (widget.initialValues != null) {
-      _exercisesKeys = [];
-      for (int i = 0; i < widget.initialValues.exercises.length; i++) {
-        _exercisesKeys.add(GlobalKey());
-      }
-    }
+    _addExercisesIfProgramIsBeingEdited();
   }
 
   @override
@@ -78,6 +70,15 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
         ],
       ),
     );
+  }
+
+  void _addExercisesIfProgramIsBeingEdited() {
+    if (widget.initialValues != null) {
+      _exercisesKeys = [];
+      for (int i = 0; i < widget.initialValues.exercises.length; i++) {
+        _exercisesKeys.add(GlobalKey());
+      }
+    }
   }
 
   void removeExercise(Key exerciseKey) => setState(() =>

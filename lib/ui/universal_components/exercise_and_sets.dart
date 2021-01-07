@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:training_app/models/workout.dart';
+import 'package:training_app/services/workout_creator.dart';
 
-import '../services/validator.dart';
-import '../providers/workouts.dart';
+import '../../services/validator.dart';
+import '../../providers/workouts.dart';
 
 class ExerciseAndSets extends StatefulWidget {
-  final key;
+  final Key key;
+  final WorkoutCreator workoutCreator;
   final String exerciseName;
   final int initialNumberOfSets;
   final List<Set> initialSets;
 
   ExerciseAndSets({
     @required this.key,
+    @required this.workoutCreator,
     @required this.exerciseName,
     @required this.initialNumberOfSets,
     this.initialSets,
@@ -23,24 +26,28 @@ class ExerciseAndSets extends StatefulWidget {
 }
 
 class ExerciseAndSetsState extends State<ExerciseAndSets> {
-  int _numberOfSets;
-  List<FocusNode> _numberOfSetsFocusNodes = [];
-  List<FocusNode> _weightFocusNodes = [];
   var _exerciseFormKey = GlobalKey<FormState>();
+  int _numberOfSets;
+  FocusNode _focusNode;
+
   WorkoutExercise _exercise;
   List<Set> _sets = [];
 
   @override
   void initState() {
+    super.initState();
     _numberOfSets = widget.initialNumberOfSets;
     for (int i = 0; i < _numberOfSets; i++) {
       _addSet();
     }
-    _exercise = WorkoutExercise(
-      name: widget.exerciseName,
-      sets: null,
-    );
-    super.initState();
+    _exercise = WorkoutExercise(name: widget.exerciseName);
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -55,9 +62,7 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 widget.exerciseName,
-                style: TextStyle(
-                  fontSize: 24,
-                ),
+                style: TextStyle(fontSize: 24),
               ),
             ),
             for (int i = 0; i < _numberOfSets; i++) ...{
@@ -73,13 +78,9 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
             FlatButton(
               child: Text(
                 'Add Another Set',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
+                style: TextStyle(fontSize: 16),
               ),
-              onPressed: () {
-                _addAnotherSet();
-              },
+              onPressed: _addAnotherSet,
             ),
           ],
         ),
@@ -105,11 +106,10 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
               initialValue:
                   initialValues != null ? initialValues.reps.toString() : null,
               style: TextStyle(fontSize: 20),
-              focusNode: _numberOfSetsFocusNodes[number - 1],
               keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
               validator: (value) => Validator.validateForNumber(value),
-              onFieldSubmitted: (value) => FocusScope.of(context)
-                  .requestFocus(_weightFocusNodes[number - 1]),
+              onFieldSubmitted: (value) => _focusNode.nextFocus(),
               onSaved: (value) {
                 var x = value;
                 if (x.isNotEmpty) {
@@ -129,11 +129,10 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
                   ? initialValues.weight.toString()
                   : null,
               style: TextStyle(fontSize: 20),
-              focusNode: _weightFocusNodes[number - 1],
               keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
               validator: (value) => Validator.validateForNumber(value),
-              onFieldSubmitted: (value) => FocusScope.of(context)
-                  .requestFocus(_numberOfSetsFocusNodes[number]),
+              onFieldSubmitted: (value) => _focusNode.nextFocus(),
               onSaved: (value) {
                 if (value.isNotEmpty) {
                   _sets[number - 1] =
@@ -145,48 +144,28 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
     );
   }
 
-  @override
-  void dispose() {
-    _numberOfSetsFocusNodes.forEach(
-      (element) => element.dispose(),
-    );
-    _weightFocusNodes.forEach(
-      (element) => element.dispose(),
-    );
-    super.dispose();
-  }
+  void _addAnotherSet() => setState(() {
+        _numberOfSets++;
+        _addSet();
+      });
 
-  void _addAnotherSet() {
-    setState(() {
-      _numberOfSets++;
-      _addSet();
-    });
-  }
-
-  void _addSet() {
-    _numberOfSetsFocusNodes.add(FocusNode());
-    _weightFocusNodes.add(FocusNode());
-    _sets.add(
-      Set(
-        reps: 0,
-        weight: 0,
-      ),
-    );
-  }
+  void _addSet() => _sets.add(
+        Set(
+          reps: 0,
+          weight: 0,
+        ),
+      );
 
   bool saveForm() {
     final isValid = _exerciseFormKey.currentState.validate();
-    if (!isValid) {
-      return false;
+    if (isValid) {
+      _exerciseFormKey.currentState.save();
+      _addSetsToExercise();
+      widget.workoutCreator.addExercise(_exercise);
+      return true;
     }
-    _exerciseFormKey.currentState.save();
-    _addSetsToExercise();
-    final workoutsProvider = Provider.of<Workouts>(context, listen: false);
-    workoutsProvider.addExerciseToNewWorkoutIfNotEmpty(_exercise);
-    return true;
+    return false;
   }
 
-  void _addSetsToExercise() {
-    _exercise = _exercise.copyWith(sets: [..._sets]);
-  }
+  void _addSetsToExercise() => _exercise = _exercise.copyWith(sets: _sets);
 }

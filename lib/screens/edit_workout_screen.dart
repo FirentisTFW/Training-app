@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/workout.dart';
 import '../providers/workouts.dart';
 import '../providers/workout_programs.dart';
-import '../widgets/exercise_and_sets.dart';
+import '../ui/universal_components/exercise_and_sets.dart';
 
 class EditWorkoutScreen extends StatefulWidget {
   static const routeName = '/edit-workout';

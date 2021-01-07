@@ -15,6 +15,8 @@ class Workouts with ChangeNotifier {
     return _workouts.where((workout) => workout.clientId == clientId).toList();
   }
 
+  void addWorkout(Workout workout) => _workouts.add(workout);
+
   int getTotalNumberOfWorkoutsByClientId(String clientId) {
     return findByClientId(clientId).length;
   }
@@ -86,9 +88,8 @@ class Workouts with ChangeNotifier {
     _resetNewWorkout();
   }
 
-  void deleteWorkout(String workoutId) {
-    _workouts.removeWhere((workout) => workout.id == workoutId);
-  }
+  void deleteWorkout(String workoutId) =>
+      _workouts.removeWhere((workout) => workout.id == workoutId);
 
   // STORAGE MANAGEMENT
 

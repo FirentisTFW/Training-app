@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/workout_programs.dart';
-import '../../../../screens/new_workout_screen.dart';
+import '../../new_workout_screen/new_workout_screen.dart';
 
 class WorkoutProgramChooser extends StatelessWidget {
   final String clientId;

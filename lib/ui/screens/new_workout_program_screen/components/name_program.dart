@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../services/validator.dart';
+import '../../../../services/validator.dart';
 
 class NameProgram extends StatelessWidget {
   final String clientId;

@@ -8,7 +8,7 @@ import 'package:training_app/ui/universal_components/no_items_added_yet_informat
 
 import '../../../providers/clients.dart';
 import '../../../providers/workout_programs.dart';
-import '../../../widgets/main_drawer.dart';
+import '../../universal_components/main_drawer.dart';
 import 'components/client_item.dart';
 import 'components/app_bar_clients_screen.dart';
 
