@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:training_app/models/workout_program.dart';
 
-import '../widgets/program_exercises_list.dart';
+import '../ui/universal_components/program_exercises_list.dart';
 
 class EditWorkoutProgramScreen extends StatefulWidget {
   static const routeName = "/edit-workout-program";

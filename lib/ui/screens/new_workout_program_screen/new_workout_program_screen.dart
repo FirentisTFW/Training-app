@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:training_app/providers/workout_programs.dart';
+import 'package:training_app/services/program_creator.dart';
 import 'package:training_app/widgets/name_program.dart';
 
-import '../widgets/program_exercises_list.dart';
+import '../../universal_components/program_exercises_list.dart';
 
 class NewWorkoutProgramScreen extends StatefulWidget {
   static const routeName = '/new-workout-program';
@@ -13,24 +16,36 @@ class NewWorkoutProgramScreen extends StatefulWidget {
 
 class _NewWorkoutProgramScreenState extends State<NewWorkoutProgramScreen> {
   final GlobalKey<ProgramExercisesListState> _exercisesListKey = GlobalKey();
-  var wasNameGiven = false;
+  ProgramCreator _programCreator;
+  var _isNameGiven = false;
+  String _clientId;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _programCreator =
+        ProgramCreator(Provider.of<WorkoutPrograms>(context, listen: false));
+  }
 
   @override
   Widget build(BuildContext context) {
     final clientId = ModalRoute.of(context).settings.arguments;
-    print("new-workout-program-screen");
+    _clientId = clientId;
+
     return Scaffold(
       appBar: AppBar(
-        title: !wasNameGiven
+        title: !_isNameGiven
             ? const Text('Name a program')
             : const Text('Add exercises'),
       ),
-      body: !wasNameGiven
-          ? NameProgram(clientId, nameWasGiven)
+      body: !_isNameGiven
+          ? NameProgram(clientId, nameProgram)
           : ProgramExercisesList(
               key: _exercisesListKey,
+              programCreator: _programCreator,
             ),
-      floatingActionButton: !wasNameGiven
+      floatingActionButton: !_isNameGiven
           ? null
           : Container(
               child: Align(
@@ -42,22 +57,22 @@ class _NewWorkoutProgramScreenState extends State<NewWorkoutProgramScreen> {
                   ),
                   label: Text(
                     'New exercise',
-                    style: TextStyle(
-                      color: Theme.of(context).accentColor,
-                    ),
+                    style: TextStyle(color: Theme.of(context).accentColor),
                   ),
                   backgroundColor: Colors.grey[600],
-                  onPressed: () =>
-                      _exercisesListKey.currentState.addAnotherExercise(),
+                  onPressed: _addAnotherExercise,
                 ),
               ),
             ),
     );
   }
 
-  void nameWasGiven() {
-    setState(() {
-      wasNameGiven = true;
-    });
+  void nameProgram(String name) {
+    _programCreator.initialiseProgram(clientId: _clientId, name: name);
+
+    setState(() => _isNameGiven = true);
   }
+
+  void _addAnotherExercise() =>
+      _exercisesListKey.currentState.addAnotherExercise();
 }

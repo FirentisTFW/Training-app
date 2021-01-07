@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:training_app/services/program_creator.dart';
 import 'package:training_app/ui/dialogs/confirmation.dart';
 
-import '../services/validator.dart';
-import '../models/exercise.dart';
-import '../providers/workout_programs.dart';
+import '../../services/validator.dart';
+import '../../models/exercise.dart';
 
 class ProgramExerciseItem extends StatefulWidget {
   final Key key;
+  final ProgramCreator programCreator;
   final Function removeExercise;
   final Exercise initialValues;
 
   ProgramExerciseItem({
     @required this.key,
+    @required this.programCreator,
     @required this.removeExercise,
     this.initialValues,
   });
@@ -23,12 +24,9 @@ class ProgramExerciseItem extends StatefulWidget {
 
 class ProgramExerciseItemState extends State<ProgramExerciseItem> {
   final _newProgramForm = GlobalKey<FormState>();
-  final _nameFocusNode = FocusNode();
-  final _typeFocusNode = FocusNode();
-  final _setsFocusNode = FocusNode();
-  final _repsMinFocusNode = FocusNode();
-  final _repsMaxFocusNode = FocusNode();
+  final _focusNode = FocusNode();
   var _isExerciseForReps = true;
+
   var _exercise = Exercise(
     id: DateTime.now().toString(),
     exerciseType: null,
@@ -40,17 +38,12 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
 
   @override
   void dispose() {
-    _nameFocusNode.dispose();
-    _typeFocusNode.dispose();
-    _setsFocusNode.dispose();
-    _repsMinFocusNode.dispose();
-    _repsMaxFocusNode.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("program-exercise-item-state");
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -72,12 +65,10 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                               ? widget.initialValues.name
                               : null,
                           textInputAction: TextInputAction.next,
-                          focusNode: _nameFocusNode,
                           keyboardType: TextInputType.name,
                           validator: (value) =>
                               Validator.validateForEmptyString(value),
-                          onFieldSubmitted: (_) => FocusScope.of(context)
-                              .requestFocus(_typeFocusNode),
+                          onFieldSubmitted: (_) => _focusNode.nextFocus(),
                           onSaved: (value) =>
                               _exercise = _exercise.copyWith(name: value),
                         ),
@@ -97,7 +88,6 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                   DropdownButtonFormField(
                     decoration:
                         const InputDecoration(labelText: 'Exercise Type'),
-                    focusNode: _typeFocusNode,
                     value: widget.initialValues != null
                         ? widget.initialValues.exerciseType
                         : ExerciseType.ForRepetitions,
@@ -112,14 +102,8 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                       ),
                     ],
                     onChanged: (value) {
-                      setState(() {
-                        if (value == ExerciseType.ForRepetitions) {
-                          _isExerciseForReps = true;
-                        } else {
-                          _isExerciseForReps = false;
-                        }
-                      });
-                      FocusScope.of(context).requestFocus(_setsFocusNode);
+                      _changeExerciseType(value);
+                      _focusNode.nextFocus();
                     },
                     onSaved: (value) =>
                         _exercise = _exercise.copyWith(exerciseType: value),
@@ -130,12 +114,10 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                         ? widget.initialValues.sets.toString()
                         : null,
                     textInputAction: TextInputAction.next,
-                    focusNode: _setsFocusNode,
                     keyboardType: TextInputType.number,
                     validator: (value) =>
                         Validator.validateForEmptyAndNumber(value),
-                    onFieldSubmitted: (_) =>
-                        FocusScope.of(context).requestFocus(_repsMinFocusNode),
+                    onFieldSubmitted: (_) => _focusNode.nextFocus(),
                     onSaved: (value) =>
                         _exercise = _exercise.copyWith(sets: int.parse(value)),
                   ),
@@ -148,12 +130,10 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                         ? widget.initialValues.repsMin.toString()
                         : null,
                     textInputAction: TextInputAction.next,
-                    focusNode: _repsMinFocusNode,
                     keyboardType: TextInputType.number,
                     validator: (value) =>
                         Validator.validateForEmptyAndNumber(value),
-                    onFieldSubmitted: (_) =>
-                        FocusScope.of(context).requestFocus(_repsMaxFocusNode),
+                    onFieldSubmitted: (_) => _focusNode.nextFocus(),
                     onSaved: (value) => _exercise =
                         _exercise.copyWith(repsMin: int.parse(value)),
                   ),
@@ -166,7 +146,6 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                         ? widget.initialValues.repsMin.toString()
                         : null,
                     textInputAction: TextInputAction.next,
-                    focusNode: _repsMaxFocusNode,
                     keyboardType: TextInputType.number,
                     validator: (value) =>
                         Validator.validateForEmptyAndNumber(value),
@@ -183,6 +162,14 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
     );
   }
 
+  void _changeExerciseType(ExerciseType value) => setState(() {
+        if (value == ExerciseType.ForRepetitions) {
+          _isExerciseForReps = true;
+        } else {
+          _isExerciseForReps = false;
+        }
+      });
+
   Future<void> _confirmRemovingExercise(BuildContext context) async {
     final isConfirmed = await Confirmation.confirmationDialog(context);
 
@@ -193,13 +180,12 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
 
   bool saveForm() {
     final isValid = _newProgramForm.currentState.validate();
-    if (!isValid) {
-      return false;
+
+    if (isValid) {
+      _newProgramForm.currentState.save();
+      widget.programCreator.addExercise(_exercise);
+      return true;
     }
-    _newProgramForm.currentState.save();
-    final workoutProgramsProvider =
-        Provider.of<WorkoutPrograms>(context, listen: false);
-    workoutProgramsProvider.addExerciseToNewProgram(_exercise);
-    return true;
+    return false;
   }
 }

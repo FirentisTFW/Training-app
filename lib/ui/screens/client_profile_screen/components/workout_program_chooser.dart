@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/workout_programs.dart';
-import '../screens/new_workout_screen.dart';
+import '../../../../providers/workout_programs.dart';
+import '../../../../screens/new_workout_screen.dart';
 
 class WorkoutProgramChooser extends StatelessWidget {
   final String clientId;
@@ -11,8 +11,9 @@ class WorkoutProgramChooser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final workoutProgramsData = Provider.of<WorkoutPrograms>(context);
-    final workoutPrograms = workoutProgramsData.findByClientId(clientId);
+    final workoutProgramsProvider = Provider.of<WorkoutPrograms>(context);
+    final workoutPrograms = workoutProgramsProvider.findByClientId(clientId);
+
     return Card(
       color: Colors.grey[200],
       elevation: 8.0,
@@ -34,28 +35,28 @@ class WorkoutProgramChooser extends StatelessWidget {
             Container(
               height: 250,
               child: ListView(
-                  children: workoutPrograms
-                      .map(
-                          (program) => _buildProgramTile(program.name, context))
-                      .toList()),
+                children: workoutPrograms
+                    .map((program) => _ProgramTile(program.name, clientId))
+                    .toList(),
+              ),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildProgramTile(String programName, BuildContext context) {
+class _ProgramTile extends StatelessWidget {
+  final String programName;
+  final String clientId;
+
+  const _ProgramTile(this.programName, this.clientId);
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushReplacementNamed(
-          NewWorkoutScreen.routeName,
-          arguments: {
-            'programName': programName,
-            'clientId': clientId,
-          },
-        );
-      },
+      onTap: () => goToNewWorkoutScreen(context),
       child: Card(
         child: Container(
           height: 80,
@@ -63,13 +64,20 @@ class WorkoutProgramChooser extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               programName,
-              style: TextStyle(
-                fontSize: 26,
-              ),
+              style: TextStyle(fontSize: 26),
             ),
           ),
         ),
       ),
     );
   }
+
+  Future goToNewWorkoutScreen(BuildContext context) =>
+      Navigator.of(context).pushReplacementNamed(
+        NewWorkoutScreen.routeName,
+        arguments: {
+          'programName': programName,
+          'clientId': clientId,
+        },
+      );
 }
