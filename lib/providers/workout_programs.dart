@@ -9,89 +9,35 @@ import '../models/exercise.dart';
 
 class WorkoutPrograms with ChangeNotifier {
   List<WorkoutProgram> _workoutPrograms = [];
-  WorkoutProgram _programCurrentlyBeingCreated = WorkoutProgram(
-    clientId: null,
-    name: null,
-    exercises: null,
-  );
-  List<Exercise> _exercisesCurrentlyBeingCreated = [];
 
-  List<WorkoutProgram> get workoutPrograms {
-    return _workoutPrograms;
-  }
+  List<WorkoutProgram> get workoutPrograms => _workoutPrograms;
 
-  List<WorkoutProgram> findByClientId(String clientId) {
-    return _workoutPrograms
-        .where((program) => program.clientId == clientId)
-        .toList();
-  }
+  List<WorkoutProgram> findByClientId(String clientId) => _workoutPrograms
+      .where((program) => program.clientId == clientId)
+      .toList();
 
   WorkoutProgram findByProgramNameAndClientId(
-      String programName, String clientId) {
-    return _workoutPrograms.firstWhere((program) =>
-        program.name == programName && program.clientId == clientId);
-  }
+          String programName, String clientId) =>
+      _workoutPrograms.firstWhere((program) =>
+          program.name == programName && program.clientId == clientId);
 
-  int getTotalNumberOfWorkoutProgramsByClientId(String clientId) {
-    return findByClientId(clientId).length;
-  }
+  int getTotalNumberOfWorkoutProgramsByClientId(String clientId) =>
+      findByClientId(clientId).length;
 
   void addProgram(WorkoutProgram program) => _workoutPrograms.add(program);
 
-  void nameNewProgram({
-    String clientId,
-    String name,
-  }) {
-    _programCurrentlyBeingCreated = _programCurrentlyBeingCreated.copyWith(
-      name: name,
-      clientId: clientId,
-    );
-  }
-
-  void addExerciseToNewProgram(Exercise newExercise) {
-    _exercisesCurrentlyBeingCreated.add(newExercise);
-  }
-
-  void saveNewProgram() {
-    _programCurrentlyBeingCreated = _programCurrentlyBeingCreated.copyWith(
-      exercises: _exercisesCurrentlyBeingCreated,
-    );
-    _workoutPrograms.add(_programCurrentlyBeingCreated);
-    _resetNewProgram();
-    resetNewExercises();
-  }
-
-  void _resetNewProgram() {
-    _programCurrentlyBeingCreated = WorkoutProgram(
-      clientId: null,
-      name: null,
-      exercises: null,
-    );
-  }
-
-  void resetNewExercises() {
-    _exercisesCurrentlyBeingCreated = [];
-  }
-
-  void updateProgram({
-    String clientId,
-    String name,
-  }) {
+  void updateProgram(
+      String clientId, String name, List<Exercise> newExercises) {
     final programIndex = _workoutPrograms.indexWhere(
         (program) => program.clientId == clientId && program.name == name);
     _workoutPrograms[programIndex] = _workoutPrograms[programIndex].copyWith(
-      exercises: _exercisesCurrentlyBeingCreated,
+      exercises: newExercises,
     );
   }
 
-  void deleteProgram({
-    String clientId,
-    String programName,
-  }) {
-    _workoutPrograms.removeWhere(
-      (program) => program.clientId == clientId && program.name == programName,
-    );
-  }
+  void deleteProgram({String clientId, String programName}) =>
+      _workoutPrograms.removeWhere((program) =>
+          program.clientId == clientId && program.name == programName);
 
 // STORAGE MANAGEMENT
 

@@ -5,7 +5,7 @@ import 'package:training_app/ui/dialogs/information_dialog.dart';
 import '../../../dialogs/confirmation.dart';
 import '../../../../models/workout_program.dart';
 import 'package:training_app/ui/screens/program_details_screen/program_details_screen.dart';
-import 'package:training_app/screens/edit_workout_program_screen.dart';
+import 'package:training_app/ui/screens/edit_workout_program_screen/edit_workout_program_screen.dart';
 import 'package:training_app/ui/universal_components/pop_up_menu.dart';
 
 import '../../../../providers/workout_programs.dart';

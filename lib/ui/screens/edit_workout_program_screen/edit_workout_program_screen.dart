@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:training_app/models/workout_program.dart';
+import 'package:training_app/providers/workout_programs.dart';
+import 'package:training_app/services/program_creator.dart';
 
-import '../ui/universal_components/program_exercises_list.dart';
+import '../../universal_components/program_exercises_list.dart';
 
 class EditWorkoutProgramScreen extends StatefulWidget {
   static const routeName = "/edit-workout-program";
@@ -13,6 +16,15 @@ class EditWorkoutProgramScreen extends StatefulWidget {
 
 class _EditWorkoutProgramScreenState extends State<EditWorkoutProgramScreen> {
   final GlobalKey<ProgramExercisesListState> _exercisesListKey = GlobalKey();
+  ProgramCreator _programCreator;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _programCreator =
+        ProgramCreator(Provider.of<WorkoutPrograms>(context, listen: false));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +36,7 @@ class _EditWorkoutProgramScreenState extends State<EditWorkoutProgramScreen> {
       ),
       body: ProgramExercisesList(
         key: _exercisesListKey,
+        programCreator: _programCreator,
         initialValues: workoutProgram,
       ),
       floatingActionButton: Container(
@@ -41,11 +54,13 @@ class _EditWorkoutProgramScreenState extends State<EditWorkoutProgramScreen> {
               ),
             ),
             backgroundColor: Colors.grey[600],
-            onPressed: () =>
-                _exercisesListKey.currentState.addAnotherExercise(),
+            onPressed: _addAnotherExercise,
           ),
         ),
       ),
     );
   }
+
+  void _addAnotherExercise() =>
+      _exercisesListKey.currentState.addAnotherExercise();
 }

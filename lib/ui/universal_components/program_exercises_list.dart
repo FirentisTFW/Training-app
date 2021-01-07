@@ -49,7 +49,8 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
                         key: _exercisesKeys[i],
                         programCreator: widget.programCreator,
                         removeExercise: removeExercise,
-                        initialValues: widget.initialValues != null
+                        initialValues: widget.initialValues != null &&
+                                i < widget.initialValues.exercises.length
                             ? widget.initialValues.exercises[i]
                             : null,
                       )
@@ -71,7 +72,7 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
                 ),
               ),
               color: Theme.of(context).primaryColor,
-              onPressed: () async => _saveProgramOrShowErrorSnackbar(),
+              onPressed: () async => _saveOrUpdateProgram(),
             ),
           ),
         ],
@@ -84,12 +85,15 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
 
   void addAnotherExercise() => setState(() => _exercisesKeys.add(GlobalKey()));
 
-  Future<void> _saveProgramOrShowErrorSnackbar() async {
-    if (widget.initialValues != null) {
-      await _updateProgram();
-      return;
+  Future<void> _saveOrUpdateProgram() async {
+    if (widget.initialValues == null) {
+      await _saveProgramOrShowErrorSnackbar();
+    } else {
+      await _updateProgramOrShowErrorSnackbar();
     }
+  }
 
+  Future<void> _saveProgramOrShowErrorSnackbar() async {
     if (_saveExercises()) {
       try {
         await widget.programCreator.saveProgram();
@@ -97,6 +101,19 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
       } catch (err) {
         InformationDialogs.showSnackbar(
             'Couldn\'t add program. Try again', context);
+      }
+    }
+  }
+
+  Future<void> _updateProgramOrShowErrorSnackbar() async {
+    if (_saveExercises()) {
+      try {
+        await widget.programCreator.updateProgram(
+            widget.initialValues.clientId, widget.initialValues.name);
+        Navigator.of(context).pop();
+      } catch (err) {
+        InformationDialogs.showSnackbar(
+            'Couldn\'t update program. Try again', context);
       }
     }
   }
@@ -109,25 +126,5 @@ class ProgramExercisesListState extends State<ProgramExercisesList> {
       }
     });
     return areFormsValid;
-  }
-
-  Future<void> _updateProgram() async {
-    final workoutProgramsProvider =
-        Provider.of<WorkoutPrograms>(context, listen: false);
-    workoutProgramsProvider.nameNewProgram(
-      clientId: widget.initialValues.clientId,
-      name: widget.initialValues.name,
-    );
-    if (!_saveExercises()) {
-      workoutProgramsProvider.resetNewExercises();
-      return;
-    }
-    workoutProgramsProvider.updateProgram(
-      clientId: widget.initialValues.clientId,
-      name: widget.initialValues.name,
-    );
-    await workoutProgramsProvider.writeToFile();
-    workoutProgramsProvider.resetNewExercises();
-    Navigator.of(context).pop();
   }
 }

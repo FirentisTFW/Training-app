@@ -33,4 +33,22 @@ class ProgramCreator {
       throw err;
     }
   }
+
+  Future updateProgram(String clientId, String name) async {
+    final originalExercises = _workoutProgramsProvider
+        .findByProgramNameAndClientId(name, clientId)
+        .exercises;
+
+    _workoutProgramsProvider.updateProgram(
+        clientId, name, _exercisesBeingCreated);
+
+    try {
+      await _workoutProgramsProvider.writeToFile();
+    } catch (err) {
+      _workoutProgramsProvider.updateProgram(clientId, name, originalExercises);
+      _exercisesBeingCreated = [];
+
+      throw err;
+    }
+  }
 }

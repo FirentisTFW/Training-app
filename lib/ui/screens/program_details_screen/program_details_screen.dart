@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:training_app/models/workout_program.dart';
 
 import '../../../providers/workout_programs.dart';
-import '../../../screens/edit_workout_program_screen.dart';
+import '../edit_workout_program_screen/edit_workout_program_screen.dart';
 import 'components/exercise_item.dart';
 
 class ProgramDetailsScreen extends StatelessWidget {
