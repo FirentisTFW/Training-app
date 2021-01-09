@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:training_app/screens/edit_workout_screen.dart';
+import 'package:training_app/ui/screens/edit_workout_screen/edit_workout_screen.dart';
 import 'package:training_app/ui/screens/workout_details_screen/workout_details_screen.dart';
 import 'package:training_app/ui/dialogs/information_dialog.dart';
 import 'package:training_app/ui/universal_components/pop_up_menu.dart';

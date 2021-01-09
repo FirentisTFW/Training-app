@@ -47,15 +47,18 @@ class WorkoutPrograms with ChangeNotifier {
   }
 
   Future<void> fetchWorkoutPrograms() async {
-    try {
-      final fileData = await readDataFromFile();
-      final programsMap = jsonDecode(fileData) as List;
-      _workoutPrograms = programsMap
-          .map((program) => WorkoutProgram.fromJson(program))
-          .toList();
+    final fileData = await readDataFromFile();
+    final programsMap = jsonDecode(fileData) as List;
+    _workoutPrograms =
+        programsMap.map((program) => WorkoutProgram.fromJson(program)).toList();
 
-      notifyListeners();
-    } catch (error) {}
+    notifyListeners();
+  }
+
+  Future<String> readDataFromFile() async {
+    final file = await localFile;
+    String content = await file.readAsString();
+    return content;
   }
 
   Future<void> writeToFile() async {
@@ -63,15 +66,5 @@ class WorkoutPrograms with ChangeNotifier {
     final programsInJson = jsonEncode(_workoutPrograms);
     await file.writeAsString(programsInJson.toString());
     notifyListeners();
-  }
-
-  Future<String> readDataFromFile() async {
-    try {
-      final file = await localFile;
-      String content = await file.readAsString();
-      return content;
-    } catch (e) {
-      return "An error occured";
-    }
   }
 }

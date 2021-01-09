@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:training_app/screens/edit_workout_screen.dart';
+import 'package:training_app/ui/screens/edit_workout_screen/edit_workout_screen.dart';
 
 import '../../../models/workout.dart';
 import 'components/done_exercise_details.dart';

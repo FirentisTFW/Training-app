@@ -42,4 +42,19 @@ class WorkoutCreator {
       throw err;
     }
   }
+
+  Future updateWorkout(String workoutId) async {
+    final originalExercises = _workoutsProvider.findById(workoutId).exercises;
+
+    _workoutsProvider.updateWorkout(workoutId, _exercisesBeingCreated);
+
+    try {
+      await _workoutsProvider.writeToFile();
+    } catch (err) {
+      _workoutsProvider.updateWorkout(workoutId, originalExercises);
+      _exercisesBeingCreated = [];
+
+      throw err;
+    }
+  }
 }

@@ -8,18 +8,26 @@ import '../models/workout.dart';
 
 class Workouts with ChangeNotifier {
   List<Workout> _workouts = [];
-  Workout _workoutCurrentlyBeingCreated;
-  List<WorkoutExercise> _exercisesCurrentlyBeingCreated = [];
 
-  List<Workout> findByClientId(String clientId) {
-    return _workouts.where((workout) => workout.clientId == clientId).toList();
-  }
+  List<Workout> findByClientId(String clientId) =>
+      _workouts.where((workout) => workout.clientId == clientId).toList();
+
+  Workout findById(String workoutId) =>
+      _workouts.firstWhere((w) => w.id == workoutId);
 
   void addWorkout(Workout workout) => _workouts.add(workout);
 
-  int getTotalNumberOfWorkoutsByClientId(String clientId) {
-    return findByClientId(clientId).length;
+  void updateWorkout(String workoutId, List<WorkoutExercise> exercises) {
+    final workoutIndex = _workouts.indexWhere((w) => w.id == workoutId);
+    _workouts[workoutIndex] =
+        _workouts[workoutIndex].copyWith(exercises: exercises);
   }
+
+  void deleteWorkout(String workoutId) =>
+      _workouts.removeWhere((workout) => workout.id == workoutId);
+
+  int getTotalNumberOfWorkoutsByClientId(String clientId) =>
+      findByClientId(clientId).length;
 
   double getNumberOfWorkoutsPerWeekByClientId(String clientId) {
     DateTime firstWorkoutDate = getFirstWorkoutDateByClientId(clientId);
@@ -44,53 +52,6 @@ class Workouts with ChangeNotifier {
     return clientWorkouts.isNotEmpty ? clientWorkouts.last.date : null;
   }
 
-  void initializeNewWorkout({
-    String clientId,
-    DateTime date,
-    String programName,
-  }) {
-    _workoutCurrentlyBeingCreated = Workout(
-      id: DateTime.now().toString(),
-      clientId: clientId,
-      date: date,
-      programName: programName,
-    );
-  }
-
-  void addExerciseToNewWorkoutIfNotEmpty(WorkoutExercise exercise) {
-    exercise = exercise.removeEmptySetsFromExercise();
-    if (exercise.sets.isNotEmpty) {
-      _exercisesCurrentlyBeingCreated.add(exercise);
-    }
-  }
-
-  void saveNewWorkout() {
-    if (_exercisesCurrentlyBeingCreated.isEmpty) {
-      return;
-    }
-    _workoutCurrentlyBeingCreated = _workoutCurrentlyBeingCreated.copyWith(
-      exercises: _exercisesCurrentlyBeingCreated,
-    );
-    _workouts.add(_workoutCurrentlyBeingCreated);
-    _resetNewWorkout();
-  }
-
-  void _resetNewWorkout() {
-    _workoutCurrentlyBeingCreated = null;
-    _exercisesCurrentlyBeingCreated = [];
-  }
-
-  void updateExercisesInWorkout(String workoutId) {
-    final workoutIndex =
-        _workouts.indexWhere((workout) => workout.id == workoutId);
-    _workouts[workoutIndex] = _workouts[workoutIndex]
-        .copyWith(exercises: _exercisesCurrentlyBeingCreated);
-    _resetNewWorkout();
-  }
-
-  void deleteWorkout(String workoutId) =>
-      _workouts.removeWhere((workout) => workout.id == workoutId);
-
   // STORAGE MANAGEMENT
 
   Future<File> get localFile async {
@@ -99,14 +60,18 @@ class Workouts with ChangeNotifier {
   }
 
   Future<void> fetchWorkouts() async {
-    try {
-      final fileData = await readDataFromFile();
-      final workoutsMap = jsonDecode(fileData) as List;
-      _workouts =
-          workoutsMap.map((program) => Workout.fromJson(program)).toList();
+    final fileData = await readDataFromFile();
+    final workoutsMap = jsonDecode(fileData) as List;
+    _workouts =
+        workoutsMap.map((program) => Workout.fromJson(program)).toList();
 
-      notifyListeners();
-    } catch (error) {}
+    notifyListeners();
+  }
+
+  Future<String> readDataFromFile() async {
+    final file = await localFile;
+    String content = await file.readAsString();
+    return content;
   }
 
   Future<void> writeToFile() async {
@@ -114,15 +79,5 @@ class Workouts with ChangeNotifier {
     final workoutsInJson = jsonEncode(_workouts);
     await file.writeAsString(workoutsInJson.toString());
     notifyListeners();
-  }
-
-  Future<String> readDataFromFile() async {
-    try {
-      final file = await localFile;
-      String content = await file.readAsString();
-      return content;
-    } catch (e) {
-      return "An error occured";
-    }
   }
 }

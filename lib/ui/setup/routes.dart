@@ -3,7 +3,7 @@ import 'package:training_app/ui/screens/client_statistics_screen/client_statisti
 import 'package:training_app/ui/screens/clients_screen/clients_screen.dart';
 import 'package:training_app/ui/screens/completed_workouts_screen/completed_workouts_screen.dart';
 import 'package:training_app/ui/screens/edit_workout_program_screen/edit_workout_program_screen.dart';
-import 'package:training_app/screens/edit_workout_screen.dart';
+import 'package:training_app/ui/screens/edit_workout_screen/edit_workout_screen.dart';
 import 'package:training_app/ui/screens/measurements_screen/measurements_screen.dart';
 import 'package:training_app/ui/screens/new_client_screen/new_client_screen.dart';
 import 'package:training_app/ui/screens/new_measurements_session_screen/new_measurement_session_screen.dart';
