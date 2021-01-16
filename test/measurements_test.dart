@@ -47,25 +47,26 @@ void main() async {
 
   group('Adding new measurement sessions works correctly', () {
     final sessionToAdd = MeasurementSession(
-      id: '12345',
-      clientId: 'client001',
-      date: DateTime(2020, 10, 24),
-      measurements: [
-        Measurement(
-          type: MeasurementType.Bodyfat,
-          value: 18.5,
-        ),
-        Measurement(
-          type: MeasurementType.Bodyweight,
-          value: 78.7,
-        ),
-        BodyMeasurement(
-          type: MeasurementType.Bodyweight,
-          value: 78.7,
-          bodypart: Bodypart.Waist,
-        ),
-      ],
-    );
+        id: '12345',
+        clientId: 'client001',
+        date: DateTime(2020, 10, 24),
+        measurements: [
+          Measurement(
+            type: MeasurementType.Bodyfat,
+            value: 18.5,
+          ),
+          Measurement(
+            type: MeasurementType.Bodyweight,
+            value: 78.7,
+          ),
+        ],
+        bodyMeasurements: [
+          BodyMeasurement(
+            type: MeasurementType.Bodyweight,
+            value: 78.7,
+            bodypart: Bodypart.Waist,
+          ),
+        ]);
 
     test('Adding new measurement session increases _measurements length', () {
       mockMeasurements.addMeasurementSession(sessionToAdd);

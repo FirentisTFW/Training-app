@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:training_app/models/workout.dart';
 import 'package:training_app/services/workout_creator.dart';
 
 import '../../services/validator.dart';
-import '../../providers/workouts.dart';
 
 class ExerciseAndSets extends StatefulWidget {
   final Key key;
@@ -111,8 +109,7 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
               validator: (value) => Validator.validateForNumber(value),
               onFieldSubmitted: (value) => _focusNode.nextFocus(),
               onSaved: (value) {
-                var x = value;
-                if (x.isNotEmpty) {
+                if (value.isNotEmpty) {
                   _sets[number - 1] =
                       _sets[number - 1].copyWith(reps: int.parse(value));
                 }
