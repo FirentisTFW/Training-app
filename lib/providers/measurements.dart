@@ -6,7 +6,7 @@ import 'package:training_app/models/measurement_session.dart';
 import 'package:training_app/services/storage_service.dart';
 
 class Measurements with ChangeNotifier {
-  List<MeasurementSession> _measurements;
+  List<MeasurementSession> _measurements = [];
 
   List<MeasurementSession> get measurements => _measurements;
 
@@ -35,19 +35,25 @@ class Measurements with ChangeNotifier {
 
   Future<void> fetchMeasurements() async {
     final fileData = await readDataFromFile();
-    final measurementsMap = jsonDecode(fileData) as List;
-    _measurements = measurementsMap
-        .map((measurementSession) =>
-            MeasurementSession.fromJson(measurementSession))
-        .toList();
+
+    if (fileData != null) {
+      final measurementsMap = jsonDecode(fileData) as List;
+      _measurements = measurementsMap
+          .map((measurementSession) =>
+              MeasurementSession.fromJson(measurementSession))
+          .toList();
+    }
 
     notifyListeners();
   }
 
   Future<String> readDataFromFile() async {
     final file = await localFile;
-    String content = await file.readAsString();
-    return content;
+    if (await file.exists()) {
+      String content = await file.readAsString();
+      return content;
+    }
+    return null;
   }
 
   Future<void> writeToFile() async {

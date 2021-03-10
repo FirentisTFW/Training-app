@@ -43,22 +43,30 @@ class WorkoutPrograms with ChangeNotifier {
 
   Future<File> get localFile async {
     final path = await StorageService.localPath;
+
     return File('$path/${StorageService.workoutProgramsFileName}');
   }
 
   Future<void> fetchWorkoutPrograms() async {
     final fileData = await readDataFromFile();
-    final programsMap = jsonDecode(fileData) as List;
-    _workoutPrograms =
-        programsMap.map((program) => WorkoutProgram.fromJson(program)).toList();
+
+    if (fileData != null) {
+      final programsMap = jsonDecode(fileData) as List;
+      _workoutPrograms = programsMap
+          .map((program) => WorkoutProgram.fromJson(program))
+          .toList();
+    }
 
     notifyListeners();
   }
 
   Future<String> readDataFromFile() async {
     final file = await localFile;
-    String content = await file.readAsString();
-    return content;
+    if (await file.exists()) {
+      String content = await file.readAsString();
+      return content;
+    }
+    return null;
   }
 
   Future<void> writeToFile() async {

@@ -61,17 +61,23 @@ class Workouts with ChangeNotifier {
 
   Future<void> fetchWorkouts() async {
     final fileData = await readDataFromFile();
-    final workoutsMap = jsonDecode(fileData) as List;
-    _workouts =
-        workoutsMap.map((program) => Workout.fromJson(program)).toList();
+
+    if (fileData != null) {
+      final workoutsMap = jsonDecode(fileData) as List;
+      _workouts =
+          workoutsMap.map((program) => Workout.fromJson(program)).toList();
+    }
 
     notifyListeners();
   }
 
   Future<String> readDataFromFile() async {
     final file = await localFile;
-    String content = await file.readAsString();
-    return content;
+    if (await file.exists()) {
+      String content = await file.readAsString();
+      return content;
+    }
+    return null;
   }
 
   Future<void> writeToFile() async {
