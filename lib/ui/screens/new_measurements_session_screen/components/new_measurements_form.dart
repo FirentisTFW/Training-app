@@ -39,26 +39,28 @@ class _NewMeasurementsFormState extends State<NewMeasurementsForm> {
         node: _focusNode,
         child: ListView(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Text(
-                'Fill in only fields which was measured',
+                'Fill in only fields which were measured',
                 style: TextStyle(fontSize: 22),
                 textAlign: TextAlign.center,
               ),
             ),
             SingleMeasurementInput(
               labelText: 'Bodyweight',
+              suffix: 'kg',
               focusNode: _focusNode,
               onSaved: _saveMeasurement,
             ),
             SingleMeasurementInput(
               labelText: 'Bodyfat',
+              suffix: '%',
               focusNode: _focusNode,
               onSaved: _saveMeasurement,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
+            const Padding(
+              padding: EdgeInsets.only(top: 16),
               child: Text(
                 'Body Measurements:',
                 style: TextStyle(fontSize: 18),
@@ -91,8 +93,9 @@ class _NewMeasurementsFormState extends State<NewMeasurementsForm> {
     for (int i = 0; i < bp.length; i++) {
       measurementInputs.add(
         SingleMeasurementInput(
-          focusNode: _focusNode,
           labelText: bp[i],
+          suffix: 'cm',
+          focusNode: _focusNode,
           onSaved: _saveMeasurement,
         ),
       );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final customTheme = ThemeData(
+final lightTheme = ThemeData(
   fontFamily: 'Lato',
   primarySwatch: Colors.grey,
   primaryColor: Colors.grey[800],

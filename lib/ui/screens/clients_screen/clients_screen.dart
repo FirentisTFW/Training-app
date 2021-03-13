@@ -2,12 +2,13 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:training_app/models/client.dart';
+import 'package:training_app/providers/workout_programs.dart';
 import 'package:training_app/ui/universal_components/error_informator.dart';
 import 'package:training_app/ui/universal_components/loading_spinner.dart';
 import 'package:training_app/ui/universal_components/no_items_added_yet_informator.dart';
 
 import '../../../providers/clients.dart';
-import '../../../providers/workout_programs.dart';
 import '../../universal_components/main_drawer.dart';
 import 'components/client_item.dart';
 import 'components/app_bar_clients_screen.dart';
@@ -20,27 +21,19 @@ class ClientsScreen extends StatefulWidget {
 class _ClientsScreenState extends State<ClientsScreen> {
   var _isLoading = true;
   bool _hasError = false;
+  Gender _genderFilter;
 
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    if (_isLoading) {
-      try {
-        await Provider.of<Clients>(context, listen: false).fetchClients();
-        await Provider.of<WorkoutPrograms>(context, listen: false)
-            .fetchWorkoutPrograms();
-      } catch (err) {
-        _hasError = true;
-      }
-
-      setState(() => _isLoading = false);
-    }
+    await _fetchWorkoutPrograms();
   }
 
   @override
   Widget build(BuildContext context) {
+    _fetchClients();
     return Scaffold(
-      appBar: const AppBarClientsScreen(),
+      appBar: AppBarClientsScreen(filterByGender),
       drawer: MainDrawer(),
       body: _isLoading
           ? LoadingSpinner()
@@ -59,5 +52,35 @@ class _ClientsScreenState extends State<ClientsScreen> {
                         ),
             ),
     );
+  }
+
+  void filterByGender(Gender gender) {
+    setState(() {
+      _genderFilter = gender;
+      _isLoading = true;
+    });
+  }
+
+  Future<void> _fetchClients() async {
+    super.didChangeDependencies();
+    if (_isLoading) {
+      try {
+        await Provider.of<Clients>(context, listen: false)
+            .fetchClients(gender: _genderFilter);
+      } catch (err) {
+        _hasError = true;
+      }
+
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _fetchWorkoutPrograms() async {
+    try {
+      await Provider.of<WorkoutPrograms>(context, listen: false)
+          .fetchWorkoutPrograms();
+    } catch (err) {
+      _hasError = true;
+    }
   }
 }

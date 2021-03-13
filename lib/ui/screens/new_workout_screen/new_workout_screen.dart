@@ -55,6 +55,7 @@ class NewWorkoutScreen extends StatelessWidget {
                               key: _exercisesKeys[i],
                               workoutCreator: _workoutCreator,
                               exerciseName: program.exercises[i].name,
+                              exerciseType: program.exercises[i].exerciseType,
                               initialNumberOfSets: program.exercises[i].sets,
                             )
                           }.toList(),

@@ -39,7 +39,7 @@ class WorkoutCreator {
       _workoutsProvider.deleteWorkout(_workoutBeingCreated.id);
       _exercisesBeingCreated = [];
 
-      throw err;
+      rethrow;
     }
   }
 
@@ -54,7 +54,7 @@ class WorkoutCreator {
       _workoutsProvider.updateWorkout(workoutId, originalExercises);
       _exercisesBeingCreated = [];
 
-      throw err;
+      rethrow;
     }
   }
 }

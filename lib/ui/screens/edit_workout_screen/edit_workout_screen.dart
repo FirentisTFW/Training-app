@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:training_app/models/exercise.dart';
 import 'package:training_app/models/workout_program.dart';
 import 'package:training_app/services/workout_creator.dart';
 import 'package:training_app/ui/dialogs/information_dialog.dart';
@@ -63,11 +64,14 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
                                   keyIndex: i,
                                   exerciseName:
                                       workoutProgram.exercises[i].name,
-                                )
+                                  exerciseType:
+                                      workoutProgram.exercises[i].exerciseType)
                               : _buildEmptyFields(
                                   keyIndex: i,
                                   exerciseName:
                                       workoutProgram.exercises[i].name,
+                                  exerciseType:
+                                      workoutProgram.exercises[i].exerciseType,
                                   initialNumberOfSets:
                                       workoutProgram.exercises[i].sets,
                                 )
@@ -92,12 +96,14 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
   Widget _buildEmptyFields({
     int keyIndex,
     String exerciseName,
+    ExerciseType exerciseType,
     int initialNumberOfSets,
   }) {
     return ExerciseAndSets(
       key: _exercisesKeys[keyIndex],
       workoutCreator: _workoutCreator,
       exerciseName: exerciseName,
+      exerciseType: exerciseType,
       initialNumberOfSets: initialNumberOfSets,
       initialSets: null,
     );
@@ -106,6 +112,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
   Widget _buildFieldsWithInitialValues({
     int keyIndex,
     String exerciseName,
+    ExerciseType exerciseType,
   }) {
     final initialSets =
         workout.exercises.firstWhere((ex) => ex.name == exerciseName).sets;
@@ -113,6 +120,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
       key: _exercisesKeys[keyIndex],
       workoutCreator: _workoutCreator,
       exerciseName: exerciseName,
+      exerciseType: exerciseType,
       initialNumberOfSets: initialSets.length,
       initialSets: initialSets,
     );

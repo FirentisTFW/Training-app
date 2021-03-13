@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:training_app/models/client.dart';
 import 'package:training_app/ui/screens/new_client_screen/new_client_screen.dart';
 
 class AppBarClientsScreen extends StatelessWidget
     implements PreferredSizeWidget {
-  final Size preferredSize = const Size.fromHeight(kToolbarHeight);
+  final Function filterByGender;
 
-  const AppBarClientsScreen();
+  AppBarClientsScreen(this.filterByGender);
+
+  final Size preferredSize = const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +23,20 @@ class AppBarClientsScreen extends StatelessWidget
           onPressed: () => goToNewClientScreen(context),
         ),
         PopupMenuButton(
-          onSelected: (value) {},
+          onSelected: filterByGender,
           icon: Icon(Icons.more_vert),
           itemBuilder: (_) => [
-            PopupMenuItem(
-              child: const Text('Show Only Men'),
-              value: 'aa',
+            const PopupMenuItem(
+              child: Text('Show Only Men'),
+              value: Gender.Man,
             ),
-            PopupMenuItem(
-              child: const Text('Show Only Women'),
-              value: 'aa',
+            const PopupMenuItem(
+              child: Text('Show Only Women'),
+              value: Gender.Woman,
+            ),
+            const PopupMenuItem(
+              child: Text('Show All Clients'),
+              value: null,
             ),
           ],
         ),

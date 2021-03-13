@@ -41,9 +41,7 @@ class _CompletedWorkoutScreenState extends State<CompletedWorkoutScreen> {
               : ListView.builder(
                   itemCount: workouts.length,
                   itemBuilder: (ctx, index) {
-                    return WorkoutItem(
-                      workouts[index],
-                    );
+                    return WorkoutItem(workouts[index]);
                   },
                 ),
     );

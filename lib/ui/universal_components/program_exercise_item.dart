@@ -56,31 +56,35 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        width: 300,
-                        child: TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'Exercise Name'),
-                          initialValue: widget.initialValues != null
-                              ? widget.initialValues.name
-                              : null,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.name,
-                          validator: (value) =>
-                              Validator.validateForEmptyString(value),
-                          onFieldSubmitted: (_) => _focusNode.nextFocus(),
-                          onSaved: (value) =>
-                              _exercise = _exercise.copyWith(name: value),
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                                labelText: 'Exercise Name'),
+                            initialValue: widget.initialValues != null
+                                ? widget.initialValues.name
+                                : null,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.name,
+                            validator: (value) =>
+                                Validator.validateForEmptyString(value),
+                            onFieldSubmitted: (_) => _focusNode.nextFocus(),
+                            onSaved: (value) =>
+                                _exercise = _exercise.copyWith(name: value),
+                          ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 14),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.delete,
-                            size: 26,
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 14),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              size: 26,
+                            ),
+                            onPressed: () => _confirmRemovingExercise(context),
                           ),
-                          onPressed: () => _confirmRemovingExercise(context),
                         ),
                       )
                     ],

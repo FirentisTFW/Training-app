@@ -27,12 +27,15 @@ class Clients with ChangeNotifier {
     return File('$path/${StorageService.clientsFileName}');
   }
 
-  Future<void> fetchClients() async {
+  Future<void> fetchClients({Gender gender}) async {
     final fileData = await readDataFromFile();
 
     if (fileData != null) {
       final clientMap = jsonDecode(fileData) as List;
       _clients = clientMap.map((client) => Client.fromJson(client)).toList();
+    }
+    if (gender != null) {
+      _clients = _clients.where((client) => client.gender == gender).toList();
     }
 
     notifyListeners();

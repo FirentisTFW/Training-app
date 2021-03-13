@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:training_app/models/exercise.dart';
 import 'package:training_app/models/workout.dart';
 import 'package:training_app/services/workout_creator.dart';
 
@@ -8,6 +9,7 @@ class ExerciseAndSets extends StatefulWidget {
   final Key key;
   final WorkoutCreator workoutCreator;
   final String exerciseName;
+  final ExerciseType exerciseType;
   final int initialNumberOfSets;
   final List<Set> initialSets;
 
@@ -15,6 +17,7 @@ class ExerciseAndSets extends StatefulWidget {
     @required this.key,
     @required this.workoutCreator,
     @required this.exerciseName,
+    @required this.exerciseType,
     @required this.initialNumberOfSets,
     this.initialSets,
   });
@@ -150,6 +153,7 @@ class ExerciseAndSetsState extends State<ExerciseAndSets> {
         Set(
           reps: 0,
           weight: 0,
+          exerciseType: widget.exerciseType,
         ),
       );
 

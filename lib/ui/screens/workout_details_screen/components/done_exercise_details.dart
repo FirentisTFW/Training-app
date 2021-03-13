@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:training_app/models/exercise.dart';
 
 import '../../../../models/workout.dart';
 
@@ -17,7 +18,7 @@ class DoneExerciseDetails extends StatelessWidget {
             setsStr: _getNumberOfSetsStr(),
           ),
           _SetsOverview(sets: exerciseDetails.sets),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
         ],
       ),
     );
@@ -42,18 +43,18 @@ class _ExerciseOverview extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.only(bottom: 10),
           height: 40,
           child: Text(
             name,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
         Container(
-          padding: EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.only(bottom: 8),
           height: 28,
           child: Text(
             setsStr,
@@ -89,10 +90,12 @@ class _SetsOverview extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Reps: ',
+                          singleSet.exerciseType == ExerciseType.ForRepetitions
+                              ? 'Reps: '
+                              : 'Hold: ',
                           style: TextStyle(color: Colors.grey[400]),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Text(
                           singleSet.reps.toString(),
                           style: TextStyle(fontSize: 18),
@@ -105,7 +108,7 @@ class _SetsOverview extends StatelessWidget {
                           'Weight: ',
                           style: TextStyle(color: Colors.grey[400]),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Text(
                           singleSet.weight.toString(),
                           style: TextStyle(fontSize: 18),
