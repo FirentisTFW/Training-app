@@ -55,6 +55,4 @@ class MeasurementSession {
         orElse: () => null);
     return bodyfatMeasurement?.value ?? null;
   }
-
-  List<BodyMeasurement> getBodyMeasurements() => bodyMeasurements;
 }

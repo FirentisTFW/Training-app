@@ -108,6 +108,13 @@ class _NewMeasurementsFormState extends State<NewMeasurementsForm> {
 
     if (isValid) {
       _newMeasurementsForm.currentState.save();
+
+      if (_measurements.isEmpty && _bodyMeasurements.isEmpty) {
+        InformationDialogs.showSnackbar(
+            'No measurements were entered. Add some.', context);
+        return;
+      }
+
       final measurementSession = _createMeasurementSession();
       final measurementsProvider =
           Provider.of<Measurements>(context, listen: false);

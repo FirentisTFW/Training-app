@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:training_app/models/body_measurement.dart';
 import 'package:training_app/ui/dialogs/confirmation.dart';
 import 'package:training_app/providers/measurements.dart';
 import 'package:training_app/ui/dialogs/information_dialog.dart';
@@ -16,24 +17,40 @@ class MeasurementItem extends StatefulWidget {
   MeasurementItem(this.measurementSession);
 
   @override
-  _MeasurementItemState createState() => _MeasurementItemState();
+  _MeasurementItemState createState() => _MeasurementItemState(
+        bodyweight: measurementSession.getBodyweight(),
+        bodyfat: measurementSession.getBodyfat(),
+        bodyMeasurements: measurementSession.bodyMeasurements,
+        date: measurementSession.date,
+      );
 }
 
 class _MeasurementItemState extends State<MeasurementItem> {
+  final double bodyweight;
+  final double bodyfat;
+  final List<BodyMeasurement> bodyMeasurements;
+  final DateTime date;
+
   var _isExpanded = false;
+  var _animationFinished = false;
   Offset _tapPosition;
+
+  _MeasurementItemState({
+    @required this.bodyweight,
+    @required this.bodyfat,
+    @required this.bodyMeasurements,
+    @required this.date,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final bodyweight = widget.measurementSession.getBodyweight();
-    final bodyfat = widget.measurementSession.getBodyfat();
-    final bodyMeasurements = widget.measurementSession.getBodyMeasurements();
-
     return InkWell(
       onTapDown: _storePosition,
       onLongPress: _showPopUpMenuAndChooseOption,
-      child: Container(
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
         height: getHeight(bodyMeasurements?.length ?? null),
+        onEnd: () => setState(() => _animationFinished = true),
         child: Card(
           child: Center(
             child: Column(
@@ -41,7 +58,7 @@ class _MeasurementItemState extends State<MeasurementItem> {
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(
-                    DateFormat.yMd().format(widget.measurementSession.date),
+                    DateFormat.yMd().format(date),
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -56,8 +73,10 @@ class _MeasurementItemState extends State<MeasurementItem> {
                   SingleMeasurementAttribute(name: 'Bodyfat', value: bodyfat),
                 if (bodyMeasurements.isNotEmpty)
                   BodyMeasurementsButton(_isExpanded, _expand),
-                if (_isExpanded && bodyMeasurements.isNotEmpty)
-                  BodyMeasurementsList(bodyMeasurements),
+                if (_isExpanded &&
+                    bodyMeasurements.isNotEmpty &&
+                    _animationFinished)
+                  Flexible(child: BodyMeasurementsList(bodyMeasurements)),
               ],
             ),
           ),
@@ -66,7 +85,10 @@ class _MeasurementItemState extends State<MeasurementItem> {
     );
   }
 
-  void _expand() => setState(() => _isExpanded = !_isExpanded);
+  void _expand() => setState(() {
+        _animationFinished = false;
+        _isExpanded = !_isExpanded;
+      });
 
   void _storePosition(TapDownDetails details) =>
       _tapPosition = details.globalPosition;
@@ -104,12 +126,21 @@ class _MeasurementItemState extends State<MeasurementItem> {
       await Confirmation.confirmationDialog(context);
 
   double getHeight(bodyMeasurementsLength) {
-    if (bodyMeasurementsLength == null) {
-      return 120.0;
-    }
+    final dateHeight = 70;
+    final bodyweightHeight = bodyweight != null ? 30.0 : 0;
+    final bodyfatHeight = bodyfat != null ? 30.0 : 0;
+    final measurementsBasicHeight = bodyMeasurementsLength != 0 ? 60.0 : 0;
+
     if (_isExpanded) {
-      return 190.0 + bodyMeasurementsLength * 30.0;
+      return dateHeight +
+          bodyweightHeight +
+          bodyfatHeight +
+          measurementsBasicHeight +
+          bodyMeasurementsLength * 30.0;
     }
-    return 190.0;
+    return dateHeight +
+        bodyweightHeight +
+        bodyfatHeight +
+        measurementsBasicHeight;
   }
 }
