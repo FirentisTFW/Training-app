@@ -55,4 +55,9 @@ class MeasurementSession {
         orElse: () => null);
     return bodyfatMeasurement?.value ?? null;
   }
+
+  @override
+  String toString() {
+    return 'MeasurementSession(id: $id, clientId: $clientId, date: $date, measurements: $measurements, bodyMeasurements: $bodyMeasurements)';
+  }
 }

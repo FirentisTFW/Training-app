@@ -25,7 +25,7 @@ class ProgramExerciseItem extends StatefulWidget {
 class ProgramExerciseItemState extends State<ProgramExerciseItem> {
   final _newProgramForm = GlobalKey<FormState>();
   final _focusNode = FocusNode();
-  var _isExerciseForReps = true;
+  bool _isExerciseForReps = true;
 
   var _exercise = Exercise(
     id: DateTime.now().toString(),
@@ -40,6 +40,15 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
   void dispose() {
     _focusNode.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialValues != null) {
+      _isExerciseForReps =
+          widget.initialValues.exerciseType == ExerciseType.ForRepetitions;
+    }
   }
 
   @override
@@ -147,7 +156,7 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
                           _isExerciseForReps ? 'Reps Max' : 'Seconds Max',
                     ),
                     initialValue: widget.initialValues != null
-                        ? widget.initialValues.repsMin.toString()
+                        ? widget.initialValues.repsMax.toString()
                         : null,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,

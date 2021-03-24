@@ -4,7 +4,7 @@ import 'package:training_app/ui/screens/new_client_screen/new_client_screen.dart
 
 class AppBarClientsScreen extends StatelessWidget
     implements PreferredSizeWidget {
-  final Function filterByGender;
+  final Function(Gender) filterByGender;
 
   AppBarClientsScreen(this.filterByGender);
 
@@ -36,7 +36,7 @@ class AppBarClientsScreen extends StatelessWidget
             ),
             const PopupMenuItem(
               child: Text('Show All Clients'),
-              value: null,
+              value: Gender.Unknown,
             ),
           ],
         ),

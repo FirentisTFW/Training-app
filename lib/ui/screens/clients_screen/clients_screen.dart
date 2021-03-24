@@ -42,13 +42,15 @@ class _ClientsScreenState extends State<ClientsScreen> {
                   ? ErrorInformator('An error occured. Try again.')
                   : clients.clients.length == 0
                       ? NoItemsAddedYetInformator('No clients added yet.')
-                      : ListView.builder(
-                          itemCount: clients.clients.length,
-                          itemBuilder: (ctx, index) => ClientItem(
-                            clients.clients[index].id,
-                            clients.clients[index].firstName,
-                            clients.clients[index].lastName,
-                          ),
+                      : ListView(
+                          children: clients
+                              .getClientsByGender(_genderFilter)
+                              .map((client) => ClientItem(
+                                    client.id,
+                                    client.firstName,
+                                    client.lastName,
+                                  ))
+                              .toList(),
                         ),
             ),
     );
@@ -58,6 +60,9 @@ class _ClientsScreenState extends State<ClientsScreen> {
     setState(() {
       _genderFilter = gender;
       _isLoading = true;
+      if (gender == Gender.Unknown) {
+        _genderFilter = null;
+      }
     });
   }
 
@@ -65,8 +70,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
     super.didChangeDependencies();
     if (_isLoading) {
       try {
-        await Provider.of<Clients>(context, listen: false)
-            .fetchClients(gender: _genderFilter);
+        await Provider.of<Clients>(context, listen: false).fetchClients();
       } catch (err) {
         _hasError = true;
       }

@@ -37,6 +37,7 @@ class ProgramDetailsScreen extends StatelessWidget {
           sets: exercises[index].sets,
           repsMin: exercises[index].repsMin,
           repsMax: exercises[index].repsMax,
+          exerciseType: exercises[index].exerciseType,
         ),
       ),
     );

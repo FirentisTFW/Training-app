@@ -63,4 +63,5 @@ T _$enumDecodeNullable<T>(
 const _$GenderEnumMap = {
   Gender.Man: 'Man',
   Gender.Woman: 'Woman',
+  Gender.Unknown: 'Unknown',
 };

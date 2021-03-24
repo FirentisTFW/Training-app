@@ -23,4 +23,7 @@ class Measurement {
       _$MeasurementFromJson(json);
 
   Map<String, dynamic> toJson() => _$MeasurementToJson(this);
+
+  @override
+  String toString() => 'Measurement(value: $value, type: $type)';
 }

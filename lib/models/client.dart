@@ -6,6 +6,7 @@ part 'client.g.dart';
 enum Gender {
   Man,
   Woman,
+  Unknown,
 }
 
 @JsonSerializable()

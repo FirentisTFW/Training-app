@@ -11,6 +11,17 @@ class Clients with ChangeNotifier {
 
   List<Client> get clients => _clients;
 
+  List<Client> getClientsByGender(Gender gender) {
+    var filteredClients = _clients;
+
+    if (gender != null) {
+      filteredClients =
+          _clients.where((client) => client.gender == gender).toList();
+    }
+
+    return filteredClients;
+  }
+
   Client getClientById(String id) =>
       _clients.firstWhere((client) => client.id == id);
 
@@ -27,15 +38,12 @@ class Clients with ChangeNotifier {
     return File('$path/${StorageService.clientsFileName}');
   }
 
-  Future<void> fetchClients({Gender gender}) async {
+  Future<void> fetchClients() async {
     final fileData = await readDataFromFile();
 
     if (fileData != null) {
       final clientMap = jsonDecode(fileData) as List;
       _clients = clientMap.map((client) => Client.fromJson(client)).toList();
-    }
-    if (gender != null) {
-      _clients = _clients.where((client) => client.gender == gender).toList();
     }
 
     notifyListeners();

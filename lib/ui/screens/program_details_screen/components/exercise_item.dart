@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:training_app/models/exercise.dart';
 
 class ExerciseItem extends StatelessWidget {
   final String name;
   final int sets;
   final int repsMin;
   final int repsMax;
+  final ExerciseType exerciseType;
 
   ExerciseItem({
     @required this.name,
     @required this.sets,
     @required this.repsMin,
     @required this.repsMax,
+    @required this.exerciseType,
   });
 
   @override
@@ -42,7 +45,9 @@ class ExerciseItem extends StatelessWidget {
                     style: TextStyle(fontSize: 18),
                   ),
                   Text(
-                    'Reps: ${repsMin.toString()} - ${repsMax.toString()}',
+                    exerciseType == ExerciseType.ForRepetitions
+                        ? 'Reps: ${repsMin.toString()} - ${repsMax.toString()}'
+                        : 'Seconds: ${repsMin.toString()} - ${repsMax.toString()}',
                     style: TextStyle(fontSize: 18),
                   )
                 ],

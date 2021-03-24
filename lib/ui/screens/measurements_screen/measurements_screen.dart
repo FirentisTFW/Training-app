@@ -37,8 +37,9 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
   Widget build(BuildContext context) {
     final clientId = ModalRoute.of(context).settings.arguments;
     final measurementsProvider = Provider.of<Measurements>(context);
-    final measurements =
-        _isLoading ? null : measurementsProvider.findByClientId(clientId);
+    final measurements = _isLoading
+        ? null
+        : measurementsProvider.findByClientId(clientId).reversed.toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -58,15 +59,21 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
                   ? NoItemsAddedYetInformator('No measurements taken yet.')
                   : ListView.builder(
                       itemCount: measurements.length,
-                      itemBuilder: (ctx, index) =>
-                          MeasurementItem(measurements[index]),
+                      itemBuilder: (ctx, index) => MeasurementItem(
+                        measurements[index],
+                        refreshAfterChange,
+                      ),
                     ),
     );
   }
 
   Future goToNewMeasurementSessionScreen(String clientId) =>
-      Navigator.of(context).pushNamed(
-        NewMeasurementSessionScreen.routeName,
-        arguments: clientId,
-      );
+      Navigator.of(context)
+          .pushNamed(
+            NewMeasurementSessionScreen.routeName,
+            arguments: clientId,
+          )
+          .then((_) => refreshAfterChange());
+
+  void refreshAfterChange() => setState(() => _isLoading = true);
 }
