@@ -32,14 +32,21 @@ class Workouts with ChangeNotifier {
   double getNumberOfWorkoutsPerWeekByClientId(String clientId) {
     DateTime firstWorkoutDate = getFirstWorkoutDateByClientId(clientId);
     DateTime currentDate = DateTime.now();
-    double dateDifferenceInWeeks =
+    int totalNumberOfWorkouts = getTotalNumberOfWorkoutsByClientId(clientId);
+
+    double dateDifferenceInDays =
         firstWorkoutDate?.difference(currentDate)?.inDays?.toDouble()?.abs() ??
             0.0;
-    if (dateDifferenceInWeeks == 0.0) {
+    if (dateDifferenceInDays == 0.0) {
       // there's only one workout or all of the workouts were done the same day
-      dateDifferenceInWeeks = 1;
+      dateDifferenceInDays = 1;
     }
-    return getTotalNumberOfWorkoutsByClientId(clientId) / dateDifferenceInWeeks;
+    if (dateDifferenceInDays < 7) {
+      // how many workouts per day * how many days in a week
+      return (totalNumberOfWorkouts / dateDifferenceInDays) *
+          dateDifferenceInDays;
+    }
+    return (totalNumberOfWorkouts / dateDifferenceInDays) * 7;
   }
 
   DateTime getFirstWorkoutDateByClientId(String clientId) {

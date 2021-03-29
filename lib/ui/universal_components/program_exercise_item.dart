@@ -24,7 +24,7 @@ class ProgramExerciseItem extends StatefulWidget {
 
 class ProgramExerciseItemState extends State<ProgramExerciseItem> {
   final _newProgramForm = GlobalKey<FormState>();
-  final _focusNode = FocusNode();
+  final _setsFocusNode = FocusNode();
   bool _isExerciseForReps = true;
 
   var _exercise = Exercise(
@@ -38,7 +38,7 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
 
   @override
   void dispose() {
-    _focusNode.dispose();
+    _setsFocusNode.dispose();
     super.dispose();
   }
 
@@ -59,114 +59,114 @@ class ProgramExerciseItemState extends State<ProgramExerciseItem> {
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: _newProgramForm,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: Container(
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                                labelText: 'Exercise Name'),
-                            initialValue: widget.initialValues != null
-                                ? widget.initialValues.name
-                                : null,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.name,
-                            validator: (value) =>
-                                Validator.validateForEmptyString(value),
-                            onFieldSubmitted: (_) => _focusNode.nextFocus(),
-                            onSaved: (value) =>
-                                _exercise = _exercise.copyWith(name: value),
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 14),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.delete,
-                              size: 26,
+            child: FocusScope(
+              child: Form(
+                key: _newProgramForm,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: Container(
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                  labelText: 'Exercise Name'),
+                              initialValue: widget.initialValues != null
+                                  ? widget.initialValues.name
+                                  : null,
+                              textInputAction: TextInputAction.done,
+                              keyboardType: TextInputType.name,
+                              validator: (value) =>
+                                  Validator.validateForEmptyString(value),
+                              onSaved: (value) =>
+                                  _exercise = _exercise.copyWith(name: value),
                             ),
-                            onPressed: () => _confirmRemovingExercise(context),
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                  DropdownButtonFormField(
-                    decoration:
-                        const InputDecoration(labelText: 'Exercise Type'),
-                    value: widget.initialValues != null
-                        ? widget.initialValues.exerciseType
-                        : ExerciseType.ForRepetitions,
-                    items: [
-                      DropdownMenuItem(
-                        value: ExerciseType.ForRepetitions,
-                        child: const Text('For Repetitions'),
-                      ),
-                      DropdownMenuItem(
-                        value: ExerciseType.ForTime,
-                        child: const Text('For Time'),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      _changeExerciseType(value);
-                      _focusNode.nextFocus();
-                    },
-                    onSaved: (value) =>
-                        _exercise = _exercise.copyWith(exerciseType: value),
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Sets'),
-                    initialValue: widget.initialValues != null
-                        ? widget.initialValues.sets.toString()
-                        : null,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
-                    validator: (value) =>
-                        Validator.validateForEmptyAndNumber(value),
-                    onFieldSubmitted: (_) => _focusNode.nextFocus(),
-                    onSaved: (value) =>
-                        _exercise = _exercise.copyWith(sets: int.parse(value)),
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText:
-                          _isExerciseForReps ? 'Reps Min' : 'Seconds Min',
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 14),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                size: 26,
+                              ),
+                              onPressed: () =>
+                                  _confirmRemovingExercise(context),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                    initialValue: widget.initialValues != null
-                        ? widget.initialValues.repsMin.toString()
-                        : null,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
-                    validator: (value) =>
-                        Validator.validateForEmptyAndNumber(value),
-                    onFieldSubmitted: (_) => _focusNode.nextFocus(),
-                    onSaved: (value) => _exercise =
-                        _exercise.copyWith(repsMin: int.parse(value)),
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText:
-                          _isExerciseForReps ? 'Reps Max' : 'Seconds Max',
+                    DropdownButtonFormField(
+                      decoration:
+                          const InputDecoration(labelText: 'Exercise Type'),
+                      value: widget.initialValues != null
+                          ? widget.initialValues.exerciseType
+                          : ExerciseType.ForRepetitions,
+                      items: [
+                        DropdownMenuItem(
+                          value: ExerciseType.ForRepetitions,
+                          child: const Text('For Repetitions'),
+                        ),
+                        DropdownMenuItem(
+                          value: ExerciseType.ForTime,
+                          child: const Text('For Time'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        _changeExerciseType(value);
+                        _setsFocusNode.requestFocus();
+                      },
+                      onSaved: (value) =>
+                          _exercise = _exercise.copyWith(exerciseType: value),
                     ),
-                    initialValue: widget.initialValues != null
-                        ? widget.initialValues.repsMax.toString()
-                        : null,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
-                    validator: (value) =>
-                        Validator.validateForEmptyAndNumber(value),
-                    onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
-                    onSaved: (value) => _exercise =
-                        _exercise.copyWith(repsMax: int.parse(value)),
-                  ),
-                ],
+                    TextFormField(
+                      focusNode: _setsFocusNode,
+                      decoration: const InputDecoration(labelText: 'Sets'),
+                      initialValue: widget.initialValues != null
+                          ? widget.initialValues.sets.toString()
+                          : null,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.number,
+                      validator: (value) =>
+                          Validator.validateForEmptyAndNumber(value),
+                      onSaved: (value) => _exercise =
+                          _exercise.copyWith(sets: int.parse(value)),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText:
+                            _isExerciseForReps ? 'Reps Min' : 'Seconds Min',
+                      ),
+                      initialValue: widget.initialValues != null
+                          ? widget.initialValues.repsMin.toString()
+                          : null,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.number,
+                      validator: (value) =>
+                          Validator.validateForEmptyAndNumber(value),
+                      onSaved: (value) => _exercise =
+                          _exercise.copyWith(repsMin: int.parse(value)),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText:
+                            _isExerciseForReps ? 'Reps Max' : 'Seconds Max',
+                      ),
+                      initialValue: widget.initialValues != null
+                          ? widget.initialValues.repsMax.toString()
+                          : null,
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.number,
+                      validator: (value) =>
+                          Validator.validateForEmptyAndNumber(value),
+                      onSaved: (value) => _exercise =
+                          _exercise.copyWith(repsMax: int.parse(value)),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
