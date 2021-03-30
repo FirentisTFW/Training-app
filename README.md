@@ -15,3 +15,8 @@ App for personal trainers which allows them to track their clients progress. Wri
 ## Launch
 
 If you want to launch the app, you can download training_app.apk file from apk folder and install it on your device.
+
+## App Preview
+
+![Creating program](demo_gifs/program_creation.gif) ![Creating workout](demo_gifs/workout_creation.gif)\
+![Measurements](demo_gifs/measurements.gif) ![Browsing workouts](demo_gifs/workouts_and_editing.gif)
