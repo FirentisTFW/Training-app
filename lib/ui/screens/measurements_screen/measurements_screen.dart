@@ -61,19 +61,17 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
                       itemCount: measurements.length,
                       itemBuilder: (ctx, index) => MeasurementItem(
                         measurements[index],
-                        refreshAfterChange,
+                        ValueKey(measurements[index].id),
                       ),
                     ),
     );
   }
 
   Future goToNewMeasurementSessionScreen(String clientId) =>
-      Navigator.of(context)
-          .pushNamed(
-            NewMeasurementSessionScreen.routeName,
-            arguments: clientId,
-          )
-          .then((_) => refreshAfterChange());
+      Navigator.of(context).pushNamed(
+        NewMeasurementSessionScreen.routeName,
+        arguments: clientId,
+      );
 
-  void refreshAfterChange() => setState(() => _isLoading = true);
+  void refreshAfterChange() {}
 }

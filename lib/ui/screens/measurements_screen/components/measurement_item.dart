@@ -13,9 +13,9 @@ import 'body_measurements_widgets.dart';
 
 class MeasurementItem extends StatefulWidget {
   final MeasurementSession measurementSession;
-  final Function refreshAfterDeleting;
+  final Key key;
 
-  MeasurementItem(this.measurementSession, this.refreshAfterDeleting);
+  MeasurementItem(this.measurementSession, this.key);
 
   @override
   _MeasurementItemState createState() => _MeasurementItemState(
@@ -114,7 +114,6 @@ class _MeasurementItemState extends State<MeasurementItem> {
         measurementsProvider
             .deleteMeasurementSession(widget.measurementSession.id);
         await measurementsProvider.writeToFile();
-        widget.refreshAfterDeleting();
         InformationDialogs.showSnackbar(
             'Measurements session deleted.', context);
       } catch (err) {
