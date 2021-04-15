@@ -8,6 +8,8 @@ import '../models/workout_program.dart';
 import '../models/exercise.dart';
 
 class WorkoutPrograms with ChangeNotifier {
+  static const String _workoutProgramsFileName = 'workout_programs.json';
+
   List<WorkoutProgram> _workoutPrograms = [];
 
   List<WorkoutProgram> get workoutPrograms => _workoutPrograms;
@@ -41,10 +43,10 @@ class WorkoutPrograms with ChangeNotifier {
 
 // STORAGE MANAGEMENT
 
-  Future<File> get localFile async {
+  Future<File> get _localFile async {
     final path = await StorageService.localPath;
 
-    return File('$path/${StorageService.workoutProgramsFileName}');
+    return File('$path/$_workoutProgramsFileName');
   }
 
   Future<void> fetchWorkoutPrograms() async {
@@ -61,7 +63,7 @@ class WorkoutPrograms with ChangeNotifier {
   }
 
   Future<String> readDataFromFile() async {
-    final file = await localFile;
+    final file = await _localFile;
     if (await file.exists()) {
       String content = await file.readAsString();
       return content;
@@ -70,7 +72,7 @@ class WorkoutPrograms with ChangeNotifier {
   }
 
   Future<void> writeToFile() async {
-    final file = await localFile;
+    final file = await _localFile;
     final programsInJson = jsonEncode(_workoutPrograms);
     await file.writeAsString(programsInJson.toString());
     notifyListeners();

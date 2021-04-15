@@ -7,6 +7,8 @@ import 'package:training_app/services/storage_service.dart';
 import '../models/client.dart';
 
 class Clients with ChangeNotifier {
+  static const String _clientsFileName = 'clients.json';
+
   List<Client> _clients = [];
 
   List<Client> get clients => _clients;
@@ -33,9 +35,9 @@ class Clients with ChangeNotifier {
 
   // STORAGE MANAGEMENT
 
-  Future<File> get localFile async {
+  Future<File> get _localFile async {
     final path = await StorageService.localPath;
-    return File('$path/${StorageService.clientsFileName}');
+    return File('$path/$_clientsFileName');
   }
 
   Future<void> fetchClients() async {
@@ -50,7 +52,7 @@ class Clients with ChangeNotifier {
   }
 
   Future<String> readDataFromFile() async {
-    final file = await localFile;
+    final file = await _localFile;
 
     if (await file.exists()) {
       String content = await file.readAsString();
@@ -60,7 +62,7 @@ class Clients with ChangeNotifier {
   }
 
   Future<void> writeToFile() async {
-    final file = await localFile;
+    final file = await _localFile;
     final clientsInJson = jsonEncode(_clients);
     await file.writeAsString(clientsInJson.toString());
 
