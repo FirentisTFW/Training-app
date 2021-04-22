@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -10,7 +11,7 @@ enum MeasurementType {
 }
 
 @JsonSerializable()
-class Measurement {
+class Measurement extends Equatable {
   final double value;
   final MeasurementType type;
 
@@ -26,4 +27,7 @@ class Measurement {
 
   @override
   String toString() => 'Measurement(value: $value, type: $type)';
+
+  @override
+  List<Object> get props => [value, type];
 }

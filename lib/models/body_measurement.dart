@@ -32,4 +32,7 @@ class BodyMeasurement extends Measurement {
       _$BodyMeasurementFromJson(json);
 
   Map<String, dynamic> toJson() => _$BodyMeasurementToJson(this);
+
+  @override
+  List<Object> get props => [value, type, bodypart];
 }

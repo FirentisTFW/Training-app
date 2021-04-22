@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -10,7 +11,7 @@ enum Gender {
 }
 
 @JsonSerializable()
-class Client {
+class Client extends Equatable {
   final String id;
   final String firstName;
   final String lastName;
@@ -58,4 +59,8 @@ class Client {
       height: height ?? this.height,
     );
   }
+
+  @override
+  List<Object> get props =>
+      [id, firstName, lastName, gender, birthDate, height];
 }

@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:training_app/models/body_measurement.dart';
@@ -6,7 +7,7 @@ import 'package:training_app/models/measurement.dart';
 part 'measurement_session.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class MeasurementSession {
+class MeasurementSession extends Equatable {
   final String id;
   final String clientId;
   final DateTime date;
@@ -60,4 +61,8 @@ class MeasurementSession {
   String toString() {
     return 'MeasurementSession(id: $id, clientId: $clientId, date: $date, measurements: $measurements, bodyMeasurements: $bodyMeasurements)';
   }
+
+  @override
+  List<Object> get props =>
+      [id, clientId, date, measurements, bodyMeasurements];
 }
