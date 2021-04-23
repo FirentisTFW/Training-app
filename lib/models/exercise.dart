@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -9,7 +10,7 @@ enum ExerciseType {
 }
 
 @JsonSerializable(explicitToJson: true)
-class Exercise {
+class Exercise extends Equatable {
   final String id;
   final String name;
   final ExerciseType exerciseType;
@@ -48,4 +49,7 @@ class Exercise {
       repsMax: repsMax ?? this.repsMax,
     );
   }
+
+  @override
+  List<Object> get props => [id, name, exerciseType, sets, repsMin, repsMax];
 }

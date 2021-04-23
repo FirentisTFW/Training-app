@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -6,7 +7,7 @@ import './exercise.dart';
 part 'workout_program.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class WorkoutProgram {
+class WorkoutProgram extends Equatable {
   final String clientId;
   final String name;
   final List<Exercise> exercises;
@@ -39,4 +40,7 @@ class WorkoutProgram {
     exercises.forEach((exercise) => total += exercise.sets);
     return total;
   }
+
+  @override
+  List<Object> get props => [clientId, name, exercises];
 }
