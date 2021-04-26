@@ -28,7 +28,7 @@ void main() {
 
   group('WorkoutsTest -', () {
     group('fetchWorkouts -', () {
-      test('When returns String, values are assigned to _workouts variable',
+      test('When returns a String, values are assigned to _workouts variable',
           () async {
         when(workoutsMock.readDataFromFile()).thenAnswer((_) async =>
             '[{"id":"W1","clientId":"1","date":"2021-01-02T00:00:00.000","programName":"PULL","exercises":[{"name":"Pull Ups","sets":[{"reps":10,"weight":0,"exerciseType":"ForRepetitions"},{"reps":10,"weight":0,"exerciseType":"ForRepetitions"}]},{"name":"Australian Pull Ups","sets":[{"reps":15,"weight":0,"exerciseType":"ForRepetitions"},{"reps":15,"weight":0,"exerciseType":"ForRepetitions"}]}]},'

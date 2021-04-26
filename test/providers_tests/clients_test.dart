@@ -49,68 +49,80 @@ void main() async {
   });
 
   group('Clients provider -', () {
-    test('fetchClients() fetches data from file correctly', () async {
-      when(clientsMock.readDataFromFile()).thenAnswer((_) async =>
-          '[{"id":"1","firstName":"John","lastName":"Doe","gender":"Man","birthDate":"1983-04-14T00:00:00.000","height":175},'
-          '{"id":"2","firstName":"Stacy","lastName":"Smith","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165}]');
+    group('fetchClients -', () {
+      test('When returns a String, values are assigned to _clients variable',
+          () async {
+        when(clientsMock.readDataFromFile()).thenAnswer((_) async =>
+            '[{"id":"1","firstName":"John","lastName":"Doe","gender":"Man","birthDate":"1983-04-14T00:00:00.000","height":175},'
+            '{"id":"2","firstName":"Stacy","lastName":"Smith","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165}]');
 
-      await clients.fetchClients();
+        await clients.fetchClients();
 
-      expect(clients.clients.length, 2);
+        expect(clients.clients.length, 2);
+        expect(clients.clients, clientsList);
+        verify(clientsMock.notifyListeners());
+      });
+      test('When throws an Exception, _clients variable is empty', () async {
+        when(clientsMock.readDataFromFile())
+            .thenThrow(Exception('An exception occured'));
 
-      expect(clients.clients[0], clientsList[0]);
-      expect(clients.clients[1], clientsList[1]);
-      verify(clientsMock.notifyListeners());
+        try {
+          await clients.fetchClients();
+        } catch (_) {}
+
+        expect(clients.clients, []);
+      });
     });
 
-    test('addNewClient() works properly', () async {
-      final clientToAdd = Client(
-        id: '3',
-        birthDate: DateTime(1980, 10, 20),
-        firstName: 'Will',
-        lastName: 'Johnson',
-        gender: Gender.Man,
-        height: 172,
-      );
+    group('When clients had been fetched successfully -', () {
+      setUp(() async {
+        when(clientsMock.readDataFromFile()).thenAnswer((_) async =>
+            '[{"id":"1","firstName":"John","lastName":"Doe","gender":"Man","birthDate":"1983-04-14T00:00:00.000","height":175},'
+            '{"id":"2","firstName":"Stacy","lastName":"Smith","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165}]');
 
-      when(clientsMock.readDataFromFile()).thenAnswer((_) async =>
-          '[{"id":"1","firstName":"John","lastName":"Doe","gender":"Man","birthDate":"1983-04-14T00:00:00.000","height":175},'
-          '{"id":"2","firstName":"Stacy","lastName":"Smith","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165}]');
+        await clients.fetchClients();
+      });
 
-      await clients.fetchClients();
-      clients.addNewClient(clientToAdd);
+      test('addNewClient() works properly', () async {
+        final clientToAdd = Client(
+          id: '3',
+          birthDate: DateTime(1980, 10, 20),
+          firstName: 'Will',
+          lastName: 'Johnson',
+          gender: Gender.Man,
+          height: 172,
+        );
 
-      expect(clients.clients.length, 3);
-      expect(clients.clients[2], clientToAdd);
+        clients.addNewClient(clientToAdd);
 
-      verify(clientsMock.notifyListeners());
-    });
+        expect(clients.clients.length, 3);
+        expect(clients.clients[2], clientToAdd);
 
-    test('getClientById() works properly', () async {
-      when(clientsMock.readDataFromFile()).thenAnswer((_) async =>
-          '[{"id":"1","firstName":"John","lastName":"Doe","gender":"Man","birthDate":"1983-04-14T00:00:00.000","height":175},'
-          '{"id":"2","firstName":"Stacy","lastName":"Smith","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165}]');
+        verify(clientsMock.notifyListeners());
+      });
 
-      await clients.fetchClients();
+      test('getClientById() works properly', () async {
+        final client = clients.getClientById('2');
 
-      final client = clients.getClientById('2');
+        expect(client, clientsList[1]);
+      });
 
-      expect(client, clientsList[1]);
-    });
+      test('getClientsByGender() works properly', () async {
+        reset(clientsMock);
 
-    test('getClientsByGender() works properly', () async {
-      when(clientsMock.readDataFromFile()).thenAnswer((_) async =>
-          '[{"id":"1","firstName":"John","lastName":"Doe","gender":"Man","birthDate":"1983-04-14T00:00:00.000","height":175},'
-          '{"id":"2","firstName":"Stacy","lastName":"Smith","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165},'
-          '{"id":"3","firstName":"Julia","lastName":"Dolan","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165},'
-          '{"id":"4","firstName":"Margaret","lastName":"Cerny","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165}]');
+        when(clientsMock.readDataFromFile()).thenAnswer((_) async =>
+            '[{"id":"1","firstName":"John","lastName":"Doe","gender":"Man","birthDate":"1983-04-14T00:00:00.000","height":175},'
+            '{"id":"2","firstName":"Stacy","lastName":"Smith","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165},'
+            '{"id":"3","firstName":"Julia","lastName":"Dolan","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165},'
+            '{"id":"4","firstName":"Margaret","lastName":"Cerny","gender":"Woman","birthDate":"1980-02-01T00:00:00.000","height":165}]');
 
-      await clients.fetchClients();
+        await clients.fetchClients();
 
-      final womenByGender = clients.getClientsByGender(Gender.Woman);
-      final menByGender = clients.getClientsByGender(Gender.Man);
-      expect(womenByGender.length, 3);
-      expect(menByGender.length, 1);
+        final womenByGender = clients.getClientsByGender(Gender.Woman);
+        final menByGender = clients.getClientsByGender(Gender.Man);
+        expect(womenByGender.length, 3);
+        expect(menByGender.length, 1);
+      });
     });
   });
 }
