@@ -11,6 +11,8 @@ class Workouts with ChangeNotifier {
 
   List<Workout> _workouts = [];
 
+  List<Workout> get workouts => _workouts;
+
   List<Workout> findByClientId(String clientId) =>
       _workouts.where((workout) => workout.clientId == clientId).toList();
 

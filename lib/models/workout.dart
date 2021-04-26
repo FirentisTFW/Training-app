@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:training_app/models/exercise.dart';
@@ -5,7 +6,7 @@ import 'package:training_app/models/exercise.dart';
 part 'workout.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class Workout {
+class Workout extends Equatable {
   final String id;
   final String clientId;
   final DateTime date;
@@ -44,10 +45,13 @@ class Workout {
   String toString() {
     return 'Workout(id: $id, clientId: $clientId, date: $date, programName: $programName, exercises: $exercises)';
   }
+
+  @override
+  List<Object> get props => [id, clientId, date, programName, exercises];
 }
 
 @JsonSerializable(explicitToJson: true)
-class WorkoutExercise {
+class WorkoutExercise extends Equatable {
   final String name;
   final List<Set> sets;
 
@@ -81,10 +85,13 @@ class WorkoutExercise {
 
   @override
   String toString() => 'WorkoutExercise(name: $name, sets: $sets)';
+
+  @override
+  List<Object> get props => [name, sets];
 }
 
 @JsonSerializable(explicitToJson: true)
-class Set {
+class Set extends Equatable {
   final int reps;
   final int weight;
   final ExerciseType exerciseType;
@@ -114,4 +121,7 @@ class Set {
   @override
   String toString() =>
       'Set(reps: $reps, weight: $weight, exerciseType: $exerciseType)';
+
+  @override
+  List<Object> get props => [reps, weight, exerciseType];
 }
