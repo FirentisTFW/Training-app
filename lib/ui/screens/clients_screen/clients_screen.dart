@@ -59,7 +59,6 @@ class _ClientsScreenState extends State<ClientsScreen> {
   void filterByGender(Gender gender) {
     setState(() {
       _genderFilter = gender;
-      _isLoading = true;
       if (gender == Gender.Unknown) {
         _genderFilter = null;
       }
@@ -67,7 +66,6 @@ class _ClientsScreenState extends State<ClientsScreen> {
   }
 
   Future<void> _fetchClients() async {
-    super.didChangeDependencies();
     if (_isLoading) {
       try {
         await Provider.of<Clients>(context, listen: false).fetchClients();
