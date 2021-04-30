@@ -4,6 +4,7 @@ import 'package:training_app/providers/workouts.dart';
 import 'package:training_app/ui/screens/completed_workouts_screen/completed_workouts_screen.dart';
 import 'package:training_app/ui/screens/client_statistics_screen/client_statistics_screen.dart';
 import 'package:training_app/ui/screens/workout_programs_screen/workout_programs_screen.dart';
+import 'package:training_app/ui/universal_components/error_informator.dart';
 import 'package:training_app/ui/universal_components/loading_spinner.dart';
 import 'package:training_app/ui/screens/client_profile_screen/components/workout_program_chooser.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class ClientProfileScreen extends StatefulWidget {
 
 class _ClientProfileScreenState extends State<ClientProfileScreen> {
   var _isLoading = true;
+  var _hasError = false;
   DateTime _lastWorkoutDate;
 
   @override
@@ -28,9 +30,13 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
     super.didChangeDependencies();
     if (_isLoading) {
       final clientId = ModalRoute.of(context).settings.arguments;
-      await Provider.of<Workouts>(context, listen: false).fetchWorkouts();
-      _lastWorkoutDate = Provider.of<Workouts>(context, listen: false)
-          .getLastWorkoutDateByClientId(clientId);
+      try {
+        await Provider.of<Workouts>(context, listen: false).fetchWorkouts();
+        _lastWorkoutDate = Provider.of<Workouts>(context, listen: false)
+            .getLastWorkoutDateByClientId(clientId);
+      } catch (e) {
+        _hasError = true;
+      }
 
       setState(() => _isLoading = false);
     }
@@ -56,67 +62,74 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
       ),
       body: _isLoading
           ? LoadingSpinner()
-          : ListView(
-              children: [
-                _NameContainer(
-                    name: client.firstName, paddingTop: 14, paddingBottom: 0),
-                _NameContainer(
-                    name: client.lastName, paddingTop: 14, paddingBottom: 14),
-                Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        'Age: ' + client.calculateAge().toString(),
-                        style: TextStyle(fontSize: 26),
+          : _hasError
+              ? ErrorInformator('An excpetion occured. Please try again.')
+              : ListView(
+                  children: [
+                    _NameContainer(
+                        name: client.firstName,
+                        paddingTop: 14,
+                        paddingBottom: 0),
+                    _NameContainer(
+                        name: client.lastName,
+                        paddingTop: 14,
+                        paddingBottom: 14),
+                    Divider(),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            'Age: ' + client.calculateAge().toString(),
+                            style: TextStyle(fontSize: 26),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      color: Colors.grey[200],
+                      padding: EdgeInsets.symmetric(vertical: 18),
+                      child: Text(
+                        _lastWorkoutDate != null
+                            ? 'Last Workout: ${DateFormat.yMd().format(_lastWorkoutDate)}'
+                            : 'No workouts completed yet',
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    ClientProfileListItem(
+                        title: 'New Workout',
+                        icon: Icons.fitness_center,
+                        tapHandler: () =>
+                            openWorkoutProgramChooser(context, clientId)),
+                    ClientProfileListItem(
+                        title: 'Completed Workouts',
+                        icon: Icons.done,
+                        tapHandler: () =>
+                            goToDoneWorkoutScreen(context, clientId)),
+                    ClientProfileListItem(
+                        title: 'Workout Programs',
+                        icon: Icons.event_note,
+                        tapHandler: () =>
+                            goToWorkoutProgramsScreen(context, clientId)),
+                    ClientProfileListItem(
+                        title: 'Measurements',
+                        icon: Icons.subject,
+                        tapHandler: () =>
+                            goToMeasurementsScreen(context, clientId)),
+                    ClientProfileListItem(
+                        title: 'Progress',
+                        icon: Icons.show_chart,
+                        tapHandler: () {}),
+                    ClientProfileListItem(
+                        title: 'Statistics',
+                        icon: Icons.insert_chart,
+                        tapHandler: () =>
+                            goToClientStatisticsScreen(context, clientId)),
+                  ],
                 ),
-                Container(
-                  width: double.infinity,
-                  color: Colors.grey[200],
-                  padding: EdgeInsets.symmetric(vertical: 18),
-                  child: Text(
-                    _lastWorkoutDate != null
-                        ? 'Last Workout: ${DateFormat.yMd().format(_lastWorkoutDate)}'
-                        : 'No workouts completed yet',
-                    style: TextStyle(fontSize: 22),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                ClientProfileListItem(
-                    title: 'New Workout',
-                    icon: Icons.fitness_center,
-                    tapHandler: () =>
-                        openWorkoutProgramChooser(context, clientId)),
-                ClientProfileListItem(
-                    title: 'Completed Workouts',
-                    icon: Icons.done,
-                    tapHandler: () => goToDoneWorkoutScreen(context, clientId)),
-                ClientProfileListItem(
-                    title: 'Workout Programs',
-                    icon: Icons.event_note,
-                    tapHandler: () =>
-                        goToWorkoutProgramsScreen(context, clientId)),
-                ClientProfileListItem(
-                    title: 'Measurements',
-                    icon: Icons.subject,
-                    tapHandler: () =>
-                        goToMeasurementsScreen(context, clientId)),
-                ClientProfileListItem(
-                    title: 'Progress',
-                    icon: Icons.show_chart,
-                    tapHandler: () {}),
-                ClientProfileListItem(
-                    title: 'Statistics',
-                    icon: Icons.insert_chart,
-                    tapHandler: () =>
-                        goToClientStatisticsScreen(context, clientId)),
-              ],
-            ),
     );
   }
 

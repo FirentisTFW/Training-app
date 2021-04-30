@@ -1,24 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:training_app/models/client.dart';
-import 'package:training_app/providers/clients.dart';
 import 'package:mockito/mockito.dart';
 
-class ClientsSpy extends Clients {
-  final ClientsMock clientsMock;
-
-  ClientsSpy(this.clientsMock);
-
-  @override
-  void notifyListeners() => clientsMock.notifyListeners();
-
-  @override
-  Future<String> readDataFromFile() async => clientsMock.readDataFromFile();
-}
-
-class ClientsMock extends Mock {
-  Future<String> readDataFromFile();
-  void notifyListeners();
-}
+import '../setup/mocks_and_spies.dart';
 
 void main() async {
   ClientsSpy clients;
@@ -45,7 +29,7 @@ void main() async {
 
   setUp(() {
     clientsMock = ClientsMock();
-    clients = ClientsSpy(clientsMock);
+    clients = ClientsSpy(clientsMock: clientsMock, mockGetClientById: false);
   });
 
   group('Clients provider -', () {

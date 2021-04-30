@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -9,33 +8,9 @@ import 'package:training_app/providers/workout_programs.dart';
 import 'package:training_app/ui/screens/clients_screen/clients_screen.dart';
 import 'package:training_app/ui/screens/clients_screen/components/client_item.dart';
 import 'package:training_app/ui/universal_components/error_informator.dart';
-import 'package:training_app/ui/universal_components/no_items_added_yet_informator.dart';
+import 'package:training_app/ui/universal_components/loading_spinner.dart';
 
-class ClientsSpy extends Clients {
-  final ClientsMock clientsMock;
-
-  ClientsSpy({@required this.clientsMock});
-
-  @override
-  Future<String> readDataFromFile() async => clientsMock.readDataFromFile();
-}
-
-class ClientsMock extends Mock {
-  Future<String> readDataFromFile();
-}
-
-class WorkoutProgramsSpy extends WorkoutPrograms {
-  final WorkoutProgramsMock programsMock;
-
-  WorkoutProgramsSpy(this.programsMock);
-
-  @override
-  Future<String> readDataFromFile() async => programsMock.readDataFromFile();
-}
-
-class WorkoutProgramsMock extends Mock {
-  Future<String> readDataFromFile();
-}
+import '../setup/mocks_and_spies.dart';
 
 void main() {
   group('ClientsScreenTest -', () {
@@ -52,6 +27,11 @@ void main() {
       workoutPrograms = WorkoutProgramsSpy(programsMock);
     });
 
+    testWidgets('When first created, widget shows loading spinner',
+        (tester) async {
+      await _pumpScreenWithProviders(tester, clients, workoutPrograms);
+      expect(find.byType(LoadingSpinner), findsOneWidget);
+    });
     group('When clients and workout programs are properly fetched -', () {
       setUp(() {
         when(clientsMock.readDataFromFile()).thenAnswer((_) async =>
@@ -63,30 +43,32 @@ void main() {
 
       testWidgets('Widget shows clients list', (tester) async {
         await _pumpScreenWithProviders(tester, clients, workoutPrograms);
-        await tester.pump(Duration(seconds: 1));
+        await tester.pump();
 
         expect(find.byType(ClientItem), findsNWidgets(2));
         expect(find.text('John Doe'), findsOneWidget);
         expect(find.text('Stacy Smith'), findsOneWidget);
+
+        expect(find.byType(ErrorInformator), findsNothing);
       });
       testWidgets(
           'After adding a client to provider, widget rebuilds itself and shows new client item',
           (tester) async {
         await _pumpScreenWithProviders(tester, clients, workoutPrograms);
-        await tester.pump(Duration(seconds: 1));
+        await tester.pump();
 
         expect(find.text('Will Stewart'), findsNothing);
 
         clients.addNewClient(_clientToAdd);
 
-        await tester.pump(Duration(seconds: 1));
+        await tester.pump();
         expect(find.text('Will Stewart'), findsOneWidget);
       });
       testWidgets(
           'When sorted by gender, widget shows only clients of that gender',
           (tester) async {
         await _pumpScreenWithProviders(tester, clients, workoutPrograms);
-        await tester.pump(Duration(seconds: 1));
+        await tester.pump();
 
         // show men
         await tester.tap(find.byIcon(Icons.more_vert));
@@ -115,6 +97,19 @@ void main() {
         expect(find.text('John Doe'), findsOneWidget);
         expect(find.text('Stacy Smith'), findsOneWidget);
       });
+    });
+    testWidgets(
+        'When there is an exception when fetching clients or workout programs, widget shows error message',
+        (tester) async {
+      when(clientsMock.readDataFromFile())
+          .thenThrow(Exception('Some exception'));
+      when(programsMock.readDataFromFile())
+          .thenThrow(Exception('Some exception'));
+
+      await _pumpScreenWithProviders(tester, clients, workoutPrograms);
+      await tester.pump();
+
+      expect(find.byType(ErrorInformator), findsOneWidget);
     });
   });
 }

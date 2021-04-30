@@ -2,20 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:training_app/models/exercise.dart';
 import 'package:training_app/models/workout.dart';
-import 'package:training_app/providers/workouts.dart';
 
-class WorkoutsSpy extends Workouts {
-  final WorkoutsMock workoutsMock;
-
-  WorkoutsSpy(this.workoutsMock);
-
-  @override
-  Future<String> readDataFromFile() async => workoutsMock.readDataFromFile();
-}
-
-class WorkoutsMock extends Mock {
-  Future<String> readDataFromFile();
-}
+import '../setup/mocks_and_spies.dart';
 
 void main() {
   WorkoutsSpy workouts;

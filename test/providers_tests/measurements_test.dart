@@ -4,21 +4,7 @@ import 'package:training_app/models/body_measurement.dart';
 import 'package:training_app/models/measurement.dart';
 import 'package:training_app/models/measurement_session.dart';
 
-import '../../lib/providers/measurements.dart';
-
-class MeasurementsSpy extends Measurements {
-  final MeasurementsMock measurementsMock;
-
-  MeasurementsSpy(this.measurementsMock);
-
-  @override
-  Future<String> readDataFromFile() async =>
-      measurementsMock.readDataFromFile();
-}
-
-class MeasurementsMock extends Mock {
-  Future<String> readDataFromFile();
-}
+import '../setup/mocks_and_spies.dart';
 
 void main() async {
   MeasurementsSpy measurements;
